@@ -6,6 +6,7 @@ from datetime import timezone as tz
 from datetime import timedelta
 from urllib.parse import quote
 
+from profile_data import profile_data
 from . import infra_utils
 
 
@@ -14,7 +15,7 @@ def get_account_age(gh_user):
     account_info = infra_utils.run_cmd(cmd)
     account_info = json.loads(account_info)
     ts_created = dt.fromisoformat(account_info["created_at"])
-    return dt.now(tz.utc) - ts_created
+    profile_data.account_age = dt.now(tz.utc) - ts_created
 
 def get_pr_activity(gh_user):
     """Get information about recent PR activity."""

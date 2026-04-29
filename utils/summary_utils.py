@@ -1,21 +1,20 @@
 """Utils for summarizing findings."""
 
+from profile_data import profile_data
 from . import flags
 
 
 def show_summary(
     gh_user,
-    account_age,
     opened_count,
     merged_count,
     closed_count,
-    flag_age,
     flag_merged_pr,
     flag_closed_pr,
     ):
     """Show a concise summary of what was found."""
     print(f"\nGitHub user: {gh_user}")
-    print(f"  {flag_age} Account age: {account_age.days} days")
+    print(f"  {profile_data.flag_age} Account age: {profile_data.account_age.days} days")
 
     if opened_count >= 10:
         # Only show merged if it's a good sign.

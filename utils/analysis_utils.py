@@ -1,15 +1,16 @@
 """Utils for analyzing account information."""
 
+from profile_data import profile_data
 from . import flags
 
-def process_account_age(account_age):
+def process_account_age():
     """Evaluate account age."""
-    if account_age.days > 3*365:
-        return flags.green_flag
-    elif account_age.days > 90:
-        return flags.yellow_flag
+    if profile_data.account_age.days > 3*365:
+        profile_data.flag_age = flags.green_flag
+    elif profile_data.account_age.days > 90:
+        profile_data.flag_age = yellow_flag
     else: 
-        return flags.red_flag
+        profile_data.flag_age = flags.red_flag
 
 def process_pr_activity(pr_counts):
     """Evaluate recent PR activity."""

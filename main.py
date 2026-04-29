@@ -26,17 +26,20 @@ import sys
 import shlex
 import json
 
+from profile_data import profile_data
 from utils import profile_utils
 from utils.infra_utils import run_cmd
 from utils import analysis_utils
 from utils import summary_utils
 
+
 gh_user = sys.argv[1]
+profile_data.username = gh_user
 
 def main():
     # How old is the account?
-    account_age = profile_utils.get_account_age(gh_user)
-    flag_age = analysis_utils.process_account_age(account_age)
+    profile_utils.get_account_age(gh_user)
+    analysis_utils.process_account_age()
 
     # What does recent PR activity look like?
     pr_counts = profile_utils.get_pr_activity(gh_user)
@@ -46,11 +49,9 @@ def main():
     # Summarize findings.
     summary_utils.show_summary(
         gh_user,
-        account_age,
         opened_count,
         merged_count,
         closed_count,
-        flag_age,
         flag_merged_pr,
         flag_closed_pr,
     )
