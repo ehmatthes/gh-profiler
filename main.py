@@ -33,10 +33,6 @@ from utils import summary_utils
 
 gh_user = sys.argv[1]
 
-red_flag = "\U0001F534"
-yellow_flag = "\U0001F7E1"
-green_flag = "\U0001F7E2"
-
 def main():
     # How old is the account?
     account_age = profile_utils.get_account_age(gh_user)
@@ -49,7 +45,6 @@ def main():
 
     # Summarize findings.
     summary_utils.show_summary(
-        green_flag,
         gh_user,
         account_age,
         opened_count,
