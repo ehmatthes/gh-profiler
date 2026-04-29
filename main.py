@@ -42,38 +42,9 @@ def main():
     flag_age = analysis_utils.process_account_age(account_age)
 
     # What does recent PR activity look like?
-    from urllib.parse import quote
-
-    cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
-    base_query = f"author:{gh_user} is:pr created:>={cutoff}"
-
-    opened_cmd = (
-        f'gh api "search/issues?q={quote(base_query)}" --jq .total_count'
-    )
-    merged_cmd = (
-        f'gh api "search/issues?q={quote(base_query + " is:merged")}" --jq .total_count'
-    )
-    closed_cmd = (
-        f'gh api "search/issues?q={quote(base_query + " is:closed -is:merged")}" --jq .total_count'
-    )
-
-    opened_count = int(run_cmd(opened_cmd).strip())
-    merged_count = int(run_cmd(merged_cmd).strip())
-    closed_count = int(run_cmd(closed_cmd).strip())
-
-    ratio_merged = merged_count / opened_count
-    ratio_closed = closed_count / opened_count
-
-    if ratio_closed > 0.5:
-        flag_closed_pr = red_flag
-    elif ratio_closed > 0.15:
-        flag_closed_pr = yellow_flag
-    else:
-        flag_closed_pr = green_flag
-
-    flag_merged_pr = None
-    if ratio_merged > 0.5:
-        flag_merged_pr = green_flag
+    pr_counts = profile_utils.get_pr_activity(gh_user)
+    opened_count, merged_count, closed_count = pr_counts
+    flag_closed_pr, flag_merged_pr = analysis_utils.process_pr_activity(pr_counts)
 
 
     # How much of the profile is filled out?
