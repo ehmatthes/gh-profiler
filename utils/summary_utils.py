@@ -7,9 +7,7 @@ from . import flags
 def show_summary():
     """Show a concise summary of what was found."""
     print(f"\nGitHub user: {pdata.username}")
-    print(
-        f"  {pdata.flag_age} Account age: {pdata.account_age.days} days"
-    )
+    print(f"  {pdata.flag_age} Account age: {pdata.account_age.days} days")
 
     if pdata.opened_count >= 10:
         # Only show merged if it's a good sign.
