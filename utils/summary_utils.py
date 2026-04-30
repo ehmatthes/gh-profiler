@@ -13,7 +13,10 @@ def show_summary():
     # Available profile information:
     print(f"\n  {pdata.flag_profile} Profile information:")
     for k, v in pdata.profile_dict.items():
-        print(f"      {k}: {v}")
+        if v:
+            print(f"      {k}: {v}")
+        else:
+            print(f"      {k}:")
 
     # Recent PR activity:
     print()

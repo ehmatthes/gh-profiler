@@ -27,7 +27,7 @@ def process_profile_info():
     fields = ["name", "company", "blog", "location", "email", "bio"]
     pdata.profile_dict = {field:pdata.profile_info[field] for field in fields}
 
-    num_filled = sum(v is not None for v in pdata.profile_dict.values())
+    num_filled = sum(v not in (None, "") for v in pdata.profile_dict.values())
     if num_filled == 0:
         pdata.flag_profile = flags.red_flag
     elif num_filled < 3:
