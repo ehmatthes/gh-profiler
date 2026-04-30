@@ -43,14 +43,10 @@ def main():
 
     # What does recent PR activity look like?
     profile_utils.get_pr_activity()
-    flag_closed_pr, flag_merged_pr = analysis_utils.process_pr_activity()
+    analysis_utils.process_pr_activity()
 
     # Summarize findings.
-    summary_utils.show_summary(
-        flag_merged_pr,
-        flag_closed_pr,
-    )
-
+    summary_utils.show_summary()
 
 if __name__ == "__main__":
     main()

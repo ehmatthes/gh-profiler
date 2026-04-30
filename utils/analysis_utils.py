@@ -18,14 +18,12 @@ def process_pr_activity():
     ratio_closed = profile_data.closed_count / profile_data.opened_count
 
     if ratio_closed > 0.5:
-        flag_closed_pr = flags.red_flag
+        profile_data.flag_closed_pr = flags.red_flag
     elif ratio_closed > 0.15:
-        flag_closed_pr = flags.yellow_flag
+        profile_data.flag_closed_pr = flags.yellow_flag
     else:
-        flag_closed_pr = flags.green_flag
+        profile_data.flag_closed_pr = flags.green_flag
 
-    flag_merged_pr = None
+    profile_data.flag_merged_pr = None
     if ratio_merged > 0.5:
-        flag_merged_pr = flags.green_flag
-
-    return flag_closed_pr, flag_merged_pr
+        profile_data.flag_merged_pr = flags.green_flag
