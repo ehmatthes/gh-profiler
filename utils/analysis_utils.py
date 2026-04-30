@@ -1,11 +1,18 @@
 """Utils for analyzing account information."""
 
+from datetime import datetime as dt
+from datetime import timezone as tz
+from datetime import timedelta
+
 from profile_data import profile_data as pdata
 from . import flags
 
 
 def process_account_age():
     """Evaluate account age."""
+    ts_created = dt.fromisoformat(pdata.profile_info["created_at"])
+    pdata.account_age = dt.now(tz.utc) - ts_created
+
     if pdata.account_age.days > 3 * 365:
         pdata.flag_age = flags.green_flag
     elif pdata.account_age.days > 90:

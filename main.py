@@ -31,8 +31,10 @@ pdata.username = gh_user
 
 
 def main():
+    # Get all information we'll need about the user's profile.
+    profile_utils.get_profile_info()
+
     # How old is the account?
-    profile_utils.get_account_age()
     analysis_utils.process_account_age()
 
     # What does recent PR activity look like?
