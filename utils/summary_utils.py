@@ -41,7 +41,24 @@ def _show_profile_dict():
     print(f"\n  {pdata.flag_profile} Profile information:")
 
     for k, v in pdata.profile_dict.items():
-        if v:
+        if v and k != "bio":
             print(f"      {k}: {v}")
+        elif k == "bio":
+            _show_bio(v)
         else:
             print(f"      {k}:")
+
+def _show_bio(bio):
+    """Show a bio appropriately."""
+    if bio in (None, ""):
+        print(f"      bio:")
+        return
+        
+    if bio.count("\n") == 0:
+        print(f"      bio: {bio}")
+        return
+
+    # Print a multi-line bio.
+    print("      bio:")
+    for line in bio.splitlines():
+        print(f"        {line}")
