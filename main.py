@@ -42,16 +42,11 @@ def main():
     analysis_utils.process_account_age()
 
     # What does recent PR activity look like?
-    pr_counts = profile_utils.get_pr_activity()
-    opened_count, merged_count, closed_count = pr_counts
-    flag_closed_pr, flag_merged_pr = analysis_utils.process_pr_activity(pr_counts)
+    profile_utils.get_pr_activity()
+    flag_closed_pr, flag_merged_pr = analysis_utils.process_pr_activity()
 
     # Summarize findings.
     summary_utils.show_summary(
-        gh_user,
-        opened_count,
-        merged_count,
-        closed_count,
         flag_merged_pr,
         flag_closed_pr,
     )

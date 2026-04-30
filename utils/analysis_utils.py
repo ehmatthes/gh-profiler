@@ -12,11 +12,10 @@ def process_account_age():
     else: 
         profile_data.flag_age = flags.red_flag
 
-def process_pr_activity(pr_counts):
+def process_pr_activity():
     """Evaluate recent PR activity."""
-    opened_count, merged_count, closed_count = pr_counts
-    ratio_merged = merged_count / opened_count
-    ratio_closed = closed_count / opened_count
+    ratio_merged = profile_data.merged_count / profile_data.opened_count
+    ratio_closed = profile_data.closed_count / profile_data.opened_count
 
     if ratio_closed > 0.5:
         flag_closed_pr = flags.red_flag

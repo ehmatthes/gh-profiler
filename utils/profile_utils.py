@@ -32,8 +32,6 @@ def get_pr_activity():
         f'gh api "search/issues?q={quote(base_query + " is:closed -is:merged")}" --jq .total_count'
     )
 
-    opened_count = int(infra_utils.run_cmd(opened_cmd).strip())
-    merged_count = int(infra_utils.run_cmd(merged_cmd).strip())
-    closed_count = int(infra_utils.run_cmd(closed_cmd).strip())
-
-    return (opened_count, merged_count, closed_count)
+    profile_data.opened_count = int(infra_utils.run_cmd(opened_cmd).strip())
+    profile_data.merged_count = int(infra_utils.run_cmd(merged_cmd).strip())
+    profile_data.closed_count = int(infra_utils.run_cmd(closed_cmd).strip())
