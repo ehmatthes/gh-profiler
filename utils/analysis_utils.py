@@ -2,7 +2,6 @@
 
 from datetime import datetime as dt
 from datetime import timezone as tz
-from datetime import timedelta
 
 from profile_data import profile_data as pdata
 from . import flags
