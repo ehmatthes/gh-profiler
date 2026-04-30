@@ -3,14 +3,16 @@
 from profile_data import profile_data
 from . import flags
 
+
 def process_account_age():
     """Evaluate account age."""
-    if profile_data.account_age.days > 3*365:
+    if profile_data.account_age.days > 3 * 365:
         profile_data.flag_age = flags.green_flag
     elif profile_data.account_age.days > 90:
         profile_data.flag_age = yellow_flag
-    else: 
+    else:
         profile_data.flag_age = flags.red_flag
+
 
 def process_pr_activity():
     """Evaluate recent PR activity."""

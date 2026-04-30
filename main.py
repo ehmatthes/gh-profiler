@@ -14,7 +14,7 @@ $ uvx gh-profiler ehmatthes
 Or, maybe from within a project:
 $ uvx gh-profiler <pr-num>
 
-Given a PR number, it finds the author of the PR and runs the profiler on that 
+Given a PR number, it finds the author of the PR and runs the profiler on that
 user?
 """
 
@@ -29,6 +29,7 @@ from utils import summary_utils
 gh_user = sys.argv[1]
 profile_data.username = gh_user
 
+
 def main():
     # How old is the account?
     profile_utils.get_account_age()
@@ -40,6 +41,7 @@ def main():
 
     # Summarize findings.
     summary_utils.show_summary()
+
 
 if __name__ == "__main__":
     main()
