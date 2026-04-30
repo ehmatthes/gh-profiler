@@ -16,6 +16,7 @@ def get_profile_info():
     profile_info = infra_utils.run_cmd(cmd)
     pdata.profile_info = json.loads(profile_info)
 
+
 def get_pr_activity():
     """Get information about recent PR activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
