@@ -37,6 +37,9 @@ def main():
     # How old is the account?
     analysis_utils.process_account_age()
 
+    # How much profile information is available?
+    analysis_utils.process_profile_info()
+
     # What does recent PR activity look like?
     profile_utils.get_pr_activity()
     analysis_utils.process_pr_activity()

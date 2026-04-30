@@ -19,6 +19,22 @@ def process_account_age():
     else:
         pdata.flag_age = flags.red_flag
 
+def process_profile_info():
+    """Evaluate available profile information.
+
+    Focus on: name, company, blog, lcoation, email, bio
+    """
+    fields = ["name", "company", "blog", "location", "email", "bio"]
+    pdata.profile_dict = {field:pdata.profile_info[field] for field in fields}
+
+    num_filled = sum(v is not None for v in pdata.profile_dict.values())
+    if num_filled == 0:
+        pdata.flag_profile = flags.red_flag
+    elif num_filled < 3:
+        pdata.flag_profile = flags.yellow_flag
+    else:
+        pdata.flag_profile = flags.green_flag
+
 
 def process_pr_activity():
     """Evaluate recent PR activity."""

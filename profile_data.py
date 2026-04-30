@@ -6,6 +6,9 @@ from dataclasses import dataclass
 @dataclass
 class ProfileData:
     username: str = ""
+
+    profile_info: dict | None = None
+
     account_age: int = 0
 
     opened_count: int = 0
