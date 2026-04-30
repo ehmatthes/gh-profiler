@@ -11,7 +11,7 @@ def show_summary():
 
     if profile_data.opened_count >= 10:
         # Only show merged if it's a good sign.
-        if profile_data.flag_merged_pr == green_flag:
+        if profile_data.flag_merged_pr == flags.green_flag:
             print(f"  {profile_data.flag_merged_pr} {profile_data.merged_count} of {profile_data.opened_count} PRs have been merged in the last 21 days.")
         print(f"  {profile_data.flag_closed_pr} {profile_data.closed_count} of {profile_data.opened_count} PRs have been closed without merging in the last 21 days.")
     else:
