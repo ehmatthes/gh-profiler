@@ -10,17 +10,17 @@ from profile_data import profile_data
 from . import infra_utils
 
 
-def get_account_age(gh_user):
-    cmd = f"gh api users/{gh_user} --jq '{{login, name, created_at}}'"
+def get_account_age():
+    cmd = f"gh api users/{profile_data.username} --jq '{{login, name, created_at}}'"
     account_info = infra_utils.run_cmd(cmd)
     account_info = json.loads(account_info)
     ts_created = dt.fromisoformat(account_info["created_at"])
     profile_data.account_age = dt.now(tz.utc) - ts_created
 
-def get_pr_activity(gh_user):
+def get_pr_activity():
     """Get information about recent PR activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
-    base_query = f"author:{gh_user} is:pr created:>={cutoff}"
+    base_query = f"author:{profile_data.username} is:pr created:>={cutoff}"
 
     opened_cmd = (
         f'gh api "search/issues?q={quote(base_query)}" --jq .total_count'

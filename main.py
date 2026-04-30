@@ -38,11 +38,11 @@ profile_data.username = gh_user
 
 def main():
     # How old is the account?
-    profile_utils.get_account_age(gh_user)
+    profile_utils.get_account_age()
     analysis_utils.process_account_age()
 
     # What does recent PR activity look like?
-    pr_counts = profile_utils.get_pr_activity(gh_user)
+    pr_counts = profile_utils.get_pr_activity()
     opened_count, merged_count, closed_count = pr_counts
     flag_closed_pr, flag_merged_pr = analysis_utils.process_pr_activity(pr_counts)
 
