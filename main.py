@@ -18,17 +18,10 @@ Given a PR number, it finds the author of the PR and runs the profiler on that
 user?
 """
 
-from datetime import datetime as dt
-from datetime import timezone as tz
-from datetime import timedelta
-import subprocess
 import sys
-import shlex
-import json
 
 from profile_data import profile_data
 from utils import profile_utils
-from utils.infra_utils import run_cmd
 from utils import analysis_utils
 from utils import summary_utils
 
