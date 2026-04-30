@@ -20,14 +20,14 @@ user?
 
 import sys
 
-from profile_data import profile_data
+from profile_data import profile_data as pdata
 from utils import profile_utils
 from utils import analysis_utils
 from utils import summary_utils
 
 
 gh_user = sys.argv[1]
-profile_data.username = gh_user
+pdata.username = gh_user
 
 
 def main():
