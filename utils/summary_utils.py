@@ -11,13 +11,11 @@ def show_summary():
     print(f"  {pdata.flag_age} Account age: {pdata.account_age.days} days")
 
     # Available profile information:
-    print(f"\n  {pdata.flag_profile} Profile information:")
-    for k, v in pdata.profile_dict.items():
-        if v:
-            print(f"      {k}: {v}")
-        else:
-            print(f"      {k}:")
-
+    if pdata.flag_profile == flags.red_flag:
+        print(f"\n  {pdata.flag_profile} No profile information has been provided.")
+    else:
+        _show_profile_dict()
+    
     # Recent PR activity:
     print()
     if pdata.opened_count >= 10:
@@ -34,3 +32,16 @@ def show_summary():
             f"  {flags.green_flag} {pdata.username} has opened fewer than 10 PRs in the last 21 days."
         )
     print("")
+
+
+# --- Helper functions ---
+
+def _show_profile_dict():
+    """Summarize information from the user's profile dict."""
+    print(f"\n  {pdata.flag_profile} Profile information:")
+
+    for k, v in pdata.profile_dict.items():
+        if v:
+            print(f"      {k}: {v}")
+        else:
+            print(f"      {k}:")
