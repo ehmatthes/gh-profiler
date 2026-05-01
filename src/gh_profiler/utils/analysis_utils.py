@@ -38,6 +38,10 @@ def process_profile_info():
 
 def process_pr_activity():
     """Evaluate recent PR activity."""
+    # Don't need to analyze PR activity if fewer than 10 PRs opened recently.
+    if pdata.opened_count < 10:
+        return
+
     ratio_merged = pdata.merged_count / pdata.opened_count
     ratio_closed = pdata.closed_count / pdata.opened_count
 
