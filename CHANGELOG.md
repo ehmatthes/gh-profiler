@@ -8,11 +8,18 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.2.3
+
+#### External changes
+
+- Supports `--version` flag.
+- Added MIT license.
+
 ### 0.2.2
 
 #### External changes
 
-- Fix bug with yellow flag for account age.
+- Fix bug with yellow flag for account age. (#19)
 
 ### 0.2.1
 
