@@ -6,7 +6,7 @@ from datetime import timezone as tz
 from datetime import timedelta
 from urllib.parse import quote
 
-from profile_data import profile_data as pdata
+from .profile_data import profile_data as pdata
 from . import infra_utils
 
 
