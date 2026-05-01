@@ -4,7 +4,9 @@ version = "0.1.1"
 description = "Examine a GitHub user's profile, and help quickly decide how much to invest in their contributions."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "click>=8.3.3",
+]
 
 [project.scripts]
 gh-profiler = "gh_profiler.main:main"
