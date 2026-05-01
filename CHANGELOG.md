@@ -13,10 +13,14 @@ These initial releases have usable behavior, but may have some rough edges for s
 #### External changes
 
 - Makes sure gh tool is installed.
+- Show a `--help` message.
+- Works from a GitHub username, PR number, or issue number.
+- Clarify issue when PR activity call hangs.
+- Simplified README.
 
 #### Internal changes
 
-- NA
+- Use Click for CLI.
 
 ### 0.1.1
 
