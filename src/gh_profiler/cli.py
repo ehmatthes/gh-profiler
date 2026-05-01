@@ -13,7 +13,17 @@ from .utils.infra_utils import run_cmd
 @click.command()
 @click.argument("target")
 def main(target):
-    """Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions."""
+    """Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions.
+    
+    You can target a GitHub username, or a PR/issue number from the repository you're working in.
+
+    \b
+    Examples:
+    $ uvx gh-profiler ehmatthes
+    $ uvx gh-profiler 8
+    $ python -m gh_profiler ehmatthes
+      ...
+    """
 
     # If the main argument is an integer, process the PR/issue number.
     # Otherwise, assume it's the username.
