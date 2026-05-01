@@ -8,6 +8,16 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### Unreleased
+
+#### External changes
+
+- If status is 404 when getting initial profile information, exit with invalid GitHub username message.
+
+#### Internal changes
+
+- 
+
 ### 0.2.0
 
 #### External changes
