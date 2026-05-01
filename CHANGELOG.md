@@ -13,6 +13,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 #### External changes
 
 - If status is 404 when getting initial profile information, exit with invalid GitHub username message.
+- @hugovk was right, `created_at` is a better check than `status`. `status` not present for valid users.
 
 #### Internal changes
 
