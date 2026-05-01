@@ -1,7 +1,6 @@
 """Main CLI entry point for gh-profiler."""
 
 import json
-import re
 import sys
 
 import click
@@ -58,20 +57,15 @@ def _get_username(pr_issue_num):
     sys.exit(msg)
 
 def _get_repo_slug():
-    """Parse `git remote -v` to identify GitHub project."""
-    remote_output = run_cmd("git remote -v")
-    match = re.search(
-        r"github\.com[:/](?P<owner>[^/\s]+)/(?P<repo>[^.\s]+)(?:\.git)?\s",
-        remote_output,
-    )
-    if not match:
-        msg = f"Couldn't determine appropriate required information from `git remote -v`."
+    """Ask `gh` for the resolved default repo (honors `gh repo set-default`)."""
+    slug = run_cmd("gh repo view --json nameWithOwner --jq .nameWithOwner").strip()
+    if not slug:
+        msg = (
+            "Couldn't determine the default GitHub repository. "
+            "Run `gh repo set-default` in this directory and try again."
+        )
         sys.exit(msg)
-
-    owner = match.group("owner")
-    repo = match.group("repo")
-
-    return f"{owner}/{repo}"
+    return slug
 
 def _process_pr(pr_issue_num, repo_slug):
     """See if this is a PR."""
