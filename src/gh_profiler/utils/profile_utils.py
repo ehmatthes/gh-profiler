@@ -25,8 +25,9 @@ def ensure_gh():
 
     cmd = "gh api user --jq .login"
     if not infra_utils.run_cmd(cmd).strip():
-        msg = "The GitHub CLI tool (gh) is not authenticated."
-        msg += "\n  Run: gh auth login"
+        msg = "The GitHub CLI tool (gh) is not authenticated, or the API hung."
+        msg += "\n  If you've already authenticated, try running the gh-profiler command again."
+        msg += "\n  If you're not authenticated, run `gh auth login`."
         sys.exit(msg)
 
 def get_profile_info():
