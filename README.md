@@ -73,6 +73,8 @@ Update changelog and bump version, then:
 ```sh
 $ uv lock
 # Commit all changes.
+$ git tag vX.Y.Z
+$ git push origin vX.Y.Z
 $ rm -rf dist/*
 $ uv build
 $ uv publish
