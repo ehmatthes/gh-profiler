@@ -16,6 +16,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 - @hugovk was right, `created_at` is a better check than `status`. `status` not present for valid users. (#11)
 - Ensure that gh CLI tool is authenticated before running. (#12)
 - Use gh's default remote, rather than parsing output of `git remote -v` and taking first result. (#13)
+- If a user has opened fewer than 10 PRs recently, don't analyze PR activity. Fixes zero division error bug from #14.
 
 #### Internal changes
 
