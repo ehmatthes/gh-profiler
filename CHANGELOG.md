@@ -8,6 +8,12 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### Unreleased
+
+#### External changes
+
+- Invalid usernames no longer cause a crash on older versions of the `gh` CLI.
+
 ### 0.2.3
 
 #### External changes
