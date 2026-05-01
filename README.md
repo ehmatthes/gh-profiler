@@ -15,6 +15,74 @@ I don't make a final decision about PRs and issues based on the answers to these
 
 The goal of this project is to get a quick snapshot of this kind of information, without having to do a bunch of clicking on GitHub. The output is a summary of what's found, with a quick visual cue as to which factors support investing time in the PR/issue, and which factors suggest it's better off being closed and ignored. I have no interest in calculating some kind of trust score, or any other single number.
 
-Usage
+Running as a tool
 ---
 
+If you have uv installed, you can run this as a tool against any GitHub user:
+
+```sh
+$ uvx gh-profiler ehmatthes
+
+GitHub user: ehmatthes
+  🟢 Account age: 5058 days
+
+  🟢 Profile information:
+      name: Eric Matthes
+      company:
+      blog: https://www.mostlypython.com
+      location: western North Carolina
+      email: ehmatthes@gmail.com
+      bio:
+
+  🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
+```
+
+Installing and then running
+---
+
+You can also install the project, and then run the bare `gh-profiler` command:
+
+```sh
+(.venv) $ pip install gh-profiler
+Installed 1 package in 4ms
+ + gh-profiler==0.1.0
+(.venv) $ gh-profiler ehmatthes
+
+GitHub user: ehmatthes
+  🟢 Account age: 5058 days
+
+  🟢 Profile information:
+      name: Eric Matthes
+      company:
+      blog: https://www.mostlypython.com
+      location: western North Carolina
+      email: ehmatthes@gmail.com
+      bio:
+
+  🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
+```
+
+When you've installed the project, you can also run it as a module:
+
+```sh
+$ python -m gh_profiler <username>
+```
+
+Maintaining
+---
+
+### Add/ modify a requirement
+
+- Add or modify a requirement by modifying pyproject.toml, or running `uv add <package>`.
+- Then run `uv lock`.
+
+New releases
+---
+
+Update changelog and bump version, then:
+
+```sh
+$ rm -rf dist/*
+$ uv build
+$ uv publish
+```
