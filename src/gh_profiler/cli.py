@@ -12,6 +12,7 @@ from .utils import cli_utils
 
 @click.command()
 @click.argument("target")
+@click.version_option(package_name="gh-profiler")
 def main(target):
     """Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions.
     
