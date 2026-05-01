@@ -44,8 +44,6 @@ You can also install the project, and then run the bare `gh-profiler` command:
 
 ```sh
 (.venv) $ pip install gh-profiler
-Installed 1 package in 4ms
- + gh-profiler==0.1.0
 (.venv) $ gh-profiler ehmatthes
 
 GitHub user: ehmatthes
