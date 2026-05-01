@@ -2,20 +2,6 @@
 
 The goal is to help make quick, evidence-based decisions about how much time
 to invest in reviewing PRs, and general interaction on open source projects.
-
-Scores:
-3: green
-2: yellow
-1: red
-
-Package, so usage can be:
-$ uvx gh-profiler ehmatthes
-
-Or, maybe from within a project:
-$ uvx gh-profiler <pr-num>
-
-Given a PR number, it finds the author of the PR and runs the profiler on that
-user?
 """
 
 import sys
