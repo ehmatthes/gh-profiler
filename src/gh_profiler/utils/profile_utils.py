@@ -28,6 +28,8 @@ def get_profile_info():
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
     profile_info = infra_utils.run_cmd(cmd)
     pdata.profile_info = json.loads(profile_info)
+    if "created_at" not in pdata.profile_info:
+        sys.exit(f"GitHub user '{pdata.username}' not found.")
 
 
 def get_pr_activity():
