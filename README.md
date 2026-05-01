@@ -71,6 +71,8 @@ New releases
 Update changelog and bump version, then:
 
 ```sh
+$ uv lock
+# Commit all changes.
 $ rm -rf dist/*
 $ uv build
 $ uv publish
