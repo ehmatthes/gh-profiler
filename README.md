@@ -27,6 +27,16 @@ GitHub user: ehmatthes
   🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
 ```
 
+If you're working in your local project directory, you can simply provide a PR or issue number. The tool will look up the PR or issue, identify the user who opened it, and give a report on that user:
+
+```sh
+$ uvx gh-profiler 8
+
+GitHub user: ehmatthes
+  🟢 Account age: 5058 days
+  ...
+```
+
 Installing and then running
 ---
 
@@ -40,16 +50,7 @@ Installed 1 package in 4ms
 
 GitHub user: ehmatthes
   🟢 Account age: 5058 days
-
-  🟢 Profile information:
-      name: Eric Matthes
-      company:
-      blog: https://www.mostlypython.com
-      location: western North Carolina
-      email: ehmatthes@gmail.com
-      bio:
-
-  🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
+  ...
 ```
 
 When you've installed the project, you can also run it as a module:
