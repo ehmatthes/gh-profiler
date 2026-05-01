@@ -15,7 +15,7 @@ def process_account_age():
     if pdata.account_age.days > 3 * 365:
         pdata.flag_age = flags.green_flag
     elif pdata.account_age.days > 90:
-        pdata.flag_age = yellow_flag
+        pdata.flag_age = flags.yellow_flag
     else:
         pdata.flag_age = flags.red_flag
 
