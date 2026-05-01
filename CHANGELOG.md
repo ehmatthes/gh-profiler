@@ -14,6 +14,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 
 - Revise description.
 - Require Python >= 3.10, not 3.14.
+- Add usage instructions to README.
 
 #### Internal changes
 
