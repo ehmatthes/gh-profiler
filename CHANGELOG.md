@@ -8,6 +8,20 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### Unreleased
+
+#### External changes
+
+- Makes sure gh tool is installed.
+- Show a `--help` message.
+- Works from a GitHub username, PR number, or issue number.
+- Clarify issue when PR activity call hangs.
+- Simplified README.
+
+#### Internal changes
+
+- Use Click for CLI.
+
 ### 0.1.1
 
 #### External changes

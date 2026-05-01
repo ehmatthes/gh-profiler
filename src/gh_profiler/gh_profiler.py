@@ -12,11 +12,12 @@ from .utils import analysis_utils
 from .utils import summary_utils
 
 
-gh_user = sys.argv[1]
-pdata.username = gh_user
+def main(gh_user):
+    pdata.username = gh_user
 
+    # Make sure gh is available.
+    profile_utils.ensure_gh()
 
-def main():
     # Get all information we'll need about the user's profile.
     profile_utils.get_profile_info()
 
@@ -33,6 +34,5 @@ def main():
     # Summarize findings.
     summary_utils.show_summary()
 
-
-if __name__ == "__main__":
-    main()
+    # Finished, don't return control to cli.py.
+    sys.exit()

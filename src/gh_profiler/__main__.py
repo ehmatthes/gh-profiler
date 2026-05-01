@@ -1,6 +1,6 @@
 """Allow project to run as a module."""
 
-from .main import main
+from .cli import main
 
 
 if __name__ == "__main__":
