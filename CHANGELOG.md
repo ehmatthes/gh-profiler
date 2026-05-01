@@ -16,7 +16,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 
 #### Internal changes
 
-- 
+- NA
 
 ### 0.2.0
 
