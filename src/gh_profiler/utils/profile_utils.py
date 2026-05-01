@@ -11,8 +11,8 @@ from .profile_data import profile_data as pdata
 from . import infra_utils
 
 def ensure_gh():
-    """Make sure user has gh installed.
-    
+    """Make sure user has gh installed and is authenticated.
+
     DEV: This may need different implementation on Windows or Linux.
     """
     cmd = "gh --version"
@@ -21,6 +21,12 @@ def ensure_gh():
     except FileNotFoundError:
         msg = "The GitHub CLI tool (gh) must be installed."
         msg += "\n  https://cli.github.com"
+        sys.exit(msg)
+
+    cmd = "gh api user --jq .login"
+    if not infra_utils.run_cmd(cmd).strip():
+        msg = "The GitHub CLI tool (gh) is not authenticated."
+        msg += "\n  Run: gh auth login"
         sys.exit(msg)
 
 def get_profile_info():
