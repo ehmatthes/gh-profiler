@@ -20,10 +20,10 @@ user?
 
 import sys
 
-from profile_data import profile_data as pdata
-from utils import profile_utils
-from utils import analysis_utils
-from utils import summary_utils
+from .utils.profile_data import profile_data as pdata
+from .utils import profile_utils
+from .utils import analysis_utils
+from .utils import summary_utils
 
 
 gh_user = sys.argv[1]

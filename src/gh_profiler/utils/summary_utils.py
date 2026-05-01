@@ -1,6 +1,6 @@
 """Utils for summarizing findings."""
 
-from profile_data import profile_data as pdata
+from .profile_data import profile_data as pdata
 from . import flags
 
 

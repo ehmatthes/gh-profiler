@@ -1,7 +1,14 @@
 [project]
 name = "gh-profiler"
 version = "0.1.0"
-description = "Add your description here"
+description = "Examine a GH user's profile, and help quickly decide how much to invest in their contributions."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = []
+
+[project.scripts]
+gh-profiler = "gh_profiler.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
