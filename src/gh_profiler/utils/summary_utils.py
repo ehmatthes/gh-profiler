@@ -6,59 +6,66 @@ from . import flags
 
 def show_summary():
     """Show a concise summary of what was found."""
+    summary = _get_summary()
+    print(summary)
+
+def _get_summary():
+    """Build a summary string.
+
+    This is more testable and flexible than just printing each bit of information.
+    """
+    summary = ""
+
     # Username, account age:
-    print(f"\nGitHub user: {pdata.username}")
-    print(f"  {pdata.flag_age} Account age: {pdata.account_age.days} days")
+    summary += f"GitHub user: {pdata.username}\n"
+    summary += f"  {pdata.flag_age} Account age: {pdata.account_age.days} days\n"
 
     # Available profile information:
     if pdata.flag_profile == flags.red_flag:
-        print(f"\n  {pdata.flag_profile} No profile information has been provided.")
+        summary += f"\n  {pdata.flag_profile} No profile information has been provided.\n"
     else:
-        _show_profile_dict()
+        summary += _get_profile_summary()
     
     # Recent PR activity:
-    print()
+    summary += "\n"
     if pdata.opened_count >= 10:
         # Only show merged if it's a good sign.
         if pdata.flag_merged_pr == flags.green_flag:
-            print(
-                f"  {pdata.flag_merged_pr} {pdata.merged_count} of {pdata.opened_count} PRs have been merged in the last 21 days."
-            )
-        print(
-            f"  {pdata.flag_closed_pr} {pdata.closed_count} of {pdata.opened_count} PRs have been closed without merging in the last 21 days."
-        )
+            summary += f"  {pdata.flag_merged_pr} {pdata.merged_count} of {pdata.opened_count} PRs have been merged in the last 21 days.\n"
+        summary += f"  {pdata.flag_closed_pr} {pdata.closed_count} of {pdata.opened_count} PRs have been closed without merging in the last 21 days.\n"
     else:
-        print(
-            f"  {flags.green_flag} {pdata.username} has opened fewer than 10 PRs in the last 21 days."
-        )
-    print("")
+        summary += f"  {flags.green_flag} {pdata.username} has opened fewer than 10 PRs in the last 21 days.\n"
+    summary += "\n"
+
+    return summary
 
 
 # --- Helper functions ---
 
-def _show_profile_dict():
+def _get_profile_summary():
     """Summarize information from the user's profile dict."""
-    print(f"\n  {pdata.flag_profile} Profile information:")
+    summary = f"\n  {pdata.flag_profile} Profile information:\n"
 
     for k, v in pdata.profile_dict.items():
         if v and k != "bio":
-            print(f"      {k}: {v}")
+            summary += f"      {k}: {v}\n"
         elif k == "bio":
-            _show_bio(v)
+            summary += _get_bio(v)
         else:
-            print(f"      {k}:")
+            summary += f"      {k}:\n"
 
-def _show_bio(bio):
+    return summary
+
+def _get_bio(bio):
     """Show a bio appropriately."""
     if bio in (None, ""):
-        print(f"      bio:")
-        return
+        return f"      bio:\n"
         
     if bio.count("\n") == 0:
-        print(f"      bio: {bio}")
-        return
+        return f"      bio: {bio}\n"
 
     # Print a multi-line bio.
-    print("      bio:")
+    summary = "      bio:\n"
     for line in bio.splitlines():
-        print(f"        {line}")
+        summary += f"        {line}\n"
+    return summary
