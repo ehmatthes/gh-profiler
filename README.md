@@ -63,7 +63,15 @@ Maintaining
 ### Add/ modify a requirement
 
 - Add or modify a requirement by modifying pyproject.toml, or running `uv add <package>`.
+- For a dev dependency, run `uv add --dev <package>`.
 - Then run `uv lock`.
+
+Running tests
+---
+
+```sh
+$ uv run pytest
+```
 
 New releases
 ---
