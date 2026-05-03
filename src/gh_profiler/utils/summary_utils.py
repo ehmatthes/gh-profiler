@@ -49,7 +49,7 @@ def _profile_summary():
     # List empty fields.
     if empty_fields:
         fields_str = ", ".join(empty_fields)
-        summary += f"     empty fields: {fields_str}\n"
+        summary += f"     Empty fields: {fields_str}\n"
 
     return summary
 
