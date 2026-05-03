@@ -12,17 +12,15 @@ If you have uv installed, you can run this as a tool against any GitHub user:
 
 ```sh
 $ uvx gh-profiler ehmatthes
-
 GitHub user: ehmatthes
   🟢 Account age: 5058 days
 
   🟢 Profile information:
       name: Eric Matthes
-      company:
       blog: https://www.mostlypython.com
       location: western North Carolina
       email: ehmatthes@gmail.com
-      bio:
+     empty fields: company, bio
 
   🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
 ```
@@ -31,7 +29,6 @@ If you're working in your local project directory, you can simply provide a PR o
 
 ```sh
 $ uvx gh-profiler 8
-
 GitHub user: ehmatthes
   🟢 Account age: 5058 days
   ...
@@ -45,7 +42,6 @@ You can also install the project, and then run the bare `gh-profiler` command:
 ```sh
 (.venv) $ pip install gh-profiler
 (.venv) $ gh-profiler ehmatthes
-
 GitHub user: ehmatthes
   🟢 Account age: 5058 days
   ...
