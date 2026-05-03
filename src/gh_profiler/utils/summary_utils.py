@@ -20,22 +20,12 @@ def _get_summary():
     summary += f"GitHub user: {pdata.username}\n"
     summary += f"  {pdata.flag_age} Account age: {pdata.account_age.days} days\n"
 
-    # Available profile information:
     summary += _profile_summary()
+    summary += "\n"
+    summary += _pr_activity_summary()
+    summary += "\n"
     
-    # Recent PR activity:
-    summary += "\n"
-    if pdata.opened_count >= 10:
-        # Only show merged if it's a good sign.
-        if pdata.flag_merged_pr == flags.green_flag:
-            summary += f"  {pdata.flag_merged_pr} {pdata.merged_count} of {pdata.opened_count} PRs have been merged in the last 21 days.\n"
-        summary += f"  {pdata.flag_closed_pr} {pdata.closed_count} of {pdata.opened_count} PRs have been closed without merging in the last 21 days.\n"
-    else:
-        summary += f"  {flags.green_flag} {pdata.username} has opened fewer than 10 PRs in the last 21 days.\n"
-    summary += "\n"
-
     return summary
-
 
 # --- Helper functions ---
 
@@ -45,7 +35,6 @@ def _profile_summary():
         return f"\n  {pdata.flag_profile} No profile information has been provided.\n"
 
     summary = f"\n  {pdata.flag_profile} Profile information:\n"
-
     for k, v in pdata.profile_dict.items():
         if v and k != "bio":
             summary += f"      {k}: {v}\n"
@@ -57,10 +46,10 @@ def _profile_summary():
     return summary
 
 def _bio_summary(bio):
-    """Show a bio appropriately."""
+    """Summarize bio section of profile."""
     if bio in (None, ""):
         return f"      bio:\n"
-        
+
     if bio.count("\n") == 0:
         return f"      bio: {bio}\n"
 
@@ -69,3 +58,17 @@ def _bio_summary(bio):
     for line in bio.splitlines():
         summary += f"        {line}\n"
     return summary
+
+def _pr_activity_summary():
+    """Summarize recent PR activity."""
+    summary = ""
+    if pdata.opened_count >= 10:
+        # Only show merged if it's a good sign.
+        if pdata.flag_merged_pr == flags.green_flag:
+            summary += f"  {pdata.flag_merged_pr} {pdata.merged_count} of {pdata.opened_count} PRs have been merged in the last 21 days.\n"
+        summary += f"  {pdata.flag_closed_pr} {pdata.closed_count} of {pdata.opened_count} PRs have been closed without merging in the last 21 days.\n"
+    else:
+        summary += f"  {flags.green_flag} {pdata.username} has opened fewer than 10 PRs in the last 21 days.\n"
+
+    return summary
+    
