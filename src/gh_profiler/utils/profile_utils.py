@@ -1,6 +1,7 @@
 """Utils for retrieving user information."""
 
 import json
+import re
 from datetime import datetime as dt
 from datetime import timezone as tz
 from datetime import timedelta
@@ -34,6 +35,10 @@ def get_profile_info():
     """Get all the profile info we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
     profile_info = infra_utils.run_cmd(cmd)
+    # In some cases the GitHub CLI will include ASCII color codes in its output. In order to
+    # br able to parse the JSON properly we need to strip those color codes out.
+    profile_info = re.sub(r'\x1b\[[\d;]*m', '', profile_info)
+    
     pdata.profile_info = json.loads(profile_info)
 
     if "created_at" not in pdata.profile_info:
