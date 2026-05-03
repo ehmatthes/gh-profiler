@@ -2,20 +2,16 @@
 
 from datetime import timedelta
 
+import pytest
+
 from gh_profiler.utils import summary_utils
 from gh_profiler.utils.profile_data import profile_data as pdata
 from gh_profiler.utils import flags
 from reference_files import reference_summaries
 
-
-
-def test_summary():
-    """Test the overall summary output.
-    
-    DEV: Consider processing the profile data, instead of setting it?
-         Maybe that's an integration test?
-         Maybe unit test the processing function?
-    """
+@pytest.fixture()
+def filled_pdata():
+    """Fill in a basic pdata profile."""
     pdata.username = "ehmatthes"
     pdata.profile_info = {
         "name": "Eric Matthes",
@@ -36,5 +32,12 @@ def test_summary():
     fields = ["name", "company", "blog", "location", "email", "bio"]
     pdata.profile_dict = {field:pdata.profile_info[field] for field in fields}
 
+def test_summary(filled_pdata):
+    """Test the overall summary output.
+    
+    DEV: Consider processing the profile data, instead of setting it?
+         Maybe that's an integration test?
+         Maybe unit test the processing function?
+    """
     summary = summary_utils._get_summary()
     assert summary.strip() == reference_summaries.full_summary
