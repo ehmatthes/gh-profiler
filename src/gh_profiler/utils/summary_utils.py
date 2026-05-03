@@ -34,14 +34,22 @@ def _profile_summary():
     if pdata.flag_profile == flags.red_flag:
         return f"\n  {pdata.flag_profile} No profile information has been provided.\n"
 
+    # Only show lines for fields that have information.
+    # Collect empty fields for last line.
     summary = f"\n  {pdata.flag_profile} Profile information:\n"
+    empty_fields = []
     for k, v in pdata.profile_dict.items():
         if v and k != "bio":
             summary += f"      {k}: {v}\n"
-        elif k == "bio":
+        elif v and k == "bio":
             summary += _bio_summary(v)
         else:
-            summary += f"      {k}:\n"
+            empty_fields.append(k)
+
+    # List empty fields.
+    if empty_fields:
+        fields_str = ", ".join(empty_fields)
+        summary += f"     empty fields: {fields_str}\n"
 
     return summary
 
