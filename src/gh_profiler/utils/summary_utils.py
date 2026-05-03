@@ -25,7 +25,7 @@ def _get_summary():
     summary += _pr_activity_summary()
     summary += "\n"
     
-    return summary
+    return summary.strip()
 
 # --- Helper functions ---
 
