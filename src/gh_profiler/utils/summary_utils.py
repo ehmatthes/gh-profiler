@@ -21,10 +21,7 @@ def _get_summary():
     summary += f"  {pdata.flag_age} Account age: {pdata.account_age.days} days\n"
 
     # Available profile information:
-    if pdata.flag_profile == flags.red_flag:
-        summary += f"\n  {pdata.flag_profile} No profile information has been provided.\n"
-    else:
-        summary += _get_profile_summary()
+    summary += _get_profile_summary()
     
     # Recent PR activity:
     summary += "\n"
@@ -44,6 +41,9 @@ def _get_summary():
 
 def _get_profile_summary():
     """Summarize information from the user's profile dict."""
+    if pdata.flag_profile == flags.red_flag:
+        return f"\n  {pdata.flag_profile} No profile information has been provided.\n"
+
     summary = f"\n  {pdata.flag_profile} Profile information:\n"
 
     for k, v in pdata.profile_dict.items():
