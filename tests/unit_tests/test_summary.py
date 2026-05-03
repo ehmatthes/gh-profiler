@@ -9,9 +9,20 @@ from gh_profiler.utils.profile_data import profile_data as pdata
 from gh_profiler.utils import flags
 from reference_files import reference_summaries
 
-@pytest.fixture()
+
+# --- Fixtures ---
+
+@pytest.fixture(autouse=True)
 def filled_pdata():
-    """Fill in a basic pdata profile."""
+    """Fill in a basic pdata profile.
+
+    This fixture doesn't need to be passed, because it modifies the singleton
+    pdata object.
+    
+    DEV: Consider processing the profile data, instead of setting it?
+         Maybe that's an integration test?
+         Maybe unit test the processing function?
+    """
     pdata.username = "ehmatthes"
     pdata.profile_info = {
         "name": "Eric Matthes",
@@ -32,7 +43,10 @@ def filled_pdata():
     fields = ["name", "company", "blog", "location", "email", "bio"]
     pdata.profile_dict = {field:pdata.profile_info[field] for field in fields}
 
-def test_summary(filled_pdata):
+
+# --- Test functions ---
+
+def test_summary():
     """Test the overall summary output.
     
     DEV: Consider processing the profile data, instead of setting it?
@@ -41,3 +55,11 @@ def test_summary(filled_pdata):
     """
     summary = summary_utils._get_summary()
     assert summary.strip() == reference_summaries.full_summary
+
+def test_summary_empty_profile():
+    """Test summary for user with an empty profile."""
+    pdata.profile_info = {}
+    pdata.flag_profile = flags.red_flag
+
+    summary = summary_utils._get_summary()
+    assert summary.strip() == reference_summaries.summary_empty_profile

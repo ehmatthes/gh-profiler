@@ -14,3 +14,12 @@ GitHub user: ehmatthes
 
   🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
 """.strip()
+
+summary_empty_profile = """
+GitHub user: ehmatthes
+  🟢 Account age: 5058 days
+
+  🔴 No profile information has been provided.
+
+  🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
+""".strip()
