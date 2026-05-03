@@ -1,7 +1,10 @@
 [project]
 name = "gh-profiler"
-version = "0.2.4"
+version = "0.2.5"
 description = "Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions."
+authors = [
+    {name = "Eric Matthes", email = "ehmatthes@gmail.com"},
+]
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
