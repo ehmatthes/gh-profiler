@@ -43,6 +43,17 @@ def filled_pdata():
     fields = ["name", "company", "blog", "location", "email", "bio"]
     pdata.profile_dict = {field:pdata.profile_info[field] for field in fields}
 
+@pytest.fixture()
+def empty_profile_info():
+    """Empty the profile dict.
+
+    Tests that need this will need to include this fixture explicitly.
+    This can simplify some more specific profile tests.
+    """
+    pdata.profile_info = {}
+    pdata.flag_profile = flags.red_flag
+
+
 
 # --- Test functions ---
 
@@ -56,10 +67,7 @@ def test_summary():
     summary = summary_utils._get_summary()
     assert summary.strip() == reference_summaries.full_summary
 
-def test_summary_empty_profile():
+def test_summary_empty_profile(empty_profile_info):
     """Test summary for user with an empty profile."""
-    pdata.profile_info = {}
-    pdata.flag_profile = flags.red_flag
-
     summary = summary_utils._get_summary()
     assert summary.strip() == reference_summaries.summary_empty_profile
