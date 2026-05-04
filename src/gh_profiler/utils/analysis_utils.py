@@ -2,6 +2,7 @@
 
 from datetime import datetime as dt
 from datetime import timezone as tz
+from collections import Counter
 
 from .profile_data import profile_data as pdata
 from . import flags
@@ -63,6 +64,7 @@ def process_issue_activity():
 
     # How many have been closed with a problematic state?
     _process_issue_state()
+    _process_repeated_issues()
 
     # Determine a flag for the overall issue section.
     _process_issue_flags()
@@ -90,6 +92,24 @@ def _process_issue_state():
     else:
         flag = flags.red_flag
     pdata.flag_issues_not_planned = flag
+
+def _process_repeated_issues():
+    """Look for spamming the same issue to multiple repositories."""
+    issue_dicts = pdata.issue_activity["nodes"]
+    issue_titles = [d["title"].strip() for d in issue_dicts]
+
+    counter = Counter(issue_titles)
+    # Only keep titles for repeated issues.
+    pdata.repeated_issue_titles = {title: count for title, count in counter.items() if count > 1}
+    pdata.total_repeats = sum(pdata.repeated_issue_titles.values())
+
+    if pdata.total_repeats == 0:
+        flag = flags.green_flag
+    elif pdata.total_repeats <= 3:
+        flag = flags.yellow_flag
+    else:
+        flag = flags.red_flag
+    pdata.flag_repeated_issues = flag
 
 def _process_issue_flags():
     """Determine a flag for the overall issue section."""

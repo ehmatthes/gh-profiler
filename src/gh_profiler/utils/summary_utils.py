@@ -91,6 +91,9 @@ def _issue_activity_summary():
         return f"\n    {pdata.usename} has not opened any new issues in the last 21 days.\n"
 
     summary = f"  {pdata.flag_overall_issues} {pdata.username} has opened {pdata.new_issue_count} new issues in the last 21 days.\n"
-    summary += f"     {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues have been closed as NOT_PLANNED."
+    summary += f"     {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues have been closed as NOT_PLANNED.\n"
+    summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues were opened with the same title.\n"
+    for title, count in pdata.repeated_issue_titles.items():
+        summary += f"      {count} {title}\n"
 
     return summary
