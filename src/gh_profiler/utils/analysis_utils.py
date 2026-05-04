@@ -55,3 +55,7 @@ def process_pr_activity():
     pdata.flag_merged_pr = None
     if ratio_merged > 0.5:
         pdata.flag_merged_pr = flags.green_flag
+
+def process_issue_activity():
+    """Evaluate recent public issue activity."""
+    ...

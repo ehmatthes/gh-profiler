@@ -24,6 +24,8 @@ def _get_summary():
     summary += "\n"
     summary += _pr_activity_summary()
     summary += "\n"
+    summary += _issue_activity_summary()
+    summary += "\n"
     
     return summary.strip()
 
@@ -81,3 +83,8 @@ def _pr_activity_summary():
     summary += f"  {pdata.flag_closed_pr} {pdata.closed_count} of {pdata.opened_count} PRs have been closed without merging in the last 21 days.\n"
 
     return summary
+
+def _issue_activity_summary():
+    """Summarize recent public issue activity."""
+    ...
+    return ""

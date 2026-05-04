@@ -65,3 +65,6 @@ def get_pr_activity():
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
 
+def get_issue_activity():
+    """Get target user's recent public issue activity."""
+    ...

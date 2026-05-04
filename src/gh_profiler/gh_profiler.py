@@ -31,6 +31,10 @@ def main(gh_user):
     profile_utils.get_pr_activity()
     analysis_utils.process_pr_activity()
 
+    # What does recent issue activity look like?
+    profile_utils.get_issue_activity()
+    analysis_utils.process_issue_activity()
+
     # Summarize findings.
     summary_utils.show_summary()
 
