@@ -1,6 +1,6 @@
 [project]
 name = "gh-profiler"
-version = "0.3.0"
+version = "0.3.1"
 description = "Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions."
 authors = [
     {name = "Eric Matthes", email = "ehmatthes@gmail.com"},
