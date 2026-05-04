@@ -58,4 +58,49 @@ def process_pr_activity():
 
 def process_issue_activity():
     """Evaluate recent public issue activity."""
+    # How many new issues have been opened recently?
     pdata.new_issue_count = pdata.issue_activity["issueCount"]
+
+    # How many have been closed with a problematic state?
+    _process_issue_state()
+
+    # Determine a flag for the overall issue section.
+    _process_issue_flags()
+
+
+# --- Helper functions ---
+
+def _process_issue_state():
+    """Examine state of closed issues.
+
+    Mostly looking for statuses like "NOT_PLANNED".
+    The GraphQL endpoint 
+    """
+    issue_dicts = pdata.issue_activity["nodes"]
+
+    # How many issues were closed as NOT_PLANNED?
+    pdata.issues_not_planned = len(
+        [d for d in issue_dicts if d["stateReason"] == "NOT_PLANNED"])
+
+    # Green flag
+    if pdata.issues_not_planned <= 3:
+        flag = flags.green_flag
+    elif pdata.issues_not_planned <= 5:
+        flag = flags.yellow_flag
+    else:
+        flag = flags.red_flag
+    pdata.flag_issues_not_planned = flag
+
+def _process_issue_flags():
+    """Determine a flag for the overall issue section."""
+    # Assume flag is green.
+    flag = flags.green_flag
+    
+    # If any are yellow, bump overall to yellow.
+    if flags.yellow_flag in (pdata.flag_issues_not_planned, ):
+        flag = flags.yellow_flag
+    # If any are red, bump overall to red.
+    if flags.red_flag in (pdata.flag_issues_not_planned, ):
+        flag = flags.red_flag
+    
+    pdata.flag_overall_issues = flag
