@@ -35,12 +35,8 @@ def ensure_gh():
 def get_profile_info():
     """Get all the profile info we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
-    env = {
-        **os.environ,
-        'CLICOLOR_FORCE': '0',
-        'NO_COLOR': '1',
-    }
-    profile_info = infra_utils.run_cmd(cmd, env=env)
+
+    profile_info = infra_utils.run_cmd(cmd)
     
     pdata.profile_info = json.loads(profile_info)
 
