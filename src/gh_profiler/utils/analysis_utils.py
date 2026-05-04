@@ -20,13 +20,14 @@ def process_account_age():
     else:
         pdata.flag_age = flags.red_flag
 
+
 def process_profile_info():
     """Evaluate available profile information.
 
     Focus on: name, company, blog, lcoation, email, bio
     """
     fields = ["name", "company", "blog", "location", "email", "bio"]
-    pdata.profile_dict = {field:pdata.profile_info[field] for field in fields}
+    pdata.profile_dict = {field: pdata.profile_info[field] for field in fields}
 
     num_filled = sum(v not in (None, "") for v in pdata.profile_dict.values())
     if num_filled == 0:
@@ -57,6 +58,7 @@ def process_pr_activity():
     if ratio_merged > 0.5:
         pdata.flag_merged_pr = flags.green_flag
 
+
 def process_issue_activity():
     """Evaluate recent public issue activity."""
     # How many new issues have been opened recently?
@@ -72,17 +74,19 @@ def process_issue_activity():
 
 # --- Helper functions ---
 
+
 def _process_issue_state():
     """Examine state of closed issues.
 
     Mostly looking for statuses like "NOT_PLANNED".
-    The GraphQL endpoint 
+    The GraphQL endpoint
     """
     issue_dicts = pdata.issue_activity["nodes"]
 
     # How many issues were closed as NOT_PLANNED?
     pdata.issues_not_planned = len(
-        [d for d in issue_dicts if d["stateReason"] == "NOT_PLANNED"])
+        [d for d in issue_dicts if d["stateReason"] == "NOT_PLANNED"]
+    )
 
     # Green flag
     if pdata.issues_not_planned <= 3:
@@ -93,6 +97,7 @@ def _process_issue_state():
         flag = flags.red_flag
     pdata.flag_issues_not_planned = flag
 
+
 def _process_repeated_issues():
     """Look for spamming the same issue to multiple repositories."""
     issue_dicts = pdata.issue_activity["nodes"]
@@ -100,7 +105,9 @@ def _process_repeated_issues():
 
     counter = Counter(issue_titles)
     # Only keep titles for repeated issues.
-    pdata.repeated_issue_titles = {title: count for title, count in counter.items() if count > 1}
+    pdata.repeated_issue_titles = {
+        title: count for title, count in counter.items() if count > 1
+    }
     pdata.total_repeats = sum(pdata.repeated_issue_titles.values())
 
     if pdata.total_repeats == 0:
@@ -111,16 +118,17 @@ def _process_repeated_issues():
         flag = flags.red_flag
     pdata.flag_repeated_issues = flag
 
+
 def _process_issue_flags():
     """Determine a flag for the overall issue section."""
     # Assume flag is green.
     flag = flags.green_flag
-    
+
     # If any are yellow, bump overall to yellow.
-    if flags.yellow_flag in (pdata.flag_issues_not_planned, ):
+    if flags.yellow_flag in (pdata.flag_issues_not_planned,):
         flag = flags.yellow_flag
     # If any are red, bump overall to red.
-    if flags.red_flag in (pdata.flag_issues_not_planned, ):
+    if flags.red_flag in (pdata.flag_issues_not_planned,):
         flag = flags.red_flag
-    
+
     pdata.flag_overall_issues = flag
