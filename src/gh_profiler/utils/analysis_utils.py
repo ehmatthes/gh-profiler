@@ -121,14 +121,15 @@ def _process_repeated_issues():
 
 def _process_issue_flags():
     """Determine a flag for the overall issue section."""
-    # Assume flag is green.
-    flag = flags.green_flag
+    issues_flags = (
+        pdata.flag_issues_not_planned,
+        pdata.flag_repeated_issues,
+    )
 
-    # If any are yellow, bump overall to yellow.
-    if flags.yellow_flag in (pdata.flag_issues_not_planned,):
-        flag = flags.yellow_flag
-    # If any are red, bump overall to red.
-    if flags.red_flag in (pdata.flag_issues_not_planned,):
-        flag = flags.red_flag
-
-    pdata.flag_overall_issues = flag
+    # Overall flag is red if any flags are red...
+    if flags.red_flag in issues_flags:
+        pdata.flag_overall_issues = flags.red_flag
+    elif flags.yellow_flag in issues_flags:
+        pdata.flag_overall_issues = flags.yellow_flag
+    else:
+        pdata.flag_overall_issues = flags.green_flag

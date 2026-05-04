@@ -83,7 +83,12 @@ def get_issue_activity():
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
 
-    pdata.issue_activity = json.loads(issue_activity)["data"]["search"]
+    try:
+        pdata.issue_activity = json.loads(issue_activity)["data"]["search"]
+    except json.decoder.JSONDecodeError:
+        msg = "Couldn't get recent issue activity. The gh CLI may have timed out."
+        msg += "\n  You may want to try running the command again."
+        sys.exit(msg)
 
 
 # --- Helper functions ---
