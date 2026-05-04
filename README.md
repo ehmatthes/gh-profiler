@@ -11,18 +11,22 @@ Running as a tool
 If you have uv installed, you can run this as a tool against any GitHub user:
 
 ```sh
-$ uvx gh-profiler ehmatthes
-GitHub user: ehmatthes
-  🟢 Account age: 5058 days
+$ uvx gh-profiler <redacted>
+GitHub user: <redacted>
+  🟡 Account age: 159 days
 
   🟢 Profile information:
-      name: Eric Matthes
-      blog: https://www.mostlypython.com
-      location: western North Carolina
-      email: ehmatthes@gmail.com
-     empty fields: company, bio
+      name: <redacted>
+      blog: https://<redacted>.com
+      email: info@<redacted>.com
+     Empty fields: company, location, bio
 
-  🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
+  🟢 <redacted> has opened fewer than 10 PRs in the last 21 days.
+
+  🟢 <redacted> has opened 6 new issues in the last 21 days.
+     🟢 0 issues have been closed as NOT_PLANNED.
+     🔴 6 issues were opened with the same title:
+        📋 Documentation Enhancement Suggestion (6)
 ```
 
 If you're working in your local project directory, you can simply provide a PR or issue number. The tool will look up the PR or issue, identify the user who opened it, and give a report on that user:
