@@ -5,6 +5,7 @@ from datetime import datetime as dt
 from datetime import timezone as tz
 from datetime import timedelta
 from urllib.parse import quote
+from textwrap import dedent
 import sys
 
 from .profile_data import profile_data as pdata
@@ -67,4 +68,40 @@ def get_pr_activity():
 
 def get_issue_activity():
     """Get target user's recent public issue activity."""
-    ...
+    cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
+    gh_call = _get_gh_issues_call(pdata.username, cutoff)
+    
+    
+
+
+# --- Helper functions ---
+
+def _get_gh_issues_call(username, cutoff):
+    """Return the gh call for recent public issue activity."""
+    gh_call = f"""
+        gh api graphql -f query='
+        query($q: String!, $n: Int!) {{
+        search(query: $q, type: ISSUE, first: $n) {{
+            issueCount
+            pageInfo {{
+            hasNextPage
+            endCursor
+            }}
+            nodes {{
+            ... on Issue {{
+                number
+                title
+                createdAt
+                state
+                stateReason
+                url
+                repository {{
+                nameWithOwner
+                }}
+            }}
+            }}
+        }}
+        }}' -F q='author:<{username}> is:issue is:public created:>={cutoff}' -F n=100
+    """
+
+    return dedent(gh_call).strip()
