@@ -23,7 +23,7 @@ GitHub user: <redacted>
 
   🟢 <redacted> has opened fewer than 10 PRs in the last 21 days.
 
-  🟢 <redacted> has opened 6 new issues in the last 21 days.
+  🔴 <redacted> has opened 6 new issues in the last 21 days.
      🟢 0 issues have been closed as NOT_PLANNED.
      🔴 6 issues were opened with the same title:
         📋 Documentation Enhancement Suggestion (6)
