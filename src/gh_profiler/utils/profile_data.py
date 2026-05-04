@@ -23,6 +23,7 @@ class ProfileData:
 
     # Issue fields
     new_issue_count: int = 0
+    issues_not_planned: int = 0
     total_repeats: int = 0
     repeated_issue_titles: dict | None = None
 

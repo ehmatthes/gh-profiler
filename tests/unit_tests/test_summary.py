@@ -24,6 +24,7 @@ def filled_pdata():
          Maybe unit test the processing function?
     """
     pdata.username = "ehmatthes"
+
     pdata.profile_info = {
         "name": "Eric Matthes",
         "company": None,
@@ -32,16 +33,29 @@ def filled_pdata():
         "email": "ehmatthes@gmail.com",
         "bio": None,
     }
+    pdata.account_age = timedelta(days=5058)
+
     pdata.opened_count = 5
     pdata.closed_count = 1
     pdata.merged_count = 3
-    pdata.account_age = timedelta(days=5058)
+    
     pdata.flag_age = flags.green_flag
     pdata.flag_profile = flags.green_flag
 
     # This is taken from analysis_utils.py:
     fields = ["name", "company", "blog", "location", "email", "bio"]
     pdata.profile_dict = {field:pdata.profile_info[field] for field in fields}
+
+    # Issue fields
+    pdata.new_issue_count = 7
+    pdata.total_repeats = 0
+    pdata.repeated_issue_titles = {}
+    
+    pdata.flag_issues_not_planned = flags.green_flag
+    pdata.flag_repeated_issues = flags.green_flag
+
+    # Call function to process this?
+    pdata.flag_overall_issues = flags.green_flag
 
 @pytest.fixture()
 def empty_profile_info():
