@@ -94,6 +94,6 @@ def _issue_activity_summary():
     summary += f"     {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues have been closed as NOT_PLANNED.\n"
     summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues were opened with the same title.\n"
     for title, count in pdata.repeated_issue_titles.items():
-        summary += f"      {count} {title}\n"
+        summary += f"        {title} ({count})\n"
 
     return summary
