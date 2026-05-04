@@ -8,6 +8,16 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.3.1
+
+#### External changes
+
+- Fixes bug where overall issues flag was not taking into account repeated issue titles.
+
+#### Internal changes
+
+- Simpler logic for processing overall issues flag.
+
 ### 0.3.0
 
 #### External changes
