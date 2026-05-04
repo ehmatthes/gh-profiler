@@ -94,7 +94,7 @@ def _issue_activity_summary():
     summary += f"     {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues have been closed as NOT_PLANNED.\n"
 
     # Repeated issues:
-    if pdata.flag_repeated_issues == 0:
+    if pdata.total_repeats == 0:
         summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues were opened with the same title.\n"
     else:
         summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues were opened with the same title:\n"
