@@ -12,7 +12,13 @@ These initial releases have usable behavior, but may have some rough edges for s
 
 #### External changes
 
-- N/A
+- Summarize recent public issue activity.
+    - Look for multiple issues closed as `NOT_PLANNED`.
+    - Look for multiple issues filed with identical titles, usually across multiple repositories.
+
+#### Internal changes
+
+- Strip ASCII color codes from gh output. We're only analyzing that text, so we didn't need it anyway. #28
 
 ### 0.2.5
 
