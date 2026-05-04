@@ -87,4 +87,9 @@ def _pr_activity_summary():
 def _issue_activity_summary():
     """Summarize recent public issue activity."""
     ...
-    return ""
+    if pdata.new_issue_count == 0:
+        return f"\n    {pdata.usename} has not opened any new issues in the last 21 days.\n"
+
+    summary = f"     {pdata.username} has opened {pdata.new_issue_count} new issues in the last 21 days.\n"
+
+    return summary

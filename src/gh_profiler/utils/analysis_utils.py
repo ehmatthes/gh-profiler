@@ -58,4 +58,4 @@ def process_pr_activity():
 
 def process_issue_activity():
     """Evaluate recent public issue activity."""
-    ...
+    pdata.new_issue_count = pdata.issue_activity["issueCount"]

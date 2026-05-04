@@ -77,7 +77,7 @@ def get_issue_activity():
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
     
-    pdata.issue_activity = json.loads(issue_activity)
+    pdata.issue_activity = json.loads(issue_activity)["data"]["search"]
 
 
 # --- Helper functions ---
