@@ -1,12 +1,9 @@
 """Main CLI entry point for gh-profiler."""
 
-import json
-import sys
 
 import click
 
 from . import gh_profiler
-from .utils.infra_utils import run_cmd
 from .utils import cli_utils
 
 

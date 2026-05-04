@@ -1,12 +1,9 @@
 """Utils for the gh-profiler CLI."""
 
-import json
 import sys
 
-import click
 
 from .infra_utils import run_cmd
-from . import cli_utils
 
 
 def get_username(pr_issue_num):

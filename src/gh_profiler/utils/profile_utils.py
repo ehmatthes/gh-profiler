@@ -1,8 +1,6 @@
 """Utils for retrieving user information."""
 
 import json
-import os
-import re
 from datetime import datetime as dt
 from datetime import timezone as tz
 from datetime import timedelta
