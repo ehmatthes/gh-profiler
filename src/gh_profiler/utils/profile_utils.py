@@ -77,9 +77,7 @@ def get_issue_activity():
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
     
-    breakpoint()
-
-    
+    pdata.issue_activity = json.loads(issue_activity)
 
 
 # --- Helper functions ---
@@ -109,7 +107,7 @@ def _get_gh_issues_call(username, cutoff):
             }}
             }}
         }}
-        }}' -F q='author:<{username}> is:issue is:public created:>={cutoff}' -F n=100
+        }}' -F q='author:{username} is:issue is:public created:>={cutoff}' -F n=100
     """
 
     return dedent(gh_call).strip()
