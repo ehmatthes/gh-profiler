@@ -70,7 +70,15 @@ def get_issue_activity():
     """Get target user's recent public issue activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
     gh_call = _get_gh_issues_call(pdata.username, cutoff)
+    try:
+        issue_activity = infra_utils.run_cmd(gh_call)
+    except ValueError:
+        msg = "Couldn't get recent issue activity. The gh CLI may have timed out."
+        msg += "\n  You may want to try running the command again."
+        sys.exit(msg)
     
+    breakpoint()
+
     
 
 
