@@ -92,9 +92,8 @@ def _pr_activity_summary():
 
 def _issue_activity_summary():
     """Summarize recent public issue activity."""
-    ...
     if pdata.new_issue_count == 0:
-        return f"\n    {pdata.username} has not opened any new issues in the last 21 days.\n"
+        return f"  {flags.green_flag} {pdata.username} has not opened any new issues in the last 21 days.\n"
 
     summary = f"  {pdata.flag_overall_issues} {pdata.username} has opened {pdata.new_issue_count} new issues in the last 21 days.\n"
     summary += f"     {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues have been closed as NOT_PLANNED.\n"
