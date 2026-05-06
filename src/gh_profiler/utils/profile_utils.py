@@ -26,6 +26,7 @@ def ensure_gh():
         msg += "\n  https://cli.github.com"
         sys.exit(msg)
 
+
 def get_profile_info():
     """Get all the profile info we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
@@ -95,11 +96,12 @@ def get_issue_activity():
 
 # --- Helper functions ---
 
+
 def _ensure_authenticated(profile_info):
     """Check that the gh CLI tool has been authenticated.
-    
+
     This should be called when the first external gh call is made.
-    Making this check on the output of an actual call is more efficent than 
+    Making this check on the output of an actual call is more efficent than
     calling `gh api user --jq .login` just to verify authentication.
     """
     if not profile_info.strip():
