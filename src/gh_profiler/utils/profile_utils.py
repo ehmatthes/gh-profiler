@@ -4,7 +4,6 @@ import json
 from datetime import datetime as dt
 from datetime import timezone as tz
 from datetime import timedelta
-from urllib.parse import quote
 from textwrap import dedent
 import sys
 
