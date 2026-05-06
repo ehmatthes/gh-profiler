@@ -8,6 +8,18 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.3.3
+
+#### External changes
+
+- Increased exception handling, should catch some failed gh calls.
+- Fewer external calls, should run faster by about 1-2 seconds.
+
+#### Internal changes
+
+- Makes one call to get recent PR activity instead of three.
+- Check for authentication at first external gh call, rather than separate call just to check authentication.
+
 ### 0.3.2
 
 #### External changes
