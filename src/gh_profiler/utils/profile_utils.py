@@ -17,8 +17,6 @@ def ensure_gh():
 
     Check for authentication issues in first external call, rather than making
     a call just for that purpose here.
-
-    DEV: This may need different implementation on Windows or Linux.
     """
     cmd = "gh --version"
     try:
@@ -33,14 +31,7 @@ def get_profile_info():
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
 
     profile_info = infra_utils.run_cmd(cmd)
-
-    # This is the first external call we're making. Check for an authentication
-    # issue here, instead of making a separate call in ensure_gh().
-    if not profile_info.strip():
-        msg = "The GitHub CLI tool (gh) is not authenticated, or the API hung."
-        msg += "\n  If you've already authenticated, try running the gh-profiler command again."
-        msg += "\n  If you're not authenticated, run `gh auth login`."
-        sys.exit(msg)
+    _ensure_authenticated(profile_info)
 
     try:
         pdata.profile_info = json.loads(profile_info)
@@ -103,6 +94,19 @@ def get_issue_activity():
 
 
 # --- Helper functions ---
+
+def _ensure_authenticated(profile_info):
+    """Check that the gh CLI tool has been authenticated.
+    
+    This should be called when the first external gh call is made.
+    Making this check on the output of an actual call is more efficent than 
+    calling `gh api user --jq .login` just to verify authentication.
+    """
+    if not profile_info.strip():
+        msg = "The GitHub CLI tool (gh) is not authenticated, or the API hung."
+        msg += "\n  If you've already authenticated, try running the gh-profiler command again."
+        msg += "\n  If you're not authenticated, run `gh auth login`."
+        sys.exit(msg)
 
 
 def _get_gh_issues_call(username, cutoff):
