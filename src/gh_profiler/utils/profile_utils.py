@@ -39,7 +39,12 @@ def get_profile_info():
 
     profile_info = infra_utils.run_cmd(cmd)
 
-    pdata.profile_info = json.loads(profile_info)
+    try:
+        pdata.profile_info = json.loads(profile_info)
+    except json.decoder.JSONDecodeError:
+        msg = "Couldn't get GitHub profile info. The gh CLI may have timed out."
+        msg += "\n  You may want to try running the command again."
+        sys.exit(msg)
 
     if "created_at" not in pdata.profile_info:
         sys.exit(f"GitHub user '{pdata.username}' not found.")
