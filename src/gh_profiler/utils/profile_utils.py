@@ -15,6 +15,9 @@ from . import infra_utils
 def ensure_gh():
     """Make sure user has gh installed and is authenticated.
 
+    Performance: The `gh --version` call is entirely local, and takes almost no time.
+    There's no performance benefit to eliminating that call.
+
     DEV: This may need different implementation on Windows or Linux.
     """
     cmd = "gh --version"
