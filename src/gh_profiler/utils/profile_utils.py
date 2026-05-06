@@ -61,30 +61,9 @@ def get_pr_activity():
     """Get information about recent PR activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
 
-    query = """
-    query($q: String!, $n: Int!) {
-      search(query: $q, type: ISSUE, first: $n) {
-        issueCount
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-        nodes {
-          ... on PullRequest {
-            number
-            state
-            createdAt
-            closedAt
-            mergedAt
-            url
-          }
-        }
-      }
-    }
-    """
-
+    pr_query = _get_pr_query()
     search_query = f"author:{pdata.username} is:pull-request created:>={cutoff}"
-    cmd = f"gh api graphql -f query='{query}' -F q='{search_query}' -F n=100"
+    cmd = f"gh api graphql -f query='{pr_query}' -F q='{search_query}' -F n=100"
 
     try:
         data = json.loads(infra_utils.run_cmd(cmd))
@@ -155,3 +134,29 @@ def _get_gh_issues_call(username, cutoff):
     """
 
     return dedent(gh_call).strip()
+
+def _get_pr_query():
+    """Return the graphql query for recent PR activity."""
+    pr_query = f"""
+        query($q: String!, $n: Int!) {{
+            search(query: $q, type: ISSUE, first: $n) {{
+                issueCount
+                pageInfo {{
+                hasNextPage
+                endCursor
+                }}
+                nodes {{
+                ... on PullRequest {{
+                    number
+                    state
+                    createdAt
+                    closedAt
+                    mergedAt
+                    url
+                }}
+                }}
+            }}
+            }}
+    """
+
+    return dedent(pr_query).strip()
