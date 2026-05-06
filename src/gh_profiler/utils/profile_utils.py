@@ -57,27 +57,57 @@ def get_profile_info():
     if pdata.profile_info["created_at"] is None:
         sys.exit(f"GitHub user '{pdata.username}' not found.")
 
-
 def get_pr_activity():
     """Get information about recent PR activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
-    base_query = f"author:{pdata.username} is:pr created:>={cutoff}"
 
-    opened_cmd = f'gh api "search/issues?q={quote(base_query)}" --jq .total_count'
-    merged_cmd = (
-        f'gh api "search/issues?q={quote(base_query + " is:merged")}" --jq .total_count'
+    query = """
+    query($q: String!, $n: Int!) {
+      search(query: $q, type: ISSUE, first: $n) {
+        issueCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes {
+          ... on PullRequest {
+            number
+            state
+            createdAt
+            closedAt
+            mergedAt
+            url
+          }
+        }
+      }
+    }
+    """
+
+    search_query = f"author:{pdata.username} is:pull-request created:>={cutoff}"
+
+    cmd = (
+        "gh api graphql "
+        f"-f query='{query}' "
+        f"-F q='{search_query}' "
+        "-F n=100"
     )
-    closed_cmd = f'gh api "search/issues?q={quote(base_query + " is:closed -is:merged")}" --jq .total_count'
 
-    # DEV: These calls seem to be timing out occasionally.
     try:
-        pdata.opened_count = int(infra_utils.run_cmd(opened_cmd).strip())
-        pdata.merged_count = int(infra_utils.run_cmd(merged_cmd).strip())
-        pdata.closed_count = int(infra_utils.run_cmd(closed_cmd).strip())
-    except ValueError:
+        data = json.loads(infra_utils.run_cmd(cmd))
+    except json.decoder.JSONDecodeError:
         msg = "Couldn't get recent PR activity. The gh CLI may have timed out."
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
+
+    search = data["data"]["search"]
+    prs = search["nodes"]
+
+    pdata.opened_count = len(prs)
+    pdata.merged_count = sum(pr["mergedAt"] is not None for pr in prs)
+    pdata.closed_count = sum(
+        pr["state"] == "CLOSED" and pr["mergedAt"] is None
+        for pr in prs
+    )
 
 
 def get_issue_activity():
