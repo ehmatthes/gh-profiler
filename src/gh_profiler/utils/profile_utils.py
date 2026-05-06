@@ -57,6 +57,7 @@ def get_profile_info():
     if pdata.profile_info["created_at"] is None:
         sys.exit(f"GitHub user '{pdata.username}' not found.")
 
+
 def get_pr_activity():
     """Get information about recent PR activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
@@ -78,8 +79,7 @@ def get_pr_activity():
     pdata.opened_count = len(prs)
     pdata.merged_count = sum(pr["mergedAt"] is not None for pr in prs)
     pdata.closed_count = sum(
-        pr["state"] == "CLOSED" and pr["mergedAt"] is None
-        for pr in prs
+        pr["state"] == "CLOSED" and pr["mergedAt"] is None for pr in prs
     )
 
 
@@ -134,6 +134,7 @@ def _get_gh_issues_call(username, cutoff):
     """
 
     return dedent(gh_call).strip()
+
 
 def _get_pr_query():
     """Return the graphql query for recent PR activity."""
