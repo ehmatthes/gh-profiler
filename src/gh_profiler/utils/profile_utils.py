@@ -15,8 +15,8 @@ from . import infra_utils
 def ensure_gh():
     """Make sure user has gh installed and is authenticated.
 
-    Performance: The `gh --version` call is entirely local, and takes almost no time.
-    There's no performance benefit to eliminating that call.
+    Check for authentication issues in first external call, rather than making
+    a call just for that purpose here.
 
     DEV: This may need different implementation on Windows or Linux.
     """
@@ -28,19 +28,19 @@ def ensure_gh():
         msg += "\n  https://cli.github.com"
         sys.exit(msg)
 
-    cmd = "gh api user --jq .login"
-    if not infra_utils.run_cmd(cmd).strip():
-        msg = "The GitHub CLI tool (gh) is not authenticated, or the API hung."
-        msg += "\n  If you've already authenticated, try running the gh-profiler command again."
-        msg += "\n  If you're not authenticated, run `gh auth login`."
-        sys.exit(msg)
-
-
 def get_profile_info():
     """Get all the profile info we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
 
     profile_info = infra_utils.run_cmd(cmd)
+
+    # This is the first external call we're making. Check for an authentication
+    # issue here, instead of making a separate call in ensure_gh().
+    if not profile_info.strip():
+        msg = "The GitHub CLI tool (gh) is not authenticated, or the API hung."
+        msg += "\n  If you've already authenticated, try running the gh-profiler command again."
+        msg += "\n  If you're not authenticated, run `gh auth login`."
+        sys.exit(msg)
 
     try:
         pdata.profile_info = json.loads(profile_info)
