@@ -84,13 +84,7 @@ def get_pr_activity():
     """
 
     search_query = f"author:{pdata.username} is:pull-request created:>={cutoff}"
-
-    cmd = (
-        "gh api graphql "
-        f"-f query='{query}' "
-        f"-F q='{search_query}' "
-        "-F n=100"
-    )
+    cmd = f"gh api graphql -f query='{query}' -F q='{search_query}' -F n=100"
 
     try:
         data = json.loads(infra_utils.run_cmd(cmd))
