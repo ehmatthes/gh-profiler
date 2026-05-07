@@ -25,8 +25,16 @@ def ensure_gh():
         msg += "\n  https://cli.github.com"
         sys.exit(msg)
 
+def get_data():
+    """Get all data we'll need from GitHub."""
+    _get_profile_dict()
+    _get_pr_activity()
+    _get_issue_activity()
 
-def get_profile_dict():
+
+# --- Helper functions ---
+
+def _get_profile_dict():
     """Get all the profile information we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
 
@@ -49,7 +57,7 @@ def get_profile_dict():
         sys.exit(f"GitHub user '{pdata.username}' not found.")
 
 
-def get_pr_activity():
+def _get_pr_activity():
     """Get information about recent PR activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
 
@@ -74,7 +82,7 @@ def get_pr_activity():
     )
 
 
-def get_issue_activity():
+def _get_issue_activity():
     """Get target user's recent public issue activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
     gh_call = _get_gh_issues_call(pdata.username, cutoff)
@@ -92,10 +100,6 @@ def get_issue_activity():
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
 
-
-# --- Helper functions ---
-
-
 def _ensure_authenticated(profile_dict_str):
     """Check that the gh CLI tool has been authenticated.
 
@@ -108,7 +112,6 @@ def _ensure_authenticated(profile_dict_str):
         msg += "\n  If you've already authenticated, try running the gh-profiler command again."
         msg += "\n  If you're not authenticated, run `gh auth login`."
         sys.exit(msg)
-
 
 def _get_gh_issues_call(username, cutoff):
     """Return the gh call for recent public issue activity."""
