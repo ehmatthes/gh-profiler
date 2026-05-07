@@ -6,7 +6,6 @@ to invest in reviewing PRs, and general interaction on open source projects.
 
 import sys
 
-from .utils.profile_data import profile_data as pdata
 from .utils import profile_utils
 from .utils import analysis_utils
 from .utils import summary_utils
