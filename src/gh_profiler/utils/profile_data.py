@@ -32,5 +32,9 @@ class ProfileData:
 
     flag_overall_issues: str = ""
 
+    # Behavior fields
+    # Redact is used primarily for live demos, and screenshots.
+    redact = False
+
 
 profile_data = ProfileData()
