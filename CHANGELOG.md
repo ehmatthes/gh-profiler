@@ -8,6 +8,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.3.4
+
+#### External changes
+
+- Support `--redact`, which replaces primary identifying information with "<redacted>".
+
+#### Internal changes
+
+- Simpler main file. Calls one function to get data, and one function to process data.
+- Move test fixtures to conftest file.
+
 ### 0.3.3
 
 #### External changes
