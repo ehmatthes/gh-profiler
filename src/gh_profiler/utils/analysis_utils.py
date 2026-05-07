@@ -18,6 +18,7 @@ def process_data():
 
 # --- Helper functions ---
 
+
 def _process_account_age():
     """Evaluate account age."""
     ts_created = dt.fromisoformat(pdata.profile_dict["created_at"])
