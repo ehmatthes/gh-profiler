@@ -36,11 +36,12 @@ def _get_summary():
 
 # --- Helper functions ---
 
+
 def _redact_info():
     """Redact identifying information when --redact passed.
-    
+
     This is primarily used for live demos, and screenshots.
-    
+
     Redact here, when all analysis has been done, and we're only presenting
     information.
     """

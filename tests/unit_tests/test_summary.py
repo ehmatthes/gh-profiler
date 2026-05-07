@@ -1,7 +1,5 @@
 """Tests for the summary that's generated."""
 
-
-
 from gh_profiler.utils import summary_utils
 from gh_profiler.utils.profile_data import profile_data as pdata
 from reference_files import reference_summaries
@@ -32,6 +30,7 @@ def test_no_issue_activity():
     assert "🟢 ehmatthes has not opened any new issues in the last 21 days." in summary
     assert "issues have been closed as NOT_PLANNED." not in summary
     assert "issues were opened with the same title:" not in summary
+
 
 def test_redact():
     """Test output when pdata.redact is True."""
