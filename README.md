@@ -60,6 +60,21 @@ $ python -m gh_profiler <username>
 Maintaining
 ---
 
+### `--redact`
+
+For live demos and screenshots, you can pass the `--redact` flag. The username and profile information sections will show "<redacted>" in place of identifying information:
+
+```sh
+$ uv run gh-profiler 39 --redact
+GitHub user: <redacted>
+  🟢 Account age: 5064 days
+
+  🟢 Profile information:
+      name: <redacted>
+      blog: <redacted>
+      ...
+```
+
 ### Add/ modify a requirement
 
 - Add or modify a requirement by modifying pyproject.toml, or running `uv add <package>`.
