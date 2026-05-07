@@ -10,7 +10,7 @@ from . import flags
 
 def process_account_age():
     """Evaluate account age."""
-    ts_created = dt.fromisoformat(pdata.profile_info["created_at"])
+    ts_created = dt.fromisoformat(pdata.profile_dict["created_at"])
     pdata.account_age = dt.now(tz.utc) - ts_created
 
     if pdata.account_age.days > 3 * 365:
@@ -27,9 +27,9 @@ def process_profile_info():
     Focus on: name, company, blog, lcoation, email, bio
     """
     fields = ["name", "company", "blog", "location", "email", "bio"]
-    pdata.profile_dict = {field: pdata.profile_info[field] for field in fields}
+    pdata.profile_info = {field: pdata.profile_dict[field] for field in fields}
 
-    num_filled = sum(v not in (None, "") for v in pdata.profile_dict.values())
+    num_filled = sum(v not in (None, "") for v in pdata.profile_info.values())
     if num_filled == 0:
         pdata.flag_profile = flags.red_flag
     elif num_filled < 3:

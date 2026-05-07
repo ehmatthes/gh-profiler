@@ -19,7 +19,7 @@ def main(gh_user):
     profile_utils.ensure_gh()
 
     # Get all information we'll need about the user's profile.
-    profile_utils.get_profile_info()
+    profile_utils.get_profile_dict()
 
     # How old is the account?
     analysis_utils.process_account_age()

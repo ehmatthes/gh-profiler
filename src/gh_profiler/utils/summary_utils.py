@@ -60,7 +60,7 @@ def _profile_summary():
     # Collect empty fields for last line.
     summary = f"\n  {pdata.flag_profile} Profile information:\n"
     empty_fields = []
-    for k, v in pdata.profile_dict.items():
+    for k, v in pdata.profile_info.items():
         if v and k != "bio":
             summary += f"      {k}: {v}\n"
         elif v and k == "bio":

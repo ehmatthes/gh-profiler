@@ -26,26 +26,26 @@ def ensure_gh():
         sys.exit(msg)
 
 
-def get_profile_info():
-    """Get all the profile info we'll need."""
+def get_profile_dict():
+    """Get all the profile information we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
 
-    profile_info = infra_utils.run_cmd(cmd)
-    _ensure_authenticated(profile_info)
+    profile_dict_str = infra_utils.run_cmd(cmd)
+    _ensure_authenticated(profile_dict_str)
 
     try:
-        pdata.profile_info = json.loads(profile_info)
+        pdata.profile_dict = json.loads(profile_dict_str)
     except json.decoder.JSONDecodeError:
         msg = "Couldn't get GitHub profile info. The gh CLI may have timed out."
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
 
-    if "created_at" not in pdata.profile_info:
+    if "created_at" not in pdata.profile_dict:
         sys.exit(f"GitHub user '{pdata.username}' not found.")
 
     # On Linux, an invalid profile seems to return a dict with all the fields,
     # but every value is None.
-    if pdata.profile_info["created_at"] is None:
+    if pdata.profile_dict["created_at"] is None:
         sys.exit(f"GitHub user '{pdata.username}' not found.")
 
 
@@ -96,14 +96,14 @@ def get_issue_activity():
 # --- Helper functions ---
 
 
-def _ensure_authenticated(profile_info):
+def _ensure_authenticated(profile_dict_str):
     """Check that the gh CLI tool has been authenticated.
 
     This should be called when the first external gh call is made.
     Making this check on the output of an actual call is more efficent than
     calling `gh api user --jq .login` just to verify authentication.
     """
-    if not profile_info.strip():
+    if not profile_dict_str.strip():
         msg = "The GitHub CLI tool (gh) is not authenticated, or the API hung."
         msg += "\n  If you've already authenticated, try running the gh-profiler command again."
         msg += "\n  If you're not authenticated, run `gh auth login`."

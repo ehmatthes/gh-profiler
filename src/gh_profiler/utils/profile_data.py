@@ -7,13 +7,16 @@ from dataclasses import dataclass
 class ProfileData:
     username: str = ""
 
-    # Profile info
+    # --- Profile info ---
+    # profile_dict is the raw profile data we get from GitHub.
+    # profile_info is the information we analyze and present.
+    profile_dict: dict | None = None
     profile_info: dict | None = None
     account_age: int = 0
 
     flag_age: str = ""
 
-    # PR fields
+    # --- PR fields ---
     opened_count: int = 0
     merged_count: int = 0
     closed_count: int = 0
@@ -21,7 +24,7 @@ class ProfileData:
     flag_merged_pr: str = ""
     flag_closed_pr: str = ""
 
-    # Issue fields
+    # --- Issue fields ---
     new_issue_count: int = 0
     issues_not_planned: int = 0
     total_repeats: int = 0
@@ -32,7 +35,7 @@ class ProfileData:
 
     flag_overall_issues: str = ""
 
-    # Behavior fields
+    # --- Behavior fields ---
     # Redact is used primarily for live demos, and screenshots.
     redact: bool = False
 
