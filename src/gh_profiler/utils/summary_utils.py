@@ -6,7 +6,6 @@ from . import flags
 
 def show_summary():
     """Show a concise summary of what was found."""
-    _redact_info()
     summary = _get_summary()
     print(summary)
 
@@ -16,6 +15,9 @@ def _get_summary():
 
     This is more testable and flexible than just printing each bit of information.
     """
+    if pdata.redact:
+        _redact_info()
+
     summary = ""
 
     # Username, account age:
@@ -42,9 +44,6 @@ def _redact_info():
     Redact here, when all analysis has been done, and we're only presenting
     information.
     """
-    if not pdata.redact:
-        return
-    
     pdata.username = "<redacted>"
     for k, v in pdata.profile_info.items():
         if v:
