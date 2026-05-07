@@ -8,7 +8,17 @@ from .profile_data import profile_data as pdata
 from . import flags
 
 
-def process_account_age():
+def process_data():
+    """Process all data."""
+    _process_account_age()
+    _process_profile_info()
+    _process_pr_activity()
+    _process_issue_activity()
+
+
+# --- Helper functions ---
+
+def _process_account_age():
     """Evaluate account age."""
     ts_created = dt.fromisoformat(pdata.profile_dict["created_at"])
     pdata.account_age = dt.now(tz.utc) - ts_created
@@ -21,7 +31,7 @@ def process_account_age():
         pdata.flag_age = flags.red_flag
 
 
-def process_profile_info():
+def _process_profile_info():
     """Evaluate available profile information.
 
     Focus on: name, company, blog, lcoation, email, bio
@@ -38,7 +48,7 @@ def process_profile_info():
         pdata.flag_profile = flags.green_flag
 
 
-def process_pr_activity():
+def _process_pr_activity():
     """Evaluate recent PR activity."""
     # Don't need to analyze PR activity if fewer than 10 PRs opened recently.
     if pdata.opened_count < 10:
@@ -59,7 +69,7 @@ def process_pr_activity():
         pdata.flag_merged_pr = flags.green_flag
 
 
-def process_issue_activity():
+def _process_issue_activity():
     """Evaluate recent public issue activity."""
     # How many new issues have been opened recently?
     pdata.new_issue_count = pdata.issue_activity["issueCount"]
@@ -70,9 +80,6 @@ def process_issue_activity():
 
     # Determine a flag for the overall issue section.
     _process_issue_flags()
-
-
-# --- Helper functions ---
 
 
 def _process_issue_state():

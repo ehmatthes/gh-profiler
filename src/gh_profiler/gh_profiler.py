@@ -15,23 +15,9 @@ def main():
     # Make sure gh is available.
     profile_utils.ensure_gh()
 
-    # Get all data we'll need from GitHub.
+    # Get and analyze all data we'll need from GitHub.
     profile_utils.get_data()
-
-
-
-
-    # How old is the account?
-    analysis_utils.process_account_age()
-
-    # How much profile information is available?
-    analysis_utils.process_profile_info()
-
-    # What does recent PR activity look like?
-    analysis_utils.process_pr_activity()
-
-    # What does recent issue activity look like?
-    analysis_utils.process_issue_activity()
+    analysis_utils.process_data()
 
     # Summarize findings.
     summary_utils.show_summary()
