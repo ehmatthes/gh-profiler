@@ -36,7 +36,9 @@ def main(target, redact):
     try:
         pr_issue_num = int(target)
     except ValueError:
-        gh_profiler.main(target)
+        # target is a username.
+        pdata.username = target
+        gh_profiler.main()
     else:
-        username = cli_utils.get_username(pr_issue_num)
-        gh_profiler.main(username)
+        pdata.username = cli_utils.get_username(pr_issue_num)
+        gh_profiler.main()

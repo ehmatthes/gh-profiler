@@ -12,9 +12,7 @@ from .utils import analysis_utils
 from .utils import summary_utils
 
 
-def main(gh_user):
-    pdata.username = gh_user
-
+def main():
     # Make sure gh is available.
     profile_utils.ensure_gh()
 
