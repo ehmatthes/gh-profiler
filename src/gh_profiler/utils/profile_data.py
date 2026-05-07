@@ -34,7 +34,7 @@ class ProfileData:
 
     # Behavior fields
     # Redact is used primarily for live demos, and screenshots.
-    redact = False
+    redact: bool = False
 
 
 profile_data = ProfileData()
