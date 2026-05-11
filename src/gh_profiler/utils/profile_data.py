@@ -13,6 +13,7 @@ class ProfileData:
     Uses `slots=True` to make sure this is an accurate listing of all fields
     that can be filled in about the user.
     """
+
     username: str = ""
 
     # --- Target info ---

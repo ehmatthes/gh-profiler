@@ -56,12 +56,14 @@ def _redact_info():
         if v:
             pdata.profile_info[k] = "<redacted>"
 
+
 def _pr_title_line():
     """If target is a PR, include title."""
     if not pdata.is_pr:
         return ""
 
     return f"PR #{pdata.pr_number}: {pdata.pr_title}\n"
+
 
 def _issue_title_line():
     """If target is an issue, include title."""
@@ -70,12 +72,14 @@ def _issue_title_line():
 
     return f"Issue #{pdata.issue_number}: {pdata.issue_title}\n"
 
+
 def _username_line():
     """Include username, with appropriate label."""
     if pdata.is_pr or pdata.is_issue:
         return f"Author: {pdata.username}\n"
 
     return f"GitHub user: {pdata.username}\n"
+
 
 def _profile_summary():
     """Summarize information from the user's profile dict."""
