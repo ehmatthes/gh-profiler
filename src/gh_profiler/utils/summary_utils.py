@@ -20,8 +20,12 @@ def _get_summary():
 
     summary = ""
 
-    # Username, account age:
+    # If target is a PR, add title.
+    summary += _pr_title_line()
+
+    # Always include username.
     summary += f"GitHub user: {pdata.username}\n"
+
     summary += f"  {pdata.flag_age} Account age: {pdata.account_age.days} days\n"
 
     summary += _profile_summary()
@@ -50,6 +54,11 @@ def _redact_info():
         if v:
             pdata.profile_info[k] = "<redacted>"
 
+def _pr_title_line():
+    """If target is a PR, include title."""
+    if not pdata.is_pr:
+        return
+    return f"PR #{pdata.pr_number}: {pdata.pr_title}\n"
 
 def _profile_summary():
     """Summarize information from the user's profile dict."""

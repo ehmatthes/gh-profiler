@@ -1,5 +1,6 @@
 """Utils for the gh-profiler CLI."""
 
+import json
 import sys
 
 
@@ -38,12 +39,25 @@ def _get_repo_slug():
 
 def _process_pr(pr_issue_num, repo_slug):
     """See if this is a PR."""
-    pr_cmd = f'gh pr view {pr_issue_num} --repo {repo_slug} --json author --jq ".author.login"'
+    # pr_cmd = f'gh pr view {pr_issue_num} --repo {repo_slug} --json author --jq ".author.login"'
+    pr_cmd = f'gh pr view {pr_issue_num} --repo {repo_slug} --json author --json title'
     try:
-        if username := run_cmd(pr_cmd).strip():
-            return username
-    except Exception as e:
-        breakpoint()
+        results = run_cmd(pr_cmd)
+        results_json = json.loads(results)
+
+        pdata.is_pr = True
+        pdata.pr_number = pr_issue_num
+        pdata.pr_title = results_json["title"]
+
+        return results_json["author"]["login"]
+
+
+        # if username := run_cmd(pr_cmd).strip():
+        #     # This is a PR. Set relevent fields, then return username.
+        #     pdata.is_pr = True
+        #     pdata.pr_number = pr_issue_num
+        #     return username
+    except json.JSONDecodeError:
         return None
 
 

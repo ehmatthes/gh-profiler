@@ -15,6 +15,11 @@ class ProfileData:
     """
     username: str = ""
 
+    # --- Target info ---
+    is_pr: bool = False
+    pr_number: int = 0
+    pr_title: str = ""
+
     # --- Profile info ---
     # profile_dict is the raw profile data we get from GitHub.
     # profile_info is the information we analyze and present.
@@ -38,6 +43,7 @@ class ProfileData:
     issues_not_planned: int = 0
     total_repeats: int = 0
     repeated_issue_titles: dict | None = None
+    issue_activity: dict | None = None
 
     flag_issues_not_planned: str = ""
     flag_repeated_issues: str = ""
