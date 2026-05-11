@@ -57,7 +57,7 @@ def _redact_info():
 def _pr_title_line():
     """If target is a PR, include title."""
     if not pdata.is_pr:
-        return
+        return ""
     return f"PR #{pdata.pr_number}: {pdata.pr_title}\n"
 
 def _profile_summary():
