@@ -8,6 +8,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.3.5
+
+#### External changes
+
+- If target is a PR or issue number, shows the number and title in summary.
+
+#### Internal changes
+
+- cli util sets `pdata.username` directly.
+- `ProfileData` uses slots to lock down fields (not values). This ensures that `ProfileData` is an accurate listing of all fields that can be filled in about the user.
+
 ### 0.3.4
 
 #### External changes
