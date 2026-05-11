@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(slots=True)
 class ProfileData:
     username: str = ""
 
@@ -15,6 +15,7 @@ class ProfileData:
     account_age: int = 0
 
     flag_age: str = ""
+    flag_profile: str = ""
 
     # --- PR fields ---
     opened_count: int = 0
