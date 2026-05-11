@@ -24,17 +24,18 @@ def _get_summary():
     summary += _pr_title_line()
     summary += _issue_title_line()
 
-    # Always include username.
-    summary += f"GitHub user: {pdata.username}\n"
+    # Include username, with label when appropriate.
+    summary += _username_line()
 
+    # Always include account age.
     summary += f"  {pdata.flag_age} Account age: {pdata.account_age.days} days\n"
 
+    # Include profiler, PR activity, and issue activity sections.
     summary += _profile_summary()
     summary += "\n"
     summary += _pr_activity_summary()
     summary += "\n"
     summary += _issue_activity_summary()
-    summary += "\n"
 
     return summary.strip()
 
@@ -59,13 +60,22 @@ def _pr_title_line():
     """If target is a PR, include title."""
     if not pdata.is_pr:
         return ""
+
     return f"PR #{pdata.pr_number}: {pdata.pr_title}\n"
 
 def _issue_title_line():
     """If target is an issue, include title."""
     if not pdata.is_issue:
         return ""
+
     return f"Issue #{pdata.issue_number}: {pdata.issue_title}\n"
+
+def _username_line():
+    """Include username, with appropriate label."""
+    if pdata.is_pr or pdata.is_issue:
+        return f"Author: {pdata.username}\n"
+
+    return f"GitHub user: {pdata.username}\n"
 
 def _profile_summary():
     """Summarize information from the user's profile dict."""
