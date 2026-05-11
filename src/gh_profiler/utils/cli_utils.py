@@ -51,19 +51,12 @@ def _process_pr(pr_issue_num, repo_slug):
 
         return results_json["author"]["login"]
 
-
-        # if username := run_cmd(pr_cmd).strip():
-        #     # This is a PR. Set relevent fields, then return username.
-        #     pdata.is_pr = True
-        #     pdata.pr_number = pr_issue_num
-        #     return username
     except json.JSONDecodeError:
         return None
 
 
 def _process_issue(pr_issue_num, repo_slug):
     """See if this is an issue."""
-    # issue_cmd = f'gh issue view {pr_issue_num} --repo {repo_slug} --json author --jq ".author.login"'
     issue_cmd = f"gh issue view {pr_issue_num} --repo {repo_slug} --json author --json title"
     try:
         results = run_cmd(issue_cmd)
@@ -74,15 +67,7 @@ def _process_issue(pr_issue_num, repo_slug):
         pdata.issue_title = results_json["title"]
 
         return results_json["author"]["login"]
-
-
-
-
-
-
-
-        # if username := run_cmd(issue_cmd).strip():
-        #     return username
+        
     except json.JSONDecodeError:
         # Target was an int, but isn't a PR or an issue.
         msg = f"Couldn't find a PR or issue #{pr_issue_num} in the repository {repo_slug}."
