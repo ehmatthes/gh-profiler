@@ -40,5 +40,6 @@ def main(target, redact):
         pdata.username = target
         gh_profiler.main()
     else:
-        pdata.username = cli_utils.get_username(pr_issue_num)
+        # Target is a PR or an issue number.
+        cli_utils.process_pr_issue_num(pr_issue_num)
         gh_profiler.main()
