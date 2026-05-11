@@ -40,7 +40,7 @@ def _get_repo_slug():
 def _process_pr(pr_issue_num, repo_slug):
     """See if this is a PR."""
     # pr_cmd = f'gh pr view {pr_issue_num} --repo {repo_slug} --json author --jq ".author.login"'
-    pr_cmd = f'gh pr view {pr_issue_num} --repo {repo_slug} --json author --json title'
+    pr_cmd = f"gh pr view {pr_issue_num} --repo {repo_slug} --json author --json title"
     try:
         results = run_cmd(pr_cmd)
         results_json = json.loads(results)
@@ -63,10 +63,27 @@ def _process_pr(pr_issue_num, repo_slug):
 
 def _process_issue(pr_issue_num, repo_slug):
     """See if this is an issue."""
-    issue_cmd = f'gh issue view {pr_issue_num} --repo {repo_slug} --json author --jq ".author.login"'
+    # issue_cmd = f'gh issue view {pr_issue_num} --repo {repo_slug} --json author --jq ".author.login"'
+    issue_cmd = f"gh issue view {pr_issue_num} --repo {repo_slug} --json author --json title"
     try:
-        if username := run_cmd(issue_cmd).strip():
-            return username
-    except Exception:
+        results = run_cmd(issue_cmd)
+        results_json = json.loads(results)
+
+        pdata.is_issue = True
+        pdata.issue_number = pr_issue_num
+        pdata.issue_title = results_json["title"]
+
+        return results_json["author"]["login"]
+
+
+
+
+
+
+
+        # if username := run_cmd(issue_cmd).strip():
+        #     return username
+    except json.JSONDecodeError:
+        # Target was an int, but isn't a PR or an issue.
         msg = f"Couldn't find a PR or issue #{pr_issue_num} in the repository {repo_slug}."
         sys.exit(msg)

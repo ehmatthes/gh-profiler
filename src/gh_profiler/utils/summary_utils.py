@@ -20,8 +20,9 @@ def _get_summary():
 
     summary = ""
 
-    # If target is a PR, add title.
+    # If target is a PR or issue, add title.
     summary += _pr_title_line()
+    summary += _issue_title_line()
 
     # Always include username.
     summary += f"GitHub user: {pdata.username}\n"
@@ -59,6 +60,12 @@ def _pr_title_line():
     if not pdata.is_pr:
         return ""
     return f"PR #{pdata.pr_number}: {pdata.pr_title}\n"
+
+def _issue_title_line():
+    """If target is an issue, include title."""
+    if not pdata.is_issue:
+        return ""
+    return f"Issue #{pdata.issue_number}: {pdata.issue_title}\n"
 
 def _profile_summary():
     """Summarize information from the user's profile dict."""

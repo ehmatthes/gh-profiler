@@ -20,6 +20,10 @@ class ProfileData:
     pr_number: int = 0
     pr_title: str = ""
 
+    is_issue: bool = False
+    issue_number: int = 0
+    issue_title: str = ""
+
     # --- Profile info ---
     # profile_dict is the raw profile data we get from GitHub.
     # profile_info is the information we analyze and present.
