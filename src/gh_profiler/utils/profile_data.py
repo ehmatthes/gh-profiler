@@ -5,6 +5,14 @@ from dataclasses import dataclass
 
 @dataclass(slots=True)
 class ProfileData:
+    """The main data store for everything we learn about the user.
+
+    There's one instance of ProfileData, which is created here when it's first
+    imported.
+
+    Uses `slots=True` to make sure this is an accurate listing of all fields
+    that can be filled in about the user.
+    """
     username: str = ""
 
     # --- Profile info ---
