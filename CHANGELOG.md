@@ -8,6 +8,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.4.0
+
+#### External changes
+
+- Supports `--concise` flag, which generates a more condensed summary that only shows one line for each major section: profile, recent PR activity, and recent issue activity.
+
+#### Internal changes
+---
+
+- Simplified CLI argument parsing.
+
 ### 0.3.5
 
 #### External changes
