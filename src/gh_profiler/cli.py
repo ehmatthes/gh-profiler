@@ -12,7 +12,7 @@ from .utils.profile_data import profile_data as pdata
 @click.version_option(package_name="gh-profiler")
 @click.option("--concise", is_flag=True, help="Show concise output; one flag per category.")
 @click.option("--redact", is_flag=True, help="Redact identifying information.")
-def main(target, redact):
+def main(target, concise, redact):
     """Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions.
 
     You can target a GitHub username, or a PR/issue number from the repository you're working in.
@@ -29,8 +29,8 @@ def main(target, redact):
       ...
     """
     # Parse CLI options.
-    if redact:
-        pdata.redact = True
+    pdata.concise = concise
+    pdata.redact = redact
 
     # If the main argument is an integer, process the PR/issue number.
     # Otherwise, assume it's the username.
