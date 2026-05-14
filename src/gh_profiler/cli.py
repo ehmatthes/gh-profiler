@@ -10,6 +10,7 @@ from .utils.profile_data import profile_data as pdata
 @click.command()
 @click.argument("target")
 @click.version_option(package_name="gh-profiler")
+@click.option("--concise", is_flag=True, help="Show concise output; one flag per category.")
 @click.option("--redact", is_flag=True, help="Redact identifying information.")
 def main(target, redact):
     """Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions.
