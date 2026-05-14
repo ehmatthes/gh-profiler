@@ -44,7 +44,7 @@ def _get_concise_summary():
         "recent issue activity",
     )
 
-    summary += f"For a more detailed report, run `gh-profiler {pdata.username}` without the --concise flag."
+    summary += f"\nFor a more detailed report, run `gh-profiler {pdata.username}`."
 
     return summary
 
