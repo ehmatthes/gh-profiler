@@ -28,16 +28,27 @@ def _get_concise_summary():
     summary = ""
 
     summary += f"GitHub user: {pdata.username}\n"
+    summary += _get_concise_section(
+        pdata.flag_overall_profile,
+        "user's profile",
+    )
     
-    if pdata.flag_overall_profile == flags.green_flag:
-        summary += f"{flags.green_flag} No concerns found with user's profile."
-    elif pdata.flag_overall_profile == flags.yellow_flag:
-        summary += f"{flags.yellow_flag} Some concerns found with user's profile."
-    elif pdata.flag_overall_profile == flags.red_flag:
-        summary += f"{flags.red_flag} Significant concerns found with user's profile."
+    # if pdata.flag_overall_profile == flags.green_flag:
+    #     summary += f"{flags.green_flag} No concerns found with user's profile."
+    # elif pdata.flag_overall_profile == flags.yellow_flag:
+    #     summary += f"{flags.yellow_flag} Some concerns found with user's profile."
+    # elif pdata.flag_overall_profile == flags.red_flag:
+    #     summary += f"{flags.red_flag} Significant concerns found with user's profile."
 
     return summary
-    
+
+def _get_concise_section(flag, section):
+    if flag == flags.green_flag:
+        return f"{flag} No concerns found with {section}."
+    elif flag == flags.yellow_flag:
+        return f"{flag} Some concerns found with {section}."
+    elif flag == flags.red_flag:
+        return f"{flag} Significant concerns found with {section}."
 
 
 def _get_full_summary():
