@@ -39,3 +39,11 @@ def test_redact():
 
     assert "ehmatthes" not in summary
     assert summary.count("<redacted") == 7
+
+def test_concise():
+    """Test output with pdata.concise set to True."""
+    pdata.concise = True
+    summary = summary_utils._get_summary()
+
+    assert "No concerns found with user's profile." in summary
+    assert "Account age:" not in summary

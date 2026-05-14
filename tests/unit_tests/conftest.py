@@ -51,6 +51,8 @@ def filled_pdata():
     pdata.flag_repeated_issues = flags.green_flag
 
     # Call function to process this?
+    pdata.flag_overall_profile = flags.green_flag
+    pdata.flag_overall_pr = flags.green_flag
     pdata.flag_overall_issues = flags.green_flag
 
 
