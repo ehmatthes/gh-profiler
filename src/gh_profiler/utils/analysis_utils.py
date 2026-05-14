@@ -55,6 +55,8 @@ def _process_pr_activity():
     """Evaluate recent PR activity."""
     # Don't need to analyze PR activity if fewer than 10 PRs opened recently.
     if pdata.opened_count < 10:
+        pdata.flag_merged_pr = flags.green_flag
+        pdata.flag_closed_pr = flags.green_flag
         return
 
     ratio_merged = pdata.merged_count / pdata.opened_count
@@ -145,10 +147,16 @@ def _process_profile_flags():
         pdata.flag_age,
         pdata.flag_profile,
     )
+    pdata.flag_overall_profile = _get_overall_flag(profile_flags)
 
 def _process_pr_flags():
     """Determine a flag for the overall PR section."""
-    ...
+    # flag_merged is either None or green. It's never yellow or red.
+    # People can have PRs open for a long time waiting for merges.
+    pr_flags = (
+        pdata.flag_closed_pr,
+    )
+    pdata.flag_overall_pr = _get_overall_flag(pr_flags)
 
 def _process_issue_flags():
     """Determine a flag for the overall issue section."""
@@ -157,14 +165,6 @@ def _process_issue_flags():
         pdata.flag_repeated_issues,
     )
     pdata.flag_overall_issues = _get_overall_flag(issues_flags)
-
-    # # Overall flag is red if any flags are red...
-    # if flags.red_flag in issues_flags:
-    #     pdata.flag_overall_issues = flags.red_flag
-    # elif flags.yellow_flag in issues_flags:
-    #     pdata.flag_overall_issues = flags.yellow_flag
-    # else:
-    #     pdata.flag_overall_issues = flags.green_flag
 
 def _get_overall_flag(component_flags):
     """Get an overall flag based on individual flags from a section.
@@ -175,8 +175,6 @@ def _get_overall_flag(component_flags):
     """
     if flags.red_flag in component_flags:
         return flags.red_flag
-    
     if flags.yellow_flag in component_flags:
         return flags.yellow_flag
-
     return flags.green_flag
