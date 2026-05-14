@@ -58,6 +58,21 @@ When you've installed the project, you can also run it as a module:
 $ python -m gh_profiler <username>
 ```
 
+Concise output
+---
+
+If you want just the simplest summary, you can pass the `--concise` flag:
+
+```sh
+$ uvx gh-profiler <redacted> --concise
+GitHub user: <redacted>
+🟡 Some concerns found with user's profile.
+🟢 No concerns found with recent PR activity.
+🔴 Significant concerns found with recent issue activity.
+
+For a more detailed report, run `gh-profiler <redacted>`.
+```
+
 Maintaining
 ---
 
