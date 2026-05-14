@@ -11,13 +11,37 @@ def show_summary():
 
 
 def _get_summary():
-    """Build a summary string.
-
-    This is more testable and flexible than just printing each bit of information.
-    """
+    """Build a summary string."""
     if pdata.redact:
         _redact_info()
 
+    if pdata.concise:
+        return _get_concise_summary()
+    else:
+        return _get_full_summary()
+
+def _get_concise_summary():
+    """Build the shorter, concise summary string.
+    
+    This is one line for each main section: name, profile, pr activity, issue activity.
+    """
+    summary = ""
+
+    summary += f"GitHub user: {pdata.username}\n"
+    
+    if pdata.flag_overall_profile == flags.green_flag:
+        summary += f"{flags.green_flag} No concerns found with user's profile."
+    elif pdata.flag_overall_profile == flags.yellow_flag:
+        summary += f"{flags.yellow_flag} Some concerns found with user's profile."
+    elif pdata.flag_overall_profile == flags.red_flag:
+        summary += f"{flags.red_flag} Significant concerns found with user's profile."
+
+    return summary
+    
+
+
+def _get_full_summary():
+    """Build the full, detailed summary string."""
     summary = ""
 
     # If target is a PR or issue, add title.
