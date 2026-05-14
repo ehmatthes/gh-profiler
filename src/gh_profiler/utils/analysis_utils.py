@@ -15,6 +15,8 @@ def process_data():
     _process_pr_activity()
     _process_issue_activity()
 
+    _set_overall_flags()
+
 
 # --- Helper functions ---
 
@@ -127,17 +129,54 @@ def _process_repeated_issues():
     pdata.flag_repeated_issues = flag
 
 
+def _set_overall_flags():
+    """Set the overall flags, based on individual flags.
+    
+    These are used for header lines in the final summary, and for the concise
+    summary as well.
+    """
+    _process_profile_flags()
+    _process_pr_flags()
+    _process_issue_flags()
+
+def _process_profile_flags():
+    """Determine a flag for the overall profile section."""
+    profile_flags = (
+        pdata.flag_age,
+        pdata.flag_profile,
+    )
+
+def _process_pr_flags():
+    """Determine a flag for the overall PR section."""
+    ...
+
 def _process_issue_flags():
     """Determine a flag for the overall issue section."""
     issues_flags = (
         pdata.flag_issues_not_planned,
         pdata.flag_repeated_issues,
     )
+    pdata.flag_overall_issues = _get_overall_flag(issues_flags)
 
-    # Overall flag is red if any flags are red...
-    if flags.red_flag in issues_flags:
-        pdata.flag_overall_issues = flags.red_flag
-    elif flags.yellow_flag in issues_flags:
-        pdata.flag_overall_issues = flags.yellow_flag
-    else:
-        pdata.flag_overall_issues = flags.green_flag
+    # # Overall flag is red if any flags are red...
+    # if flags.red_flag in issues_flags:
+    #     pdata.flag_overall_issues = flags.red_flag
+    # elif flags.yellow_flag in issues_flags:
+    #     pdata.flag_overall_issues = flags.yellow_flag
+    # else:
+    #     pdata.flag_overall_issues = flags.green_flag
+
+def _get_overall_flag(component_flags):
+    """Get an overall flag based on individual flags from a section.
+    
+    Overall flag is red if any component flag is red.
+    Then, yellow if any component flag is yellow.
+    If no red or yellow flags, return green.
+    """
+    if flags.red_flag in component_flags:
+        return flags.red_flag
+    
+    if flags.yellow_flag in component_flags:
+        return flags.yellow_flag
+
+    return flags.green_flag
