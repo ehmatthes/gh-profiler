@@ -1,6 +1,7 @@
 """Utils for writing a profile_contributors workflow to the user's repo."""
 
 from pathlib import Path
+import sys
 
 
 def generate_workflow():
@@ -18,4 +19,8 @@ def _get_workflow_path():
     if path_workflows.exists() and not path_pc_workflow.exists():
         return path_pc_workflow
 
-
+    # If the workflow already exists, inform and exit.
+    if path_pc_workflow.exists():
+        msg = f"The file {path_pc_workflow.as_posix()} already exists."
+        msg += "\nIf you want to generate this file, please delete the existing file and run this command again."
+        sys.exit(msg)
