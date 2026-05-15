@@ -4,13 +4,21 @@ The goal is to help make quick, evidence-based decisions about how much time
 to invest in reviewing PRs, and general interaction on open source projects.
 """
 
+import sys
 
+from .utils.profile_data import profile_data as pdata
 from .utils import profile_utils
 from .utils import analysis_utils
+from .utils import workflow_utils
 from .utils import summary_utils
 
 
 def main():
+    # Generate new workflow, if that's what was requested.
+    if pdata.generate_workflow:
+        workflow_utils.generate_workflow()
+        sys.exit()
+
     # Make sure gh is available.
     profile_utils.ensure_gh()
 

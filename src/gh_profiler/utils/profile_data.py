@@ -63,6 +63,8 @@ class ProfileData:
     # Redact is used primarily for live demos, and screenshots.
     redact: bool = False
 
+    generate_workflow: bool = False
+
 
 
 profile_data = ProfileData()

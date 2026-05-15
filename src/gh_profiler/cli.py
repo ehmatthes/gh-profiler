@@ -40,6 +40,12 @@ def main(target, concise, generate_workflow, redact):
     # Parse CLI options.
     pdata.concise = concise
     pdata.redact = redact
+    pdata.generate_workflow = generate_workflow
+
+    # If --generate-workflow was passed, go straight to that work.
+    if generate_workflow:
+        gh_profiler.main()
+        sys.exit()
 
     # If the main argument is an integer, process the PR/issue number.
     # Otherwise, assume it's the username.
