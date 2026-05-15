@@ -8,7 +8,7 @@ from .utils.profile_data import profile_data as pdata
 
 
 @click.command()
-@click.argument("target")
+@click.argument("target", required=False)
 @click.version_option(package_name="gh-profiler")
 @click.option("--concise", is_flag=True, help="Show concise output; one flag per category.")
 @click.option("--redact", is_flag=True, help="Redact identifying information.")
