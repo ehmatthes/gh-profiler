@@ -1,8 +1,4 @@
 # Run gh-profiler against the author of each new issue and PR.
-# This is a bit of dogfooding. :)
-# 
-# But it also raises the question:
-#   What if this kind of information was surfaced all over GitHub?
 
 name: Profile contributors
 
