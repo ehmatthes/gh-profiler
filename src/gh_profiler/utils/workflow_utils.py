@@ -7,15 +7,14 @@ import sys
 def generate_workflow():
     """Write a profile_contributors.yml workflow file to the user's repo."""
     path = _get_workflow_path()
-    print(f"Writing to: {path.as_posix()}...")
+    _confirm_write_workflow(path)
 
 def _get_workflow_path():
     """Determine the path we'd like to write the workflow to."""
-    path_cwd = Path.cwd()
+    path_workflows = Path.cwd() / ".github" / "workflows"
+    path_pc_workflow = path_workflows / "profile_contributors.yml"
 
     # If the path we want exists and there's no conflict, move forward.
-    path_workflows = path_cwd / ".github" / "workflows"
-    path_pc_workflow = path_workflows / "profile_contributors.yml"
     if path_workflows.exists() and not path_pc_workflow.exists():
         return path_pc_workflow
 
@@ -31,3 +30,19 @@ def _get_workflow_path():
         msg = f"Could not find a .git dir at: {path_cwd.as_posix()}"
         msg += "\nAre you in the root directory of your project's repository?"
         sys.exit(msg)
+
+def _confirm_write_workflow(path_workflow):
+    """Confirm the user wants the file written to the calculated location."""
+    msg = "This will generate a GitHub action that will automatically run gh-profiler"
+    msg += "\nwhenever someone opens a new issue or PR in your repository."
+    msg += "\n\nThe workflow will be written at the following location:"
+    msg += f"\n  {path_workflow.as_posix()}"
+    msg += "\n\nAre you sure you want to do this? (y/n) "
+
+    confirmed = ""
+    while confirmed.lower() not in ("y", "yes", "n", "no"):
+        confirmed = input(msg)
+        if confirmed.lower() in ("y", "yes"):
+            return
+        elif confirmed.lower() in ("n", "no"):
+            sys.exit()
