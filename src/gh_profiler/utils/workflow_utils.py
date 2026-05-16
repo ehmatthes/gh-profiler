@@ -10,6 +10,7 @@ def generate_workflow():
     path = _get_workflow_path()
     _confirm_write_workflow(path)
     _write_workflow(path)
+    _show_closing_message(path)
 
 def _get_workflow_path():
     """Determine the path we'd like to write the workflow to."""
@@ -40,7 +41,8 @@ def _get_workflow_path():
 def _confirm_write_workflow(path_workflow):
     """Confirm the user wants the file written to the calculated location."""
     msg = "This will generate a GitHub action that will automatically run gh-profiler"
-    msg += "\nwhenever someone opens a new issue or PR in your repository."
+    msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
+    msg += "\noutput will be written as a comment on the issue or PR."
     msg += "\n\nThe workflow will be written at the following location:"
     msg += f"\n  {path_workflow.as_posix()}"
     msg += "\n\nAre you sure you want to do this? (y/n) "
@@ -67,3 +69,18 @@ def _write_workflow(path_workflow):
 
     # Write profile_contributors.yml file.
     path_workflow.write_text(contents)
+
+def _show_closing_message(path):
+    """Workflow was written, describe next steps."""
+    msg = "\nThe new workflow file was written:"
+    msg += f"\n  {path.as_posix()}"
+    msg += "\n\nTo start seeing profiles when new issues and PRs are opened:"
+    msg += "\n- Commit the workflow file to your main branch."
+    msg += "\n- Push your main branch to GitHub."
+    msg += "\n- Make sure Actions are enabled on your project."
+    msg += "\n- Open a new issue, and make sure a comment appears with a profile of your account."
+    msg += "\n\nIf you don't see a comment right away, look under the Actions tab and see if there's an obvious issue."
+    msg += "\nIf it's still not working, please open an issue on the gh-profiler repo:"
+    msg += "\n  https://github.com/ehmatthes/gh-profiler/issues"
+
+    print(msg)
