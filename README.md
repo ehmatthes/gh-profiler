@@ -73,6 +73,33 @@ GitHub user: <redacted>
 For a more detailed report, run `gh-profiler <redacted>`.
 ```
 
+GitHub Actions
+---
+
+gh-profiler can write a GitHub Action that will automatically run `gh-profiler --concise` any time a new PR or issue is opened on your project. The output will be written as a comment on the new PR or issue.
+
+The `--generate-workflow` flag does this by writing a `profile_contributors.yml` file to `.github/workflows`:
+
+```txt
+$ uvx gh-profiler --generate-workflow
+This will generate a GitHub action that will automatically run gh-profiler
+whenever someone opens a new issue or PR in your repository. The profile
+output will be written as a comment on the issue or PR.
+
+The workflow will be written at the following location:
+  /.../.github/workflows/profile_contributors.yml
+
+Are you sure you want to do this? (y/n) y
+
+The new workflow file was written:
+  /.../.github/workflows/profile_contributors.yml
+
+To start seeing profiles when new issues and PRs are opened:
+- Commit the workflow file to your main branch.
+- Push your main branch to GitHub.
+  ...
+```
+
 Maintaining
 ---
 
