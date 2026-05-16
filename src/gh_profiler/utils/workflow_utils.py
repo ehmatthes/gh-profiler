@@ -8,6 +8,7 @@ def generate_workflow():
     """Write a profile_contributors.yml workflow file to the user's repo."""
     path = _get_workflow_path()
     _confirm_write_workflow(path)
+    _write_workflow(path)
 
 def _get_workflow_path():
     """Determine the path we'd like to write the workflow to."""
@@ -46,3 +47,7 @@ def _confirm_write_workflow(path_workflow):
             return
         elif confirmed.lower() in ("n", "no"):
             sys.exit()
+
+def _write_workflow(path_workflow):
+    """Write the workflow file to the correct location."""
+    breakpoint()
