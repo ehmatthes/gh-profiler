@@ -8,15 +8,16 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
-### Unreleased
+### 0.5.0
 
 #### External changes
 
-- NA
+- Supports `--generate-workflow`. This writes a `.github/workflows/profile_contributors.yml` file that runs `gh-profiler --concise` any time a new PR or issue is opened on the user's repository. The output is written as a comment on the new PR or issue.
 
 #### Internal changes
 
 - Whenever someone opens a new PR or issue on this repository, the workflow profile_contributors.yml automatically runs gh-profiler against the author. The output is written as a comment on the PR or issue.
+- Target is optional in CLI, but validation requires it if not running `--generate-workflow`.
 
 ### 0.4.0
 
