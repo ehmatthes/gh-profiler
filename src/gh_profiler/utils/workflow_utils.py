@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import sys
+import importlib.resources
 
 
 def generate_workflow():
@@ -22,7 +23,7 @@ def _get_workflow_path():
     # If the workflow already exists, inform and exit.
     if path_pc_workflow.exists():
         msg = f"The file {path_pc_workflow.as_posix()} already exists."
-        msg += "\nIf you want to generate this file, please delete the existing file and run this command again."
+        msg += "\nIf you want to regenerate this file, please delete the existing file and run this command again."
         sys.exit(msg)
 
     # If there's a .git directory, we can move forward.
@@ -50,4 +51,7 @@ def _confirm_write_workflow(path_workflow):
 
 def _write_workflow(path_workflow):
     """Write the workflow file to the correct location."""
-    breakpoint()
+    path_templates = importlib.resources.files("gh_profiler") / "templates"
+    path_src = path_templates / "profile_contributors.yml"
+    contents = path_src.read_text()
+    path_workflow.write_text(contents)
