@@ -1,5 +1,5 @@
 """Utils for analyzing account information."""
-
+import requests
 from datetime import datetime as dt
 from datetime import timezone as tz
 from collections import Counter

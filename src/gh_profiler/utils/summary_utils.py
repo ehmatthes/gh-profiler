@@ -1,3 +1,5 @@
+
+
 """Utils for summarizing findings."""
 
 from .profile_data import profile_data as pdata
@@ -20,14 +22,18 @@ def _get_summary():
     else:
         return _get_full_summary()
 
+
 def _get_concise_summary():
     """Build the shorter, concise summary string.
-    
+
     This is one line for each main section: name, profile, pr activity, issue activity.
     """
     summary = ""
 
     summary += f"GitHub user: {pdata.username}\n"
+
+    if pdata.is_blacklisted:
+        summary += f"{pdata.flag_blacklist} ALERT: User is flagged on the automated LLM bounty-hunter blocklist!\n"
 
     summary += _get_concise_section(
         pdata.flag_overall_profile,
@@ -48,6 +54,7 @@ def _get_concise_summary():
 
     return summary
 
+
 def _get_concise_section(flag, section):
     if flag == flags.green_flag:
         return f"{flag} No concerns found with {section}.\n"
@@ -67,6 +74,10 @@ def _get_full_summary():
 
     # Include username, with label when appropriate.
     summary += _username_line()
+
+    # Insert clear, standalone warning notice if account match is verified
+    if pdata.is_blacklisted:
+        summary += f"  {pdata.flag_blacklist} LLM BOUNTY BLOCKLIST MATCH DETECTED\n"
 
     # Always include account age.
     summary += f"  {pdata.flag_age} Account age: {pdata.account_age.days} days\n"
@@ -195,3 +206,4 @@ def _issue_activity_summary():
         summary += f"        {title} ({count})\n"
 
     return summary
+
