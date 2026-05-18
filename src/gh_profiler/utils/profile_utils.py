@@ -1,14 +1,14 @@
 """Utils for retrieving user information."""
 
 import json
-from datetime import datetime as dt
-from datetime import timezone as tz
-from datetime import timedelta
-from textwrap import dedent
 import sys
+from datetime import datetime as dt
+from datetime import timedelta
+from datetime import timezone as tz
+from textwrap import dedent
 
-from .profile_data import profile_data as pdata
 from . import infra_utils
+from .profile_data import profile_data as pdata
 
 
 def ensure_gh():
@@ -64,7 +64,9 @@ def _get_pr_activity():
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
 
     pr_query = _get_pr_query()
-    search_query = f"author:{pdata.username} is:pull-request created:>={cutoff}"
+    search_query = (
+        f"author:{pdata.username} is:pull-request is:public created:>={cutoff}"
+    )
     cmd = f"gh api graphql -f query='{pr_query}' -F q='{search_query}' -F n=100"
 
     try:
