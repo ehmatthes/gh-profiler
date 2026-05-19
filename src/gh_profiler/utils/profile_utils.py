@@ -116,6 +116,16 @@ def _ensure_authenticated(profile_dict_str):
         msg += "\n  If you're not authenticated, run `gh auth login`."
         sys.exit(msg)
 
+    try:
+        data = json.loads(profile_dict_str)
+        if data.get("status") == "401" or data.get("message") == "Bad credentials":
+            msg = "The GitHub CLI tool (gh) is not authenticated."
+            msg += "\n  Run `gh auth login` to authenticate."
+            sys.exit(msg)
+    except json.JSONDecodeError:
+        msg = "The GitHub CLI tool (gh) returned invalid JSON."
+        sys.exit(msg)
+
 
 def _get_gh_issues_call(username, cutoff):
     """Return the gh call for recent public issue activity."""
