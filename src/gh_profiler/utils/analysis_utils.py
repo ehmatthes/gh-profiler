@@ -31,7 +31,6 @@ def _process_account_age():
             pdata.profile_dict["created_at"],
             "%Y-%m-%dT%H:%M:%SZ",
         ).replace(tzinfo=timezone.utc)
-        breakpoint()
 
     pdata.account_age = dt.now(tz.utc) - ts_created
 

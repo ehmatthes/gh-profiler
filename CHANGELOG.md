@@ -16,10 +16,11 @@ These initial releases have usable behavior, but may have some rough edges for s
 - PR search is restricted to public activity.
 - Thresholds upped for problematic behavior related to opening multiple identical issues. For example opening an issue on the wrong repo, closing it, and opening an identical issue on the correct repo should not raise any flags. Old thresholds: 0 green, 1-3 yellow, 4+ red. New: 0-3 green, 4-5 yellow, 6+ red.
 - Shows all social media accounts present in user's GH profile.
+- Works for Python 3.10. (Was failing on a timestamp-parsing library.)
 
 #### Internal changes
 
-- NA
+- Manually parse account created_at timestamp. `datetime.fromisoformat()` doesn't work as generally in Python <3.11.
 
 ### 0.5.0
 
