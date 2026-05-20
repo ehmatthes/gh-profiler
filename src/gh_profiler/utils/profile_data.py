@@ -30,7 +30,9 @@ class ProfileData:
     # profile_info is the information we analyze and present.
     profile_dict: dict | None = None
     profile_info: dict | None = None
+
     account_age: int = 0
+    socials: list | None = None
 
     flag_age: str = ""
     flag_profile: str = ""

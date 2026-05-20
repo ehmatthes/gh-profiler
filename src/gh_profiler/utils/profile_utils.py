@@ -29,6 +29,7 @@ def ensure_gh():
 def get_data():
     """Get all data we'll need from GitHub."""
     _get_profile_dict()
+    _get_socials()
     _get_pr_activity()
     _get_issue_activity()
 
@@ -57,6 +58,21 @@ def _get_profile_dict():
     # but every value is None.
     if pdata.profile_dict["created_at"] is None:
         sys.exit(f"GitHub user '{pdata.username}' not found.")
+
+def _get_socials():
+    """Get social media accounts from user's profile.
+    
+    Social media accounts from profiles are a separate endpoint, so I believe
+    they require an additional API call.
+    """
+    cmd = f"gh api users/{pdata.username}/social_accounts"
+    socials_dict_str = infra_utils.run_cmd(cmd)
+    try:
+        pdata.socials = json.loads(socials_dict_str)
+    except json.decoder.JSONDecodeError:
+        msg = "Couldn't get GitHub profile info. The gh CLI may have timed out."
+        msg += "\n  You may want to try running the command again."
+        sys.exit(msg)
 
 
 def _get_pr_activity():
