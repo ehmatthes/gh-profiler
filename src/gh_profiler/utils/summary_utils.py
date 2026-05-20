@@ -96,6 +96,9 @@ def _redact_info():
     for k, v in pdata.profile_info.items():
         if v:
             pdata.profile_info[k] = "<redacted>"
+    
+    for social in socials:
+        social["url"] = "<redacted>"
 
 
 def _pr_title_line():
