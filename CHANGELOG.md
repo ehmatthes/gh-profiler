@@ -15,6 +15,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 - Commas in account ages over 999 days.
 - PR search is restricted to public activity.
 - Thresholds upped for problematic behavior related to opening multiple identical issues. For example opening an issue on the wrong repo, closing it, and opening an identical issue on the correct repo should not raise any flags. Old thresholds: 0 green, 1-3 yellow, 4+ red. New: 0-3 green, 4-5 yellow, 6+ red.
+- Shows all social media accounts present in user's GH profile.
 
 #### Internal changes
 
