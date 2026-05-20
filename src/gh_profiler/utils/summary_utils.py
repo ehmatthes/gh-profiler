@@ -97,7 +97,7 @@ def _redact_info():
         if v:
             pdata.profile_info[k] = "<redacted>"
     
-    for social in socials:
+    for social in pdata.socials:
         social["url"] = "<redacted>"
 
 
@@ -141,6 +141,10 @@ def _profile_summary():
             summary += _bio_summary(v)
         else:
             empty_fields.append(k)
+
+    # Include socials.
+    for social in pdata.socials:
+        summary += f"      {social['provider']}: {social['url']}\n"
 
     # List empty fields.
     if empty_fields:
