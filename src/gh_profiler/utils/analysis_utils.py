@@ -1,6 +1,6 @@
 """Utils for analyzing account information."""
 
-from datetime import datetime as dt
+from datetime import datetime as dt, timezone
 from datetime import timezone as tz
 from collections import Counter
 
@@ -23,7 +23,16 @@ def process_data():
 
 def _process_account_age():
     """Evaluate account age."""
-    ts_created = dt.fromisoformat(pdata.profile_dict["created_at"])
+    try:
+        ts_created = dt.fromisoformat(pdata.profile_dict["created_at"])
+    except ValueError:
+        # This happens with Python <3.11. Let's support 3.10 for a while.
+        ts_created = dt.strptime(
+            pdata.profile_dict["created_at"],
+            "%Y-%m-%dT%H:%M:%SZ",
+        ).replace(tzinfo=timezone.utc)
+        breakpoint()
+
     pdata.account_age = dt.now(tz.utc) - ts_created
 
     if pdata.account_age.days > 3 * 365:
