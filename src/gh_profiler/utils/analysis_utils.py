@@ -122,9 +122,15 @@ def _process_repeated_issues():
     }
     pdata.total_repeats = sum(pdata.repeated_issue_titles.values())
 
-    if pdata.total_repeats == 0:
+    # There are some valid reasons for someone to open the same issue across
+    # several repositories. For example if they open it on the wrong issue,
+    # close it, then open it on the correct repo, that's two identical issues.
+    # One person can also implement something on one repo, and implement that
+    # same feature or improvement on several repos. There should be a threshold
+    # where that's a clear sign of spamming though.
+    if pdata.total_repeats <= 3:
         flag = flags.green_flag
-    elif pdata.total_repeats <= 3:
+    elif pdata.total_repeats <= 5:
         flag = flags.yellow_flag
     else:
         flag = flags.red_flag
