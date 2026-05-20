@@ -37,12 +37,17 @@ def _process_account_age():
 def _process_profile_info():
     """Evaluate available profile information.
 
-    Focus on: name, company, blog, lcoation, email, bio
+    Focus on: name, company, blog, location, email, bio, socials
     """
     fields = ["name", "company", "blog", "location", "email", "bio"]
     pdata.profile_info = {field: pdata.profile_dict[field] for field in fields}
 
     num_filled = sum(v not in (None, "") for v in pdata.profile_info.values())
+
+    # Include social media URLs, which are handled separately by GitHub.
+    filled_socials = [d for d in pdata.socials if d["url"]]
+    num_filled += len(filled_socials)
+
     if num_filled == 0:
         pdata.flag_profile = flags.red_flag
     elif num_filled < 3:
