@@ -39,11 +39,12 @@ def get_data():
     # Fetch data. This can all be done in parallel.
     socials_str = _fetch_socials()
     pr_activity_str = _fetch_pr_activity()
-    _get_issue_activity()
+    issue_activity_str = _fetch_issue_activity()
 
     # Parse data. This should only happen after all data has been fetched.
     _parse_socials(socials_str)
     _parse_pr_activity(pr_activity_str)
+    _parse_issue_activity(issue_activity_str)
 
 
 # --- Helper functions ---
@@ -71,7 +72,7 @@ def _get_profile_dict():
         sys.exit(f"GitHub user '{pdata.username}' not found.")
 
 def _fetch_socials():
-    """Get social media accounts from user's profile.
+    """Fetch social media accounts from user's profile.
     
     Social media accounts from profiles are a separate endpoint, so I believe
     they require an additional API call.
@@ -90,7 +91,7 @@ def _parse_socials(socials_str):
 
 
 def _fetch_pr_activity():
-    """Get information about recent PR activity."""
+    """Fetch information about recent PR activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
 
     pr_query = _get_pr_query()
@@ -119,19 +120,16 @@ def _parse_pr_activity(pr_activity_str):
     )
 
 
-def _get_issue_activity():
-    """Get target user's recent public issue activity."""
+def _fetch_issue_activity():
+    """Fetch target user's recent public issue activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
     gh_call = _get_gh_issues_call(pdata.username, cutoff)
-    try:
-        issue_activity = infra_utils.run_cmd(gh_call)
-    except ValueError:
-        msg = "Couldn't get recent issue activity. The gh CLI may have timed out."
-        msg += "\n  You may want to try running the command again."
-        sys.exit(msg)
+    return infra_utils.run_cmd(gh_call)
 
+def _parse_issue_activity(issue_activity_str):
+    """Parse data returned by _fetch_issue_activity()."""
     try:
-        pdata.issue_activity = json.loads(issue_activity)["data"]["search"]
+        pdata.issue_activity = json.loads(issue_activity_str)["data"]["search"]
     except (json.decoder.JSONDecodeError, KeyError):
         msg = "Couldn't get recent issue activity. The gh CLI may have timed out."
         msg += "\n  You may want to try running the command again."
