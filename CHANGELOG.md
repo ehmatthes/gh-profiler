@@ -16,7 +16,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 
 #### Internal changes
 
-- NA
+- Basic e2e tests for full and --concise runs. E2e tests are flaky because they make actual gh API calls. E2e tests must be run explicitly, ie `uv run pytest tests/e2e_tests -k full`.
 
 ### 0.5.1
 
