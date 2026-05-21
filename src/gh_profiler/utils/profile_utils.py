@@ -33,18 +33,25 @@ def get_data():
     can be analyzed and processed.
     """
     _fetch_data()
-    _parse_data()
+    # _parse_data()
 
 def _fetch_data():
     """Fetch all data from GitHub. Don't parse any of it."""
+    # This is the first call, and it checks if the user exists. This call needs
+    # to happen before all others.
     _get_profile_dict()
-    _get_socials()
+
+    socials_str = _fetch_socials()
     _get_pr_activity()
     _get_issue_activity()
 
-def _parse_data():
-    """Parse the data that was fetched."""
-    ...
+    # Parse data.
+    _parse_socials(socials_str)
+
+# def _parse_data():
+#     """Parse the data that was fetched."""
+#     _parse_socials()
+#     ...
 
 
 # --- Helper functions ---
@@ -72,14 +79,17 @@ def _get_profile_dict():
     if pdata.profile_dict["created_at"] is None:
         sys.exit(f"GitHub user '{pdata.username}' not found.")
 
-def _get_socials():
+def _fetch_socials():
     """Get social media accounts from user's profile.
     
     Social media accounts from profiles are a separate endpoint, so I believe
     they require an additional API call.
     """
     cmd = f"gh api users/{pdata.username}/social_accounts"
-    socials_str = infra_utils.run_cmd(cmd)
+    return infra_utils.run_cmd(cmd)
+
+def _parse_socials(socials_str):
+    """Parse the data string returned from _fetch_socials()."""
     try:
         pdata.socials = json.loads(socials_str)
     except json.decoder.JSONDecodeError:
