@@ -36,10 +36,17 @@ def get_data():
     # to happen before all others.
     _get_profile_dict()
 
+    from time import perf_counter
+
     # Fetch data. This can all be done in parallel.
+    ts_before = perf_counter()
+
     socials_str = _fetch_socials()
     pr_activity_str = _fetch_pr_activity()
     issue_activity_str = _fetch_issue_activity()
+
+    ts_after = perf_counter()
+    print(f"Fetch data: {ts_after - ts_before:.2f} seconds")
 
     # Parse data. This should only happen after all data has been fetched.
     _parse_socials(socials_str)
