@@ -27,11 +27,24 @@ def ensure_gh():
 
 
 def get_data():
-    """Get all data we'll need from GitHub."""
+    """Get all data we'll need from GitHub.
+    
+    Fetch all data we'll need, then parse it into the data structures that
+    can be analyzed and processed.
+    """
+    _fetch_data()
+    _parse_data()
+
+def _fetch_data():
+    """Fetch all data from GitHub. Don't parse any of it."""
     _get_profile_dict()
     _get_socials()
     _get_pr_activity()
     _get_issue_activity()
+
+def _parse_data():
+    """Parse the data that was fetched."""
+    ...
 
 
 # --- Helper functions ---
