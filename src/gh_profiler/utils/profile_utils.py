@@ -2,10 +2,12 @@
 
 import json
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime as dt
 from datetime import timedelta
 from datetime import timezone as tz
 from textwrap import dedent
+from time import perf_counter
 
 from . import infra_utils
 from .profile_data import profile_data as pdata
@@ -36,12 +38,10 @@ def get_data():
     # to happen before all others.
     _get_profile_dict()
 
-    from time import perf_counter
-    from concurrent.futures import ThreadPoolExecutor
-
-    # Fetch data. This can all be done in parallel.
+    # Fetch data. This can all be done in parallel. The benchmarking is here
+    # because this is the slowest part of the program, and it's helpful at
+    # times to benchmark just this block of code.
     ts_before = perf_counter()
-
     with ThreadPoolExecutor() as executor:
         socials_future = executor.submit(_fetch_socials)
         pr_activity_future = executor.submit(_fetch_pr_activity)
@@ -52,7 +52,8 @@ def get_data():
         issue_activity_str = issue_activity_future.result()
 
     ts_after = perf_counter()
-    print(f"Fetch data: {ts_after - ts_before:.2f} seconds")
+    if pdata.benchmark_fetch:
+        print(f"Fetch data: {ts_after - ts_before:.2f} seconds")
 
     # Parse data. This should only happen after all data has been fetched.
     _parse_socials(socials_str)

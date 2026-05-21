@@ -65,6 +65,9 @@ class ProfileData:
     # Redact is used primarily for live demos, and screenshots.
     redact: bool = False
 
+    # Benchmark the code that fetches external data.
+    benchmark_fetch: bool = False
+
     generate_workflow: bool = False
 
 
