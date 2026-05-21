@@ -37,13 +37,19 @@ def get_data():
     _get_profile_dict()
 
     from time import perf_counter
+    from concurrent.futures import ThreadPoolExecutor
 
     # Fetch data. This can all be done in parallel.
     ts_before = perf_counter()
 
-    socials_str = _fetch_socials()
-    pr_activity_str = _fetch_pr_activity()
-    issue_activity_str = _fetch_issue_activity()
+    with ThreadPoolExecutor() as executor:
+        socials_future = executor.submit(_fetch_socials)
+        pr_activity_future = executor.submit(_fetch_pr_activity)
+        issue_activity_future = executor.submit(_fetch_issue_activity)
+
+        socials_str = socials_future.result()
+        pr_activity_str = pr_activity_future.result()
+        issue_activity_str = issue_activity_future.result()
 
     ts_after = perf_counter()
     print(f"Fetch data: {ts_after - ts_before:.2f} seconds")
