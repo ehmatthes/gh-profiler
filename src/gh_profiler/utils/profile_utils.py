@@ -32,32 +32,21 @@ def get_data():
     Fetch all data we'll need, then parse it into the data structures that
     can be analyzed and processed.
     """
-    _fetch_data()
-    # _parse_data()
-
-def _fetch_data():
-    """Fetch all data from GitHub. Don't parse any of it."""
     # This is the first call, and it checks if the user exists. This call needs
     # to happen before all others.
     _get_profile_dict()
 
+    # Fetch data. This can all be done in parallel.
     socials_str = _fetch_socials()
     pr_activity_str = _fetch_pr_activity()
-    # _get_pr_activity()
     _get_issue_activity()
 
-    # Parse data.
+    # Parse data. This should only happen after all data has been fetched.
     _parse_socials(socials_str)
     _parse_pr_activity(pr_activity_str)
 
-# def _parse_data():
-#     """Parse the data that was fetched."""
-#     _parse_socials()
-#     ...
-
 
 # --- Helper functions ---
-
 
 def _get_profile_dict():
     """Get all the profile information we'll need."""
