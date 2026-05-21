@@ -8,15 +8,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
-### Unreleased
+### 0.6.0
 
 #### External changes
 
-- NA
+- gh-profiler runs meaningfully faster, by parallelizing the calls that fetch external data.
 
 #### Internal changes
 
 - Basic e2e tests for full and --concise runs. E2e tests are flaky because they make actual gh API calls. E2e tests must be run explicitly, ie `uv run pytest tests/e2e_tests -k full`.
+- Uses `ThreadPoolExecutor` to parallelize the fetching calls. We shouldn't add many more calls, but this should mean a few more quick calls are essentially free. The call to fetch issue activity is the slowest, so any fetch significantly faster than that should add not add to execution time in any meaningful way.
+- Supports `--benchmark-fetch`, which lets us easily benchmark just the fetching block.
 
 ### 0.5.1
 
