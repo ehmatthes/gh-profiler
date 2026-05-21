@@ -15,6 +15,10 @@ def test_full_run():
     cmd = "uv run gh-profiler ehmatthes"
     output = infra_utils.run_cmd(cmd)
 
+    if output == "":
+        msg = "Output was empty, which may indicate a gh timeout rather than a problem with the code."
+        pytest.fail(msg)
+
     # Make assertions about stable parts of output, not entire output string.
     # DEV: Find some assertions to make about PRs and issues?
     expected_strings = (

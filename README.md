@@ -128,8 +128,17 @@ Author: <redacted>
 Running tests
 ---
 
+Run all tests except end-to-end tests:
+
 ```sh
 $ uv run pytest
+```
+
+End-to-end tests are slower, and flakier because they make actual API calls. It's best to run a specific e2e test:
+
+```sh
+$ uv run pytest tests/e2e_tests -k full
+$ uv run pytest tests/e2e_tests -k concise
 ```
 
 Profiling
