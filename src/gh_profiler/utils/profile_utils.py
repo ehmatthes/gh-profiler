@@ -42,11 +42,13 @@ def _fetch_data():
     _get_profile_dict()
 
     socials_str = _fetch_socials()
-    _get_pr_activity()
+    pr_activity_str = _fetch_pr_activity()
+    # _get_pr_activity()
     _get_issue_activity()
 
     # Parse data.
     _parse_socials(socials_str)
+    _parse_pr_activity(pr_activity_str)
 
 # def _parse_data():
 #     """Parse the data that was fetched."""
@@ -98,7 +100,7 @@ def _parse_socials(socials_str):
         sys.exit(msg)
 
 
-def _get_pr_activity():
+def _fetch_pr_activity():
     """Get information about recent PR activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
 
@@ -107,9 +109,12 @@ def _get_pr_activity():
         f"author:{pdata.username} is:pull-request is:public created:>={cutoff}"
     )
     cmd = f"gh api graphql -f query='{pr_query}' -F q='{search_query}' -F n=100"
+    return infra_utils.run_cmd(cmd)
 
+def _parse_pr_activity(pr_activity_str):
+    """Parse the data returned by _fetch_pr_activity()."""
     try:
-        data = json.loads(infra_utils.run_cmd(cmd))
+        data = json.loads(pr_activity_str)
     except json.decoder.JSONDecodeError:
         msg = "Couldn't get recent PR activity. The gh CLI may have timed out."
         msg += "\n  You may want to try running the command again."
