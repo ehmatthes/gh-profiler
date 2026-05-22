@@ -1,5 +1,6 @@
 """Utils for summarizing findings."""
 
+import humanize
 from .profile_data import profile_data as pdata
 from . import flags
 
@@ -69,7 +70,8 @@ def _get_full_summary():
     summary += _username_line()
 
     # Always include account age.
-    summary += f"  {pdata.flag_age} Account age: {pdata.account_age.days:,} days\n"
+    age = humanize.naturaldelta(pdata.account_age)
+    summary += f"  {pdata.flag_age} Account age: {age}\n"
 
     # Include profiler, PR activity, and issue activity sections.
     summary += _profile_summary()
