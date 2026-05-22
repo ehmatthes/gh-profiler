@@ -169,18 +169,35 @@ def _bio_summary(bio):
     return summary
 
 
+def _count(number, name):
+    s = "" if number == 1 else "s"
+    return f"{number} {name}{s}"
+
+
+def _verb(number, singular, plural):
+    return singular if number == 1 else plural
+
+
 def _pr_activity_summary():
     """Summarize recent PR activity."""
     if pdata.opened_count < 10:
         return f"  {flags.green_flag} {pdata.username} has opened fewer than 10 PRs in the last 21 days.\n"
 
     summary = ""
+    n_prs = _count(pdata.opened_count, "PR")
+
     # Only show merged if it's a good sign.
     if pdata.flag_merged_pr == flags.green_flag:
-        summary += f"  {pdata.flag_merged_pr} {pdata.merged_count} of {pdata.opened_count} PRs have been merged in the last 21 days.\n"
+        flag = pdata.flag_merged_pr
+        n = pdata.merged_count
+        have = _verb(n, "has", "have")
+        summary += f"  {flag} {n} of {n_prs} {have} been merged in the last 21 days.\n"
 
     # Include number closed for everyone.
-    summary += f"  {pdata.flag_closed_pr} {pdata.closed_count} of {pdata.opened_count} PRs have been closed without merging in the last 21 days.\n"
+    flag = pdata.flag_closed_pr
+    n = pdata.closed_count
+    have = _verb(n, "has", "have")
+    summary += f"  {flag} {n} of {n_prs} {have} been closed without merging in the last 21 days.\n"
 
     return summary
 
@@ -190,14 +207,21 @@ def _issue_activity_summary():
     if pdata.new_issue_count == 0:
         return f"  {flags.green_flag} {pdata.username} has not opened any new issues in the last 21 days.\n"
 
-    summary = f"  {pdata.flag_overall_issues} {pdata.username} has opened {pdata.new_issue_count} new issues in the last 21 days.\n"
-    summary += f"     {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues have been closed as NOT_PLANNED.\n"
+    flag = pdata.flag_overall_issues
+    opened = _count(pdata.new_issue_count, "new issue")
+    summary = f"  {flag} {pdata.username} has opened {opened} in the last 21 days.\n"
+
+    flag = pdata.flag_issues_not_planned
+    n_issues = _count(pdata.issues_not_planned, "issue")
+    have = _verb(pdata.issues_not_planned, "has", "have")
+    summary += f"     {flag} {n_issues} {have} been closed as NOT_PLANNED.\n"
 
     # Repeated issues:
-    if pdata.total_repeats == 0:
-        summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues were opened with the same title.\n"
-    else:
-        summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues were opened with the same title:\n"
+    flag = pdata.flag_repeated_issues
+    n_issues = _count(pdata.total_repeats, "issue")
+    have = _verb(pdata.total_repeats, "was", "were")
+    suffix = "." if pdata.total_repeats == 0 else ":"
+    summary += f"     {flag} {n_issues} {have} opened with the same title{suffix}\n"
     for title, count in pdata.repeated_issue_titles.items():
         summary += f"        {title} ({count})\n"
 
