@@ -130,7 +130,7 @@ def _username_line():
 def _profile_summary():
     """Summarize information from the user's profile dict."""
     if pdata.flag_profile == flags.red_flag:
-        return f"\n  {pdata.flag_profile} No profile information has been provided.\n"
+        return f"\n  {pdata.flag_profile} No profile information provided.\n"
 
     # Only show lines for fields that have information.
     # Collect empty fields for last line.
@@ -174,15 +174,15 @@ def _bio_summary(bio):
 def _pr_activity_summary():
     """Summarize recent PR activity."""
     if pdata.opened_count < 10:
-        return f"  {flags.green_flag} {pdata.username} has opened fewer than 10 PRs in the last 21 days.\n"
+        return f"  {flags.green_flag} {pdata.username} opened fewer than 10 PRs in the last 21 days.\n"
 
     summary = ""
     # Only show merged if it's a good sign.
     if pdata.flag_merged_pr == flags.green_flag:
-        summary += f"  {pdata.flag_merged_pr} {pdata.merged_count} of {pdata.opened_count} PRs have been merged in the last 21 days.\n"
+        summary += f"  {pdata.flag_merged_pr} {pdata.merged_count} of {pdata.opened_count} PRs merged in the last 21 days.\n"
 
     # Include number closed for everyone.
-    summary += f"  {pdata.flag_closed_pr} {pdata.closed_count} of {pdata.opened_count} PRs have been closed without merging in the last 21 days.\n"
+    summary += f"  {pdata.flag_closed_pr} {pdata.closed_count} of {pdata.opened_count} PRs closed without merging in the last 21 days.\n"
 
     return summary
 
@@ -190,16 +190,16 @@ def _pr_activity_summary():
 def _issue_activity_summary():
     """Summarize recent public issue activity."""
     if pdata.new_issue_count == 0:
-        return f"  {flags.green_flag} {pdata.username} has not opened any new issues in the last 21 days.\n"
+        return f"  {flags.green_flag} {pdata.username} opened no new issues in the last 21 days.\n"
 
-    summary = f"  {pdata.flag_overall_issues} {pdata.username} has opened {pdata.new_issue_count} new issues in the last 21 days.\n"
-    summary += f"     {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues have been closed as NOT_PLANNED.\n"
+    summary = f"  {pdata.flag_overall_issues} {pdata.username} opened {pdata.new_issue_count} new issues in the last 21 days.\n"
+    summary += f"     {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues closed as NOT_PLANNED.\n"
 
     # Repeated issues:
     if pdata.total_repeats == 0:
-        summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues were opened with the same title.\n"
+        summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues opened with the same title.\n"
     else:
-        summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues were opened with the same title:\n"
+        summary += f"     {pdata.flag_repeated_issues} {pdata.total_repeats} issues opened with the same title:\n"
     for title, count in pdata.repeated_issue_titles.items():
         summary += f"        {title} ({count})\n"
 
