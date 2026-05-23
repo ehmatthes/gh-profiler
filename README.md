@@ -152,6 +152,12 @@ $ uv run pytest tests/e2e_tests -k full
 $ uv run pytest tests/e2e_tests -k concise
 ```
 
+There's a shell script that runs all of these tests. It works on macOS and probably linux, but may not work on Windows.
+
+```sh
+$ ./test_all.sh
+```
+
 Profiling
 ---
 
