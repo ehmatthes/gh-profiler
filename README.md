@@ -165,6 +165,12 @@ Profiling
 $ uv run python -m cProfile -s cumtime -m gh_profiler ehmatthes > profile.txt
 ```
 
+Style notes
+---
+
+- When composing output messages, prefer terse messages over verbose messages:
+    - "0 issues closed as NOT_PLANNED." over "0 issues have been closed as NOT_PLANNED."
+
 Benchmarking
 ---
 
