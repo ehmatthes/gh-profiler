@@ -18,10 +18,16 @@ from time import perf_counter
 import shlex
 import subprocess
 import statistics
+import sys
 
 # from gh_profiler.utils.infra_utils import run_cmd
 
-cmd = "uv run gh-profiler ehmatthes"
+try:
+    username = sys.argv[1]
+except IndexError:
+    username = "ehmatthes"
+
+cmd = f"uv run gh-profiler {username}"
 cmd_parts = shlex.split(cmd)
 
 run_times = []
