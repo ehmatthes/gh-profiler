@@ -11,22 +11,22 @@ GitHub user: ehmatthes
       email: ehmatthes@gmail.com
      Empty fields: company, bio
 
-  🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
+  🟢 ehmatthes opened fewer than 10 PRs in the last 21 days.
 
-  🟢 ehmatthes has opened 7 new issues in the last 21 days.
-     🟢 0 issues have been closed as NOT_PLANNED.
-     🟢 0 issues were opened with the same title.
+  🟢 ehmatthes opened 7 new issues in the last 21 days.
+     🟢 0 issues closed as NOT_PLANNED.
+     🟢 0 issues opened with the same title.
 """.strip()
 
 summary_empty_profile = """
 GitHub user: ehmatthes
   🟢 Account age: 13 years
 
-  🔴 No profile information has been provided.
+  🔴 No profile information provided.
 
-  🟢 ehmatthes has opened fewer than 10 PRs in the last 21 days.
+  🟢 ehmatthes opened fewer than 10 PRs in the last 21 days.
 
-  🟢 ehmatthes has opened 7 new issues in the last 21 days.
-     🟢 0 issues have been closed as NOT_PLANNED.
-     🟢 0 issues were opened with the same title.
+  🟢 ehmatthes opened 7 new issues in the last 21 days.
+     🟢 0 issues closed as NOT_PLANNED.
+     🟢 0 issues opened with the same title.
 """.strip()

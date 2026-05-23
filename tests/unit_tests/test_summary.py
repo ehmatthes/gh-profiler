@@ -27,9 +27,9 @@ def test_no_issue_activity():
     pdata.new_issue_count = 0
     summary = summary_utils._get_summary()
 
-    assert "🟢 ehmatthes has not opened any new issues in the last 21 days." in summary
-    assert "issues have been closed as NOT_PLANNED." not in summary
-    assert "issues were opened with the same title:" not in summary
+    assert "🟢 ehmatthes opened no new issues in the last 21 days." in summary
+    assert "issues closed as NOT_PLANNED." not in summary
+    assert "issues opened with the same title:" not in summary
 
 
 def test_redact():
