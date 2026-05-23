@@ -18,6 +18,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 
 - Run tests in CI via tox.
 - Small helper script `test_all.sh` to run unit tests, then all e2e tests.
+- Benchmarking script to ensure consistent performance over time.
 
 ### 0.6.0
 

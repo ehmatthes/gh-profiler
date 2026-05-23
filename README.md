@@ -165,6 +165,16 @@ Profiling
 $ uv run python -m cProfile -s cumtime -m gh_profiler ehmatthes > profile.txt
 ```
 
+Benchmarking
+---
+
+To track overall real-world performance over time, use the benchmarking script:
+
+```sh
+$ uv run developer_resources/benchmark.py
+$ uv run developer_resources/benchmark.py <target>
+```
+
 New releases
 ---
 
