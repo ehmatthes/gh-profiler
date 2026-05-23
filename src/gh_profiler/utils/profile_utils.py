@@ -14,9 +14,9 @@ from .profile_data import profile_data as pdata
 
 
 def ensure_gh():
-    """Make sure user has gh installed and is authenticated.
+    """Make sure user has gh installed.
 
-    Check for authentication issues in first external call, rather than making
+    Check for authentication issues in batch of external calls, rather than making
     a call just for that purpose here.
     """
     cmd = "gh --version"
