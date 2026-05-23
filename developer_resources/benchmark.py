@@ -17,20 +17,32 @@ API response time issues.
 from time import perf_counter
 import shlex
 import subprocess
+import statistics
 
 # from gh_profiler.utils.infra_utils import run_cmd
 
 cmd = "uv run gh-profiler ehmatthes"
 cmd_parts = shlex.split(cmd)
 
-times = []
-while len(times) < 5:
+run_times = []
+while len(run_times) < 5:
     ts_start = perf_counter()
 
     output_obj = subprocess.run(cmd_parts, capture_output=True)
 
     ts_end = perf_counter()
     run_time = round((ts_end - ts_start), 2)
-    print(run_time)
 
-    breakpoint()
+    if run_time < 5:
+        run_times.append(run_time)
+        print(f"Successful run: {run_time} sec...")
+    else:
+        print(f"Failed run: {run_time} sec")
+
+# Report results.
+summary = "\n"
+summary += f"\nMedian time: {statistics.median(run_times)} sec"
+summary += f"\nMinimum time: {min(run_times)} sec"
+summary += f"\nAll times: {run_times}"
+
+print(summary)
