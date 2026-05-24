@@ -43,10 +43,12 @@ def get_data():
     # times to benchmark just this block of code.
     ts_before = perf_counter()
     with ThreadPoolExecutor() as executor:
+        status_future = executor.submit(_fetch_status)
         socials_future = executor.submit(_fetch_socials)
         pr_activity_future = executor.submit(_fetch_pr_activity)
         issue_activity_future = executor.submit(_fetch_issue_activity)
 
+        status_str = status_future.result()
         socials_str = socials_future.result()
         pr_activity_str = pr_activity_future.result()
         issue_activity_str = issue_activity_future.result()
@@ -62,6 +64,19 @@ def get_data():
 
 
 # --- Helper functions ---
+
+def _fetch_status():
+    """Find out whether gh-profiler user is authenticated."""
+    cmd = "gh auth status"
+    return infra_utils.run_cmd(cmd)
+
+def _parse_status(status_str):
+    """Parse output of status call."""
+    if "Logged in to github.com account " not in status_str:
+        msg = status_str
+        msg = "\nThe GitHub CLI tool (gh) is not authenticated."
+        msg += "Run `gh auth login` to authenticate."
+        sys.exit(msg)
 
 def _get_profile_dict():
     """Get all the profile information we'll need."""
