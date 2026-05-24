@@ -36,7 +36,7 @@ def get_data():
     """
     # This is the first call, and it checks if the user exists. This call needs
     # to happen before all others.
-    _get_profile_dict()
+    # _get_profile_dict()
 
     # Fetch data. This can all be done in parallel. The benchmarking is here
     # because this is the slowest part of the program, and it's helpful at
@@ -58,6 +58,7 @@ def get_data():
         print(f"Fetch data: {ts_after - ts_before:.2f} seconds")
 
     # Parse data. This should only happen after all data has been fetched.
+    _parse_status(status_str)
     _parse_socials(socials_str)
     _parse_pr_activity(pr_activity_str)
     _parse_issue_activity(issue_activity_str)
@@ -73,9 +74,15 @@ def _fetch_status():
 def _parse_status(status_str):
     """Parse output of status call."""
     if "Logged in to github.com account " not in status_str:
-        msg = status_str
-        msg = "\nThe GitHub CLI tool (gh) is not authenticated."
-        msg += "Run `gh auth login` to authenticate."
+        # Show the stdout part of `gh auth status`, if there is any.
+        # I believe this is relevant when the user has an expired token.
+        if status_str:
+            msg = f"{status_str}\n"
+        else:
+            msg = ""
+
+        msg += "The GitHub CLI tool (gh) is not authenticated."
+        msg += "\nRun `gh auth login` to authenticate."
         sys.exit(msg)
 
 def _get_profile_dict():
