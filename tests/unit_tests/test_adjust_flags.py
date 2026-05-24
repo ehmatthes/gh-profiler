@@ -1,0 +1,14 @@
+"""Tests for making final adjustments to flags."""
+
+from gh_profiler.utils.profile_data import profile_data as pdata
+from gh_profiler.utils.analysis_utils import _adjust_account_age_flag
+from gh_profiler.utils import flags
+
+
+
+def test_account_age_all_green():
+    """Flags stay green when all are green."""
+    _adjust_account_age_flag()
+
+    assert pdata.flag_age == flags.green_flag
+    assert pdata.flag_overall_profile == flags.green_flag

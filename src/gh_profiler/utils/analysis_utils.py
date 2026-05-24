@@ -238,4 +238,5 @@ def _adjust_account_age_flag():
         return
 
     # The only issue is the account age flag. Set it green.
+    pdata.flag_age = flags.green_flag
     pdata.flag_overall_profile = flags.green_flag
