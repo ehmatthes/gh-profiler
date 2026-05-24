@@ -8,17 +8,23 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
-### Unreleased
+### 0.6.1
 
 #### External changes
 
 - Start documenting talks and discussions of this project in README.
+- Much clearer output when the user's gh CLI tool is not authenticated.
 
 #### Internal changes
 
 - Run tests in CI via tox.
 - Small helper script `test_all.sh` to run unit tests, then all e2e tests.
 - Benchmarking script to ensure consistent performance over time.
+    - Benchmarking script has a 5-second cutoff for API calls that seem to hang.
+- Check the output of `gh auth status` explicitly.
+    - This is done in a batched mode, so it does not impact performance.
+    - The call to fetch the target user's profile dict is batched now as well.
+    - Performance is improved by about 0.25 seconds against my own profile, close to 0.10 seconds on users with more activity.
 
 ### 0.6.0
 
