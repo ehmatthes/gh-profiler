@@ -41,16 +41,18 @@ run_times = []
 while len(run_times) < 5:
     # Call gh-profiler. Don't wait on apparently hung calls.
     ts_start = perf_counter()
-    output_obj = subprocess.run(cmd_parts, timeout=cutoff, capture_output=True)
+    try:
+        output_obj = subprocess.run(cmd_parts, timeout=cutoff, capture_output=True)
+    except subprocess.TimeoutExpired:
+        print("Failed run, timed out.")
+        continue
+        
+    # The run was faster than the cutoff time, so keep it.
     ts_end = perf_counter()
-
-    # Keep the run if it was faster than the cutoff time.
     run_time = round((ts_end - ts_start), 2)
-    if run_time < cutoff:
-        run_times.append(run_time)
-        print(f"Successful run: {run_time} sec")
-    else:
-        print(f"Failed run: {run_time} sec")
+    run_times.append(run_time)
+    print(f"Successful run: {run_time} sec")
+
 
 # Report results.
 summary = f"\nMinimum time: {min(run_times)} sec"
