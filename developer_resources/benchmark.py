@@ -37,6 +37,7 @@ run_times = []
 while len(run_times) < 5:
     ts_start = perf_counter()
 
+    # DEV: Wrap this so if it takes longer than 5s call it a fail.
     output_obj = subprocess.run(cmd_parts, capture_output=True)
 
     ts_end = perf_counter()
@@ -49,8 +50,8 @@ while len(run_times) < 5:
         print(f"Failed run: {run_time} sec")
 
 # Report results.
-summary = f"\nMedian time: {statistics.median(run_times)} sec"
-summary += f"\nMinimum time: {min(run_times)} sec"
-summary += f"\nAll times: {run_times}"
+summary = f"\nMinimum time: {min(run_times)} sec"
+summary += f"\nMedian time:  {statistics.median(run_times)} sec"
+summary += f"\nAll times:    {", ".join([str(rt) for rt in run_times])}"
 
 print(summary)
