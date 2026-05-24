@@ -12,3 +12,14 @@ def test_account_age_all_green():
 
     assert pdata.flag_age == flags.green_flag
     assert pdata.flag_overall_profile == flags.green_flag
+
+def test_account_age_yellow():
+    """Yellow age flag turns green when all others green."""
+    pdata.flag_age = flags.yellow_flag
+    pdata.flag_overall_profile = flags.yellow_flag
+
+    _adjust_account_age_flag()
+
+    assert pdata.flag_age == flags.green_flag
+    assert pdata.flag_overall_profile == flags.green_flag
+    
