@@ -17,6 +17,9 @@ def process_data():
 
     _set_overall_flags()
 
+    # This is a step done after all individual and group flags have been set.
+    _adjust_flags()
+
 
 # --- Helper functions ---
 
@@ -197,3 +200,42 @@ def _get_overall_flag(component_flags):
     if flags.yellow_flag in component_flags:
         return flags.yellow_flag
     return flags.green_flag
+
+def _adjust_flags():
+    """Make final adjustments to flags.
+
+    This takes place after all individual flags have been set, and all group
+    flags have been set based on flags within the group.
+
+    For example, if a newer account has no other red or yellow flags, we'll
+    adjust the account age flag to green.
+
+    Be careful about unintended effects. Especially as evaluation criteria gets
+    more complex, it would be easy to undo some reasoning implemented earlier.
+    """
+    _adjust_account_age_flag()
+
+def _adjust_account_age_flag():
+    """Reevaluate the account age flag.
+
+    If all other overall flags are green, the account age flag should be green.
+    This override only applies when all of the following are true:
+    - The overall profile flag is not green.
+    - The only individual profile flag that's not green is the account age.
+    - All other overall flags are green.
+    """
+    # Check for clear reasons this doesn't apply. Profile flag is already green,
+    # or another overall flag is not green.
+    if (
+        pdata.flag_overall_profile == flags.green_flag
+        or pdata.flag_overall_pr != flags.green_flag
+        or pdata.flag_overall_issues != flags.green_flag
+    ):
+        return
+    
+    # Check other profile component flags.
+    if pdata.flag_profiler != flags.green_flag:
+        return
+
+    # The only issue is the account age flag. Set it green.
+    pdata.flag_overall_profile = flags.green_flag
