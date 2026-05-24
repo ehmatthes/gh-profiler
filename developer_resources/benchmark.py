@@ -30,20 +30,23 @@ try:
 except IndexError:
     target = "ehmatthes"
 
+# Set up the gh-profiler command.
 cmd = f"uv run gh-profiler {target}"
 cmd_parts = shlex.split(cmd)
 
+# Most calls where gh doesn't hang are taking less than 5 seconds. Some calls
+# for highly active users may take longer.
+cutoff = 5
 run_times = []
 while len(run_times) < 5:
+    # Call gh-profiler. Don't wait on apparently hung calls.
     ts_start = perf_counter()
-
-    # DEV: Wrap this so if it takes longer than 5s call it a fail.
-    output_obj = subprocess.run(cmd_parts, capture_output=True)
-
+    output_obj = subprocess.run(cmd_parts, timeout=cutoff, capture_output=True)
     ts_end = perf_counter()
-    run_time = round((ts_end - ts_start), 2)
 
-    if run_time < 5:
+    # Keep the run if it was faster than the cutoff time.
+    run_time = round((ts_end - ts_start), 2)
+    if run_time < cutoff:
         run_times.append(run_time)
         print(f"Successful run: {run_time} sec")
     else:
@@ -52,6 +55,6 @@ while len(run_times) < 5:
 # Report results.
 summary = f"\nMinimum time: {min(run_times)} sec"
 summary += f"\nMedian time:  {statistics.median(run_times)} sec"
-summary += f"\nAll times:    {", ".join([str(rt) for rt in run_times])}"
+summary += f"\nAll times:    {', '.join([str(rt) for rt in run_times])}"
 
 print(summary)
