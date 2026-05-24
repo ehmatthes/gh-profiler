@@ -34,21 +34,19 @@ def get_data():
     Fetch all data we'll need, then parse it into the data structures that
     can be analyzed and processed.
     """
-    # This is the first call, and it checks if the user exists. This call needs
-    # to happen before all others.
-    # _get_profile_dict()
-
     # Fetch data. This can all be done in parallel. The benchmarking is here
     # because this is the slowest part of the program, and it's helpful at
-    # times to benchmark just this block of code.
+    # times to benchmark just this fetching code.
     ts_before = perf_counter()
     with ThreadPoolExecutor() as executor:
+        # Make fetching calls.
         status_future = executor.submit(_fetch_status)
         profile_dict_future = executor.submit(_fetch_profile_dict)
         socials_future = executor.submit(_fetch_socials)
         pr_activity_future = executor.submit(_fetch_pr_activity)
         issue_activity_future = executor.submit(_fetch_issue_activity)
 
+        # When each call finishes, store the result.
         status_str = status_future.result()
         profile_dict_str = profile_dict_future.result()
         socials_str = socials_future.result()
