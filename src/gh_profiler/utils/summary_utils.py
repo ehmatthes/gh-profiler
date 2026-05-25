@@ -29,27 +29,26 @@ def _get_concise_summary():
     summary = ""
 
     summary += f"GitHub user: {pdata.username}\n"
-
-    summary += _get_concise_section(
-        pdata.flag_overall_profile,
-        "user's profile",
-    )
-
-    summary += _get_concise_section(
-        pdata.flag_overall_pr,
-        "recent PR activity",
-    )
-
-    summary += _get_concise_section(
-        pdata.flag_overall_issues,
-        "recent issue activity",
-    )
-
+    summary += _get_profile_header()
+    summary += _get_pr_header()
+    summary += _get_issue_header()
     summary += f"\nFor a more detailed report, run `gh-profiler {pdata.username}`."
 
     return summary
 
-def _get_concise_section(flag, section):
+def _get_profile_header():
+    return _get_section_header(pdata.flag_overall_profile, "user's profile")
+
+def _get_pr_header():
+    return _get_section_header(pdata.flag_overall_pr, "recent PR activity")
+
+def _get_issue_header():
+    return _get_section_header(
+        pdata.flag_overall_issues,
+        "recent issue activity",
+    )
+
+def _get_section_header(flag, section):
     if flag == flags.green_flag:
         return f"{flag} No concerns found with {section}.\n"
     elif flag == flags.yellow_flag:
@@ -70,10 +69,7 @@ def _get_full_summary():
     summary += _username_line()
 
     # Include section header for profile.
-    summary += _get_concise_section(
-        pdata.flag_overall_profile,
-        "user's profile",
-    )
+    summary += _get_profile_header()
 
     # Always include account age.
     age = humanize.naturaldelta(pdata.account_age)
@@ -84,20 +80,14 @@ def _get_full_summary():
     summary += "\n"
 
     # Include section header for PR activity.
-    summary += _get_concise_section(
-        pdata.flag_overall_pr,
-        "recent PR activity",
-    )
+    summary += _get_pr_header()
 
     # Include PR activity.
     summary += _pr_activity_summary()
     summary += "\n"
 
     # Include section header for issue activity.
-    summary += _get_concise_section(
-        pdata.flag_overall_issues,
-        "recent issue activity",
-    )
+    summary += _get_issue_header()
 
     #  Include issue activity.
     summary += _issue_activity_summary()
