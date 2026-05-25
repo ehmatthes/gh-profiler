@@ -40,6 +40,14 @@ def test_redact():
     assert "ehmatthes" not in summary
     assert summary.count("<redacted") == 7
 
+def test_full_header_lines():
+    """The full summary should include the same header lines as concise."""
+    summary = summary_utils._get_summary()
+
+    assert "No concerns found with user's profile." in summary
+    assert "No concerns found with recent PR activity." in summary
+    assert "No concerns found with recent issue activity." in summary
+
 def test_concise():
     """Test output with pdata.concise set to True."""
     pdata.concise = True
