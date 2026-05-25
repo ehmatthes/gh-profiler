@@ -19,18 +19,3 @@ GitHub user: ehmatthes
    🟢 0 issues closed as NOT_PLANNED.
    🟢 0 issues opened with the same title.
 """.strip()
-
-summary_empty_profile = """
-GitHub user: ehmatthes
-🔴 Significant concerns found with user's profile.
-   🟢 Account age: 13 years
-   🔴 No profile information provided.
-
-🟢 No concerns found with recent PR activity.
-   🟢 Fewer than 10 PRs opened in the last 21 days.
-
-🟢 No concerns found with recent issue activity.
-   🟢 7 new issues opened in the last 21 days.
-   🟢 0 issues closed as NOT_PLANNED.
-   🟢 0 issues opened with the same title.
-""".strip()

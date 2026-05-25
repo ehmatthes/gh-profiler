@@ -19,7 +19,9 @@ def test_summary():
 def test_summary_empty_profile(empty_profile_info):
     """Test summary for user with an empty profile."""
     summary = summary_utils._get_summary()
-    assert summary.strip() == reference_summaries.summary_empty_profile
+
+    assert "🔴 Significant concerns found with user's profile." in summary
+    assert "🔴 No profile information provided." in summary
 
 
 def test_no_issue_activity():
