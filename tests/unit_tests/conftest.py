@@ -66,3 +66,4 @@ def empty_profile_info():
     """
     pdata.profile_info = {}
     pdata.flag_profile = flags.red_flag
+    pdata.flag_overall_profile = flags.red_flag

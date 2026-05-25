@@ -22,7 +22,7 @@ GitHub user: ehmatthes
 
 summary_empty_profile = """
 GitHub user: ehmatthes
-🟢 No concerns found with user's profile.
+🔴 Significant concerns found with user's profile.
    🟢 Account age: 13 years
    🔴 No profile information provided.
 
