@@ -69,15 +69,37 @@ def _get_full_summary():
     # Include username, with label when appropriate.
     summary += _username_line()
 
+    # Include section header for profile.
+    summary += _get_concise_section(
+        pdata.flag_overall_profile,
+        "user's profile",
+    )
+
     # Always include account age.
     age = humanize.naturaldelta(pdata.account_age)
     summary += f"  {pdata.flag_age} Account age: {age}\n"
 
-    # Include profiler, PR activity, and issue activity sections.
+    # Include profile info.
     summary += _profile_summary()
     summary += "\n"
+
+    # Include section header for PR activity.
+    summary += _get_concise_section(
+        pdata.flag_overall_pr,
+        "recent PR activity",
+    )
+
+    # Include PR activity.
     summary += _pr_activity_summary()
     summary += "\n"
+
+    # Include section header for issue activity.
+    summary += _get_concise_section(
+        pdata.flag_overall_issues,
+        "recent issue activity",
+    )
+
+    #  Include issue activity.
     summary += _issue_activity_summary()
 
     return summary.strip()
