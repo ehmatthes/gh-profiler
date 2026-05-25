@@ -196,7 +196,7 @@ def _pr_activity_summary():
 def _issue_activity_summary():
     """Summarize recent public issue activity."""
     if pdata.new_issue_count == 0:
-        return f"   {flags.green_flag} No new issues in the last 21 days.\n"
+        return f"   {flags.green_flag} No new issues opened in the last 21 days.\n"
 
     summary = f"   {pdata.flag_overall_issues} {pdata.new_issue_count} new issues opened in the last 21 days.\n"
     summary += f"   {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues closed as NOT_PLANNED.\n"
@@ -207,6 +207,6 @@ def _issue_activity_summary():
     else:
         summary += f"   {pdata.flag_repeated_issues} {pdata.total_repeats} issues opened with the same title:\n"
     for title, count in pdata.repeated_issue_titles.items():
-        summary += f"      {title} ({count})\n"
+        summary += f"        {title} ({count})\n"
 
     return summary
