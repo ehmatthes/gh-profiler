@@ -8,7 +8,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
-### Unreleased
+### 0.6.3
+
+#### External changes
+
+- Full summaries have the same section headers as concise summaries.
+- Messages are more consistent across categories, ie no usernames in detail lines.
+- More consistent alignment throughout summary.
+
+#### Internal changes
+
+- Simplified tests to make them less fragile. For example, only test lines relevant to the test, not the entire summary (except initial full summary test).
 
 #### External changes
 
