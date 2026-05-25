@@ -13,32 +13,34 @@ Running as a tool
 
 If you have uv installed, you can run this as a tool against any GitHub user:
 
-```sh
+```txt
 $ uvx gh-profiler <redacted>
 GitHub user: <redacted>
-  🟡 Account age: 159 days
+🟡 Some concerns found with user's profile.
+   🟡 Account age: 6 months
+   🟢 Profile information:
+        name: <redacted>
+        blog: <redacted>
+        email: <redacted>
+      Empty fields: company, location, bio
 
-  🟢 Profile information:
-      name: <redacted>
-      blog: https://<redacted>.com
-      email: info@<redacted>.com
-     Empty fields: company, location, bio
+🟢 No concerns found with recent PR activity.
+   🟢 Fewer than 10 PRs opened in the last 21 days.
 
-  🟢 <redacted> has opened fewer than 10 PRs in the last 21 days.
-
-  🔴 <redacted> has opened 6 new issues in the last 21 days.
-     🟢 0 issues have been closed as NOT_PLANNED.
-     🔴 6 issues were opened with the same title:
-        📋 Documentation Enhancement Suggestion (6)
+🔴 Significant concerns found with recent issue activity.
+   🔴 79 new issues opened in the last 21 days.
+   🟢 0 issues closed as NOT_PLANNED.
+   🔴 71 issues opened with the same title:
+        📋 Documentation Enhancement Suggestion (71)
 ```
 
 If you're working in your local project directory, you can simply provide a PR or issue number. The tool will look up the PR or issue, identify the user who opened it, and give a report on that user:
 
-```sh
+```txt
 $ uvx gh-profiler 8
 Issue #8: Accept a username or an issue/ pr number.
 Author: ehmatthes
-  🟢 Account age: 5,058 days
+  🟢 Account age: 13 years
   ...
 ```
 
@@ -51,7 +53,7 @@ You can also install the project, and then run the bare `gh-profiler` command:
 (.venv) $ pip install gh-profiler
 (.venv) $ gh-profiler ehmatthes
 GitHub user: ehmatthes
-  🟢 Account age: 5,058 days
+  🟢 Account age: 13 years
   ...
 ```
 
@@ -66,7 +68,7 @@ Concise output
 
 If you want just the simplest summary, you can pass the `--concise` flag:
 
-```sh
+```txt
 $ uvx gh-profiler <redacted> --concise
 GitHub user: <redacted>
 🟡 Some concerns found with user's profile.
@@ -118,11 +120,11 @@ Maintaining
 
 For live demos and screenshots, you can pass the `--redact` flag. The username and profile information sections will show "\<redacted\>" in place of identifying information:
 
-```sh
+```txt
 $ uv run gh-profiler 39 --redact
 Issue #39: Add a `--redact` flag
 Author: <redacted>
-  🟢 Account age: 5,058 days
+  🟢 Account age: 13 years
 
   🟢 Profile information:
       name: <redacted>
