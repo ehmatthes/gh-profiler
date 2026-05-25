@@ -167,16 +167,13 @@ def _profile_summary():
 
 def _bio_summary(bio):
     """Summarize bio section of profile."""
-    if bio in (None, ""):
-        return f"        bio:\n"
-
     if bio.count("\n") == 0:
         return f"        bio: {bio}\n"
 
     # Print a multi-line bio.
     summary = "        bio:\n"
     for line in bio.splitlines():
-        summary += f"        {line}\n"
+        summary += f"          {line}\n"
     return summary
 
 
