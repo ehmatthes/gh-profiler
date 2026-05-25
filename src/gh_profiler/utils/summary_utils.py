@@ -21,9 +21,10 @@ def _get_summary():
     else:
         return _get_full_summary()
 
+
 def _get_concise_summary():
     """Build the shorter, concise summary string.
-    
+
     This is one line for each main section: name, profile, pr activity, issue activity.
     """
     summary = ""
@@ -35,17 +36,21 @@ def _get_concise_summary():
 
     return summary
 
+
 def _get_profile_header():
     return _get_section_header(pdata.flag_overall_profile, "user's profile")
 
+
 def _get_pr_header():
     return _get_section_header(pdata.flag_overall_pr, "recent PR activity")
+
 
 def _get_issue_header():
     return _get_section_header(
         pdata.flag_overall_issues,
         "recent issue activity",
     )
+
 
 def _get_section_header(flag, section):
     """Return a single line header for each main section of the summary."""
@@ -102,7 +107,7 @@ def _redact_info():
     for k, v in pdata.profile_info.items():
         if v:
             pdata.profile_info[k] = "<redacted>"
-    
+
     for social in pdata.socials:
         social["url"] = "<redacted>"
 
