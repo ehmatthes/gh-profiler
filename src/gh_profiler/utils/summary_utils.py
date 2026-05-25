@@ -27,7 +27,6 @@ def _get_concise_summary():
     This is one line for each main section: name, profile, pr activity, issue activity.
     """
     summary = ""
-
     summary += f"GitHub user: {pdata.username}\n"
     summary += _get_profile_header()
     summary += _get_pr_header()
@@ -49,6 +48,7 @@ def _get_issue_header():
     )
 
 def _get_section_header(flag, section):
+    """Return a single line header for each main section of the summary."""
     if flag == flags.green_flag:
         return f"{flag} No concerns found with {section}.\n"
     elif flag == flags.yellow_flag:
@@ -68,28 +68,20 @@ def _get_full_summary():
     # Include username, with label when appropriate.
     summary += _username_line()
 
-    # Include section header for profile.
+    # Include profile info.
     summary += _get_profile_header()
-
-    # Always include account age.
     age = humanize.naturaldelta(pdata.account_age)
     summary += f"  {pdata.flag_age} Account age: {age}\n"
-
-    # Include profile info.
     summary += _profile_summary()
     summary += "\n"
 
-    # Include section header for PR activity.
-    summary += _get_pr_header()
-
     # Include PR activity.
+    summary += _get_pr_header()
     summary += _pr_activity_summary()
     summary += "\n"
 
-    # Include section header for issue activity.
-    summary += _get_issue_header()
-
     #  Include issue activity.
+    summary += _get_issue_header()
     summary += _issue_activity_summary()
 
     return summary.strip()
