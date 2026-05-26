@@ -212,8 +212,12 @@ def _adjust_flags():
 
     Be careful about unintended effects. Especially as evaluation criteria gets
     more complex, it would be easy to undo some reasoning implemented earlier.
+
+    These function names can be longer than typical names, more like test
+    function names.
     """
     _adjust_account_age_flag()
+    _adjust_profile_flag_no_pr_issue_activity()
 
 def _adjust_account_age_flag():
     """Reevaluate the account age flag.
@@ -240,3 +244,21 @@ def _adjust_account_age_flag():
     # The only issue is the account age flag. Set it green.
     pdata.flag_age = flags.green_flag
     pdata.flag_overall_profile = flags.green_flag
+
+def _adjust_profile_flag_no_pr_issue_activity():
+    """If user has no recent PRs or issues, profile flags should be green.
+    
+    This is meant to handle the specific situation where the target user has
+    had not recent PR or issue activity, and they have little or no profile
+    information. For example, people who have scrubbed their GH accounts but
+    not deleted their profile shouldn't raise any yellow or red flags.
+    
+    This should never come into play on a PR or issue. This should only come
+    into play when someone decides to run a profile against the user's account
+    for some other reason, such as curiosity. This was brought to my attention
+    by someone running gh-profiler on their own account, and feeling
+    uncomfortable about seeing flags raised despite no problematic activity.
+    """
+    if (pdata.opened_count == 0 and pdata.new_issue_count == 0):
+        pdata.flag_profile = flags.green_flag
+        pdata.flag_overall_profile = flags.green_flag
