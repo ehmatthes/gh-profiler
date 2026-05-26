@@ -8,6 +8,9 @@ from . import flags
 def show_summary():
     """Show a concise summary of what was found."""
     summary = _get_summary()
+
+    if pdata.verbose:
+        print("\n\n--- Summary ---\n")
     print(summary)
 
 

@@ -273,8 +273,8 @@ def _adjust_profile_flag_no_pr_issue_activity():
     pdata.flag_profile = flags.green_flag
     pdata.flag_overall_profile = flags.green_flag
 
-    msg = "\nSet profile info and overall profile flags green. This user has not"
-    msg += "\nopened any recent PRs or issues, so they have no concerning activity."
+    msg = "\nFlags adjusted: Set profile info and overall profile flags green. This user has not"
+    msg += "\n  opened any recent PRs or issues, so they have no concerning activity."
     if pdata.verbose:
         print(msg)
 
