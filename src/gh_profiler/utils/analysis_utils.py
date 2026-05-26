@@ -208,10 +208,10 @@ def _adjust_flags():
     flags have been set based on flags within the group.
 
     For example, if a newer account has no other red or yellow flags, we'll
-    adjust the account age flag to green.
+    adjust the profile flags to green.
 
-    Be careful about unintended effects. Especially as evaluation criteria gets
-    more complex, it would be easy to undo some reasoning implemented earlier.
+    Be careful about unintended effects. As evaluation criteria gets more
+    complex, it would be easy to undo some reasoning implemented earlier.
 
     These function names can be longer than typical names, more like test
     function names.
@@ -222,28 +222,29 @@ def _adjust_flags():
 def _adjust_account_age_flag():
     """Reevaluate the account age flag.
 
-    If all other overall flags are green, the account age flag should be green.
-    This override only applies when all of the following are true:
-    - The overall profile flag is not green.
-    - The only individual profile flag that's not green is the account age.
-    - All other overall flags are green.
+    If PR and issue flags are green, the account age flag should be green.
+    This applies when:
+    - The account age flag is not green.
+    - All other overall flags (PRs and issues) are green.
     """
-    # Check for clear reasons this doesn't apply. Profile flag is already green,
+    # Check for clear reasons this doesn't apply. Account age flag is already green,
     # or another overall flag is not green.
     if (
-        pdata.flag_overall_profile == flags.green_flag
+        pdata.flag_age == flags.green_flag
         or pdata.flag_overall_pr != flags.green_flag
         or pdata.flag_overall_issues != flags.green_flag
     ):
         return
-    
-    # Check other profile component flags.
-    if pdata.flag_profile != flags.green_flag:
-        return
 
-    # The only issue is the account age flag. Set it green.
+    # Set the account age flag green, and reevaluate overall profile flag.
     pdata.flag_age = flags.green_flag
-    pdata.flag_overall_profile = flags.green_flag
+    _process_profile_flags()
+
+    # Verbose rationale.
+    msg = "\nFlag adjusted: Set account age flag green. This user has a newer account,"
+    msg += "\n  but they have no other concerning activity."
+    if pdata.verbose:
+        print(msg)
 
 def _adjust_profile_flag_no_pr_issue_activity():
     """If user has no recent PRs or issues, profile flags should be green.
@@ -273,8 +274,8 @@ def _adjust_profile_flag_no_pr_issue_activity():
     pdata.flag_profile = flags.green_flag
     pdata.flag_overall_profile = flags.green_flag
 
+    # Verbose rationale.
     msg = "\nFlags adjusted: Set profile info and overall profile flags green. This user has not"
     msg += "\n  opened any recent PRs or issues, so they have no concerning activity."
     if pdata.verbose:
         print(msg)
-
