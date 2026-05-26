@@ -63,6 +63,30 @@ When you've installed the project, you can also run it as a module:
 $ python -m gh_profiler <username>
 ```
 
+Verbose output
+---
+
+The `-v` or `--verbose` flag will print some of the rationales for evaluating flags:
+
+```txt
+$ uv run gh-profiler <redacted> -v
+
+Flag adjusted: Set account age flag green. This user has a newer account,
+  but they have no other concerning activity.
+
+Flags adjusted: Set profile info and overall profile flags green. This user has not
+  opened any recent PRs or issues, so they have no concerning activity.
+
+--- Summary ---
+
+GitHub user: <redacted>
+🟢 No concerns found with user's profile.
+   🟢 Account age: 20 minutes
+   🟢 Profile information:
+      Empty fields: name, company, blog, location, email, bio
+...
+```
+
 Concise output
 ---
 
@@ -77,6 +101,13 @@ GitHub user: <redacted>
 
 For a more detailed report, run `gh-profiler <redacted>`.
 ```
+
+False positives
+---
+
+Some checks are in place to ensure that people who are not engaged in clear problematic behavior don't raise red or yellow flags. For example, a new user who opens a bunch of identical issues or PRs will have a red flag for the account age. But a new user who does not show any other signs of problematic behavior will have their account age flag set to green.
+
+If you see an example of red or yellow flags being raised with no clear indication of problematic behavior, please consider opening an issue.
 
 GitHub Actions
 ---
