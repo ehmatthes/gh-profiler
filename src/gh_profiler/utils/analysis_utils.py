@@ -259,6 +259,22 @@ def _adjust_profile_flag_no_pr_issue_activity():
     by someone running gh-profiler on their own account, and feeling
     uncomfortable about seeing flags raised despite no problematic activity.
     """
-    if (pdata.opened_count == 0 and pdata.new_issue_count == 0):
-        pdata.flag_profile = flags.green_flag
-        pdata.flag_overall_profile = flags.green_flag
+    # Doesn't apply if there are any new PRs or issues.
+    if pdata.opened_count > 0 or pdata.new_issue_count > 0:
+        return
+
+    # Doesn't apply if relevant flags are already green.
+    if (
+        pdata.flag_profile == flags.green_flag
+        and pdata.flag_overall_profile == flags.green_flag
+    ):
+        return
+
+    pdata.flag_profile = flags.green_flag
+    pdata.flag_overall_profile = flags.green_flag
+
+    msg = "\nSet profile info and overall profile flags green. This user has not"
+    msg += "\nopened any recent PRs or issues, so they have no concerning activity."
+    if pdata.verbose:
+        print(msg)
+

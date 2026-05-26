@@ -62,6 +62,7 @@ class ProfileData:
 
     # --- Behavior fields ---
     concise: bool = False
+    verbose: bool = False
     # Redact is used primarily for live demos, and screenshots.
     redact: bool = False
 
