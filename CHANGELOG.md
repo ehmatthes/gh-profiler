@@ -8,6 +8,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.6.4
+
+#### External changes
+
+- If a user has 0 new PRs or issues, the profile flags are set to green. This is important, for example, for people who have left GitHub and scrubbed their profile info, but not deleted their account. They haven't opened any PRs or issues, but they don't want to see yellow or red flags if someone runs gh-profiler against their account.
+- Supports `-v`, `--verbose`. When passed, this prints the rationale for adjust flags. This can expand to dump explanations for any decisions made in the analysis work.
+
+#### Internal changes
+
+- NA
+
 ### 0.6.3
 
 #### External changes
