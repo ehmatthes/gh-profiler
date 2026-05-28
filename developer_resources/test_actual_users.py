@@ -34,7 +34,7 @@ from gh_profiler.utils import infra_utils
 from gh_profiler.utils import flags
 
 
-# --- Fixtures ---
+# --- Helper functions ---
 
 def get_users(category):
     """Return data object containing green and non-green user lists."""
@@ -57,9 +57,6 @@ def get_users(category):
     elif category == "non_green":
         return data["non_green_users"]
 
-
-# --- Helper functions ---
-
 def run_with_timeout(cmd):
     """Run gh-profiler command, with a timeout."""
     num_attempts = 0
@@ -78,21 +75,27 @@ def run_with_timeout(cmd):
 
 # --- Test functions ---
 
-
 @pytest.mark.parametrize("username", get_users("green"))
 def test_green_users(username):
-    """Run gh-profiler against known green users."""
+    """Run gh-profiler against known green users.
+    
+    We should not find any yellow or red flags for these users.
+    """
     print(f"\nTesting against green user {username}")
     cmd = f"uv run gh-profiler {username} --concise"
     output = run_with_timeout(cmd)
 
-    assert output.count(flags.green_flag) == 3
+    assert flags.yellow_flag not in output
+    assert flags.red_flag not in output
 
 @pytest.mark.parametrize("username", get_users("non_green"))
 def test_non_green_users(username):
-    """Run gh-profiler against known non-green users."""
+    """Run gh-profiler against known non-green users.
+    
+    We should find at least one yellow or red flag for these users.
+    """
     print(f"\nTesting against non-green user {username}")
     cmd = f"uv run gh-profiler {username} --concise"
     output = run_with_timeout(cmd)
 
-    assert output.count(flags.green_flag) < 3
+    assert flags.yellow_flag in output or flags.red_flag in output
