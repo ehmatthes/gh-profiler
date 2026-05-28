@@ -88,13 +88,11 @@ def test_green_users(username):
 
     assert output.count(flags.green_flag) == 3
 
-def test_non_green_users():
+@pytest.mark.parametrize("username", get_users("non_green"))
+def test_non_green_users(username):
     """Run gh-profiler against known non-green users."""
-    non_green_users = get_users("non_green")
-    print("\n\nTesting non-green users...")
-    for username in non_green_users:
-        print(f"  Testing against non-green user {username}")
-        cmd = f"uv run gh-profiler {username} --concise"
-        output = run_with_timeout(cmd)
+    print(f"\nTesting against non-green user {username}")
+    cmd = f"uv run gh-profiler {username} --concise"
+    output = run_with_timeout(cmd)
 
-        assert output.count(flags.green_flag) < 3
+    assert output.count(flags.green_flag) < 3
