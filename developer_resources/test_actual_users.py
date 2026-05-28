@@ -21,6 +21,10 @@ The target file should be a .toml file, with two lists:
   green_users, and non_green_users.
 We're using TOML so we can have comments in the data file. I like to keep track
 of why I'm testing against certain users.
+
+If your data file isn't being found, you can see what path is being used
+with this command:
+    uv run pytest developer_resources/test_actual_users.py -rs
 """
 
 from pathlib import Path
@@ -47,7 +51,7 @@ def get_users(category):
     
     if not path.exists():
         msg = f"No actual_users.toml file found. Tried {path}"
-        pytest.exit(msg)
+        pytest.skip(msg, allow_module_level=True)
 
     with path.open("rb") as f:
         data = tomllib.load(f)
