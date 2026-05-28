@@ -84,7 +84,7 @@ def run_with_timeout(cmd):
 
 
 # --- Test functions ---
-def test_green_user(green_users):
+def test_green_users(green_users):
     """Run gh-profiler against known green users."""
     print("Testing green users...")
     for username in green_users:
