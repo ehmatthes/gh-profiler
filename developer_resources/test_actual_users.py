@@ -71,7 +71,13 @@ def run_with_timeout(cmd):
             print("Time out.")
             num_attempts += 1
         else:
-            return output
+            # Did not time out, but check that we got a response.
+            if output:
+                return output
+            else:
+                print("Got an empty response.")
+                num_attempts += 1
+                continue
     
     msg = "Too many timeouts."
     pytest.exit(msg)
