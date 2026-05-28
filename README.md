@@ -187,6 +187,7 @@ $ uv run pytest tests/e2e_tests
 There's a test that runs against a longer set of actual users. It pulls from a data file that's stored outside this repo, because we don't want to call attention to any specific users. There's an empty data file template in `developer_resources/`, for people who want to start testing against actual users.
 
 ```sh
+$ export PATH_ACTUAL_USERS=<path/to/actual_users.toml>
 $ uv run pytest developer_resources/test_actual_users.py -s
 ```
 
