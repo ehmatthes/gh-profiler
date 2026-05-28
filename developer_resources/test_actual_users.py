@@ -36,7 +36,8 @@ from gh_profiler.utils import flags
 # --- Fixtures ---
 
 @pytest.fixture()
-def path_actual_usernames(request):
+def usernames_data(request):
+    """Return data object containing green and non-green user lists."""
     path = request.config.getoption("--path-actual-usernames")
     if path:
         path = Path(path)
@@ -44,12 +45,24 @@ def path_actual_usernames(request):
         path_src_dir = Path(__file__).parents[2]
         path = path_src_dir / "gh-profiler_support" / "actual_users.toml"
     
-    if path.exists():
-        return path
-    else:
+    if not path.exists():
         msg = "No actual_users.py file found."
-        breakpoint()
         pytest.exit(msg)
+
+    with path.open("rb") as f:
+        data = tomllib.load(f)
+    
+    return data
+
+@pytest.fixture()
+def green_users(usernames_data):
+    """Return only green users."""
+    return usernames_data["green_users"]
+
+@pytest.fixture()
+def non_green_users(usernames_data):
+    """Return only non-green users."""
+    return usernames_data["non_green_users"]
 
 
 # --- Helper functions ---
@@ -71,23 +84,20 @@ def run_with_timeout(cmd):
 
 
 # --- Test functions ---
-
-def test_actual_users(path_actual_usernames):
-    """Run gh-profiler against actual users, and look for appropriate flags.
-    """
-    with path_actual_usernames.open("rb") as f:
-        data = tomllib.load(f)
-
-    print("\nTesting green users...")
-    for username in data["green_users"]:
-        print(f"  Testing against {username}")
+def test_green_user(green_users):
+    """Run gh-profiler against known green users."""
+    print("Testing green users...")
+    for username in green_users:
+        print(f"  Testing against green user {username}")
         cmd = f"uv run gh-profiler {username} --concise"
         output = run_with_timeout(cmd)
 
         assert output.count(flags.green_flag) == 3
 
+def test_non_green_users(non_green_users):
+    """Run gh-profiler against known non-green users."""
     print("Testing non-green users...")
-    for username in data["non_green_users"]:
+    for username in non_green_users:
         print(f"  Testing against {username}")
         cmd = f"uv run gh-profiler {username} --concise"
         output = run_with_timeout(cmd)
