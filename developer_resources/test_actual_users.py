@@ -77,16 +77,16 @@ def run_with_timeout(cmd):
 
 
 # --- Test functions ---
-def test_green_users():
-    """Run gh-profiler against known green users."""
-    green_users = get_users("green")
-    print("\n\nTesting green users...")
-    for username in green_users:
-        print(f"  Testing against green user {username}")
-        cmd = f"uv run gh-profiler {username} --concise"
-        output = run_with_timeout(cmd)
 
-        assert output.count(flags.green_flag) == 3
+
+@pytest.mark.parametrize("username", get_users("green"))
+def test_green_users(username):
+    """Run gh-profiler against known green users."""
+    print(f"\nTesting against green user {username}")
+    cmd = f"uv run gh-profiler {username} --concise"
+    output = run_with_timeout(cmd)
+
+    assert output.count(flags.green_flag) == 3
 
 def test_non_green_users():
     """Run gh-profiler against known non-green users."""
