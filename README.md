@@ -178,14 +178,21 @@ Run all tests except end-to-end tests:
 $ uv run pytest
 ```
 
-End-to-end tests are slower, and flakier because they make actual API calls. It's best to run a specific e2e test:
+End-to-end tests are slower because they make actual API calls. You have to run them explicitly:
 
 ```sh
-$ uv run pytest tests/e2e_tests -k full
-$ uv run pytest tests/e2e_tests -k concise
+$ uv run pytest tests/e2e_tests
 ```
 
-There's a shell script that runs all of these tests. It works on macOS and probably linux, but may not work on Windows.
+There's a test that runs against a longer set of actual users. It pulls from a data file that's stored outside this repo, because we don't want to call attention to any specific users. There's an empty data file template in `developer_resources/`, for people who want to start testing against actual users.
+
+```sh
+$ uv run pytest developer_resources/test_actual_users.py -s
+```
+
+The `-s` flag is helpful to see each user account that's being tested. For fuller documentation, see the comments in `test_actual_users.py`. This test will likely be moved to `tests/e2e_tests/`, but the usernames will always be kept outside this repo.
+
+There's a shell script that runs all these tests. It works on macOS and probably linux, but may not work on Windows.
 
 ```sh
 $ ./test_all.sh
