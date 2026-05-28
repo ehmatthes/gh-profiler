@@ -1,0 +1,34 @@
+# Actual GH user profiles to test against.
+# 
+# This is a template file. If you want to run
+# developer_resources/test_actual_users.py, copy this file to a location
+# outside the gh-profiler repo. Then add the actual usernames you want
+# to test against.
+# 
+# A version of this file with actual usernames should never be checked in.
+# 
+# To run the test:
+# - Set PATH_ACTUAL_USERS to the location you saved this file.
+# - Run `uv run pytest developer_resources/test_actual_users.py`.
+# 
+# If your file is not being found, run with the `-rs` flag to see the 
+# the path that's being used.
+
+
+# Accounts that should only ever return green flags.
+green_users = [
+    # Me.
+
+    # Collaborators and known prominent open source people.
+
+    # New users, who have never engaged in known problematic behavior.
+
+    # Users who have left GH, but haven't deleted their account.
+
+]
+
+
+# Accounts that should always raise at least one non-green flag.
+non_green_users = [
+
+]

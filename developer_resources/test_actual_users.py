@@ -6,21 +6,24 @@ behaviors, and users known to have problematic behaviors.
 It fails on any non-green flag in known green user profiles.
 It fails on all-green results for known problematic users.
 
-The user lists are entirely private and will never be posted publicly. This is
-meant to help make sure we're not actually flagging appropriate behaviors, or
-not catching inappropriate behaviors.
+The user lists are entirely private and will never be in the public repo. This
+test helps make sure we're not accidentally flagging appropriate behaviors, or
+missing inappropriate behaviors.
 
-When a test fails, it doesn't necessarily mean there's a problem with
-gh-profiler. When this test fails, we should look at that user's profile. If
-they are expected to be all green, we should see if there's a legitimate
-behavior that's being flagged. If they're expected not to be all green, we 
-should see if the user has stopped being active, has improved their activity,
-or if we're just not catching something.
+When this test fails, it doesn't necessarily mean there's a problem with
+gh-profiler. When it fails, we should look at that user's profile. If
+they're expected to be all green, we should see if there's a legitimate
+behavior that's being flagged. If they're expected to raise yellow or red flags,
+we should see if the user has stopped being active, has improved their activity,
+or if we're missing something.
 
-The target file should be a .toml file, with two lists:
-  green_users, and non_green_users.
-We're using TOML so we can have comments in the data file. I like to keep track
-of why I'm testing against certain users.
+The target file should be a .toml file, with two lists: green_users, and
+non_green_users. We're using TOML so we can have comments in the data file.
+I like to keep track of why I'm testing against certain users. You can see a
+sample actual_users.toml file in developer_resources/.
+
+Running this test:
+    uv run pytest developer_resources/test_actual_users.py -s
 
 If your data file isn't being found, you can see what path is being used
 with this command:
