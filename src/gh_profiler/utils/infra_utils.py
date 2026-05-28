@@ -11,8 +11,8 @@ DEFAULT_ENV = {
 }
 
 
-def run_cmd(cmd, env=DEFAULT_ENV):
+def run_cmd(cmd, env=DEFAULT_ENV, timeout=None):
     """Run a subprocess command, return stdout."""
     cmd_parts = shlex.split(cmd)
-    output_obj = subprocess.run(cmd_parts, capture_output=True, env=env)
+    output_obj = subprocess.run(cmd_parts, capture_output=True, env=env, timeout=timeout)
     return output_obj.stdout.decode()
