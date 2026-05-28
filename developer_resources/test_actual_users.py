@@ -33,6 +33,8 @@ from gh_profiler.utils import infra_utils
 from gh_profiler.utils import flags
 
 
+# --- Fixtures ---
+
 @pytest.fixture()
 def path_actual_usernames(request):
     path = request.config.getoption("--path-actual-usernames")
@@ -50,6 +52,8 @@ def path_actual_usernames(request):
         pytest.exit(msg)
 
 
+# --- Helper functions ---
+
 def run_with_timeout(cmd):
     """Run gh-profiler command, with a timeout."""
     num_attempts = 0
@@ -66,6 +70,7 @@ def run_with_timeout(cmd):
     pytest.exit(msg)
 
 
+# --- Test functions ---
 
 def test_actual_users(path_actual_usernames):
     """Run gh-profiler against actual users, and look for appropriate flags.
