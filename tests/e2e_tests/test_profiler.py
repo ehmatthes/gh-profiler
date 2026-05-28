@@ -27,9 +27,9 @@ def run_with_timeout(cmd):
         else:
             return output
     
-    # Use a sys exit, not pytest. pytest.exit would exit the whole suite?
+    # Skip this entire module if there are too many timeouts.
     msg = "Too many timeouts."
-    sys.exit(msg)
+    pytest.skip(msg, allow_module_level=True)
 
 
 # --- Test functions ---
