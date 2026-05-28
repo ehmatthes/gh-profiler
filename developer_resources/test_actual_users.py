@@ -17,13 +17,20 @@ behavior that's being flagged. If they're expected not to be all green, we
 should see if the user has stopped being active, has improved their activity,
 or if we're just not catching something.
 
-The target file should be a .py file, with two lists:
+The target file should be a .toml file, with two lists:
   green_users, and non_green_users.
+We're using TOML so we can have comments in the data file. I like to keep track
+of why I'm testing against certain users.
 """
 
 from pathlib import Path
+import tomllib
+import subprocess
 
 import pytest
+
+from gh_profiler.utils import infra_utils
+from gh_profiler.utils import flags
 
 
 @pytest.fixture()
@@ -33,7 +40,7 @@ def path_actual_usernames(request):
         path = Path(path)
     else:
         path_src_dir = Path(__file__).parents[2]
-        path = path_src_dir / "gh-profiler_support" / "actual_users.py"
+        path = path_src_dir / "gh-profiler_support" / "actual_users.toml"
     
     if path.exists():
         return path
@@ -43,8 +50,34 @@ def path_actual_usernames(request):
         pytest.exit(msg)
 
 
+def run_with_timeout(cmd):
+    """Run gh-profiler command, with a timeout."""
+    num_attempts = 0
+    while num_attempts < 5:
+        try:
+            output = infra_utils.run_cmd(cmd, timeout=5)
+        except subprocess.TimeoutExpired:
+            print("Time out.")
+            num_attempts += 1
+        else:
+            return output
+    
+    msg = "Too many timeouts."
+    pytest.exit(msg)
+
+
 
 def test_actual_users(path_actual_usernames):
     """Run gh-profiler against actual users, and look for appropriate flags.
     """
-    assert False    
+    with path_actual_usernames.open("rb") as f:
+        data = tomllib.load(f)
+
+    for username in data["green_users"]:
+        print(f"Testing against {username}...")
+        cmd = f"uv run gh-profiler {username} --concise"
+        output = run_with_timeout(cmd)
+
+        assert output.count(flags.green_flag) == 3
+
+    

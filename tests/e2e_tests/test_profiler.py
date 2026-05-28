@@ -6,6 +6,7 @@ to use.
 """
 
 import sys
+import subprocess
 
 import pytest
 
