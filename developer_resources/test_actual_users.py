@@ -86,7 +86,7 @@ def run_with_timeout(cmd):
 # --- Test functions ---
 def test_green_users(green_users):
     """Run gh-profiler against known green users."""
-    print("Testing green users...")
+    print("\n\nTesting green users...")
     for username in green_users:
         print(f"  Testing against green user {username}")
         cmd = f"uv run gh-profiler {username} --concise"
@@ -96,9 +96,9 @@ def test_green_users(green_users):
 
 def test_non_green_users(non_green_users):
     """Run gh-profiler against known non-green users."""
-    print("Testing non-green users...")
+    print("\n\nTesting non-green users...")
     for username in non_green_users:
-        print(f"  Testing against {username}")
+        print(f"  Testing against non-green user {username}")
         cmd = f"uv run gh-profiler {username} --concise"
         output = run_with_timeout(cmd)
 
