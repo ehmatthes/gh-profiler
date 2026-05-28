@@ -26,6 +26,7 @@ of why I'm testing against certain users.
 from pathlib import Path
 import tomllib
 import subprocess
+import os
 
 import pytest
 
@@ -35,10 +36,9 @@ from gh_profiler.utils import flags
 
 # --- Fixtures ---
 
-@pytest.fixture()
-def usernames_data(request):
+def get_users(category):
     """Return data object containing green and non-green user lists."""
-    path = request.config.getoption("--path-actual-usernames")
+    path = os.environ.get("PATH_ACTUAL_USERS", None)
     if path:
         path = Path(path)
     else:
@@ -52,17 +52,10 @@ def usernames_data(request):
     with path.open("rb") as f:
         data = tomllib.load(f)
     
-    return data
-
-@pytest.fixture()
-def green_users(usernames_data):
-    """Return only green users."""
-    return usernames_data["green_users"]
-
-@pytest.fixture()
-def non_green_users(usernames_data):
-    """Return only non-green users."""
-    return usernames_data["non_green_users"]
+    if category == "green":
+        return data["green_users"]
+    elif category == "non_green":
+        return data["non_green_users"]
 
 
 # --- Helper functions ---
@@ -84,8 +77,9 @@ def run_with_timeout(cmd):
 
 
 # --- Test functions ---
-def test_green_users(green_users):
+def test_green_users():
     """Run gh-profiler against known green users."""
+    green_users = get_users("green")
     print("\n\nTesting green users...")
     for username in green_users:
         print(f"  Testing against green user {username}")
@@ -94,8 +88,9 @@ def test_green_users(green_users):
 
         assert output.count(flags.green_flag) == 3
 
-def test_non_green_users(non_green_users):
+def test_non_green_users():
     """Run gh-profiler against known non-green users."""
+    non_green_users = get_users("non_green")
     print("\n\nTesting non-green users...")
     for username in non_green_users:
         print(f"  Testing against non-green user {username}")
