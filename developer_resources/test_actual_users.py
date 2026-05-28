@@ -46,7 +46,7 @@ def get_users(category):
         path = path_src_dir / "gh-profiler_support" / "actual_users.toml"
     
     if not path.exists():
-        msg = "No actual_users.py file found."
+        msg = f"No actual_users.toml file found. Tried {path}"
         pytest.exit(msg)
 
     with path.open("rb") as f:
