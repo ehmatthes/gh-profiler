@@ -8,6 +8,20 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### Unreleased
+
+#### External changes
+
+- NA
+
+#### Internal changes
+
+- Includes `developer_resources/test_actual_users.py`, which runs tests against a series of actual users.
+  - Targets users in `actual_users.toml`, which is stored outside this repo so as not to call attention to any specific users.
+  - Targets users who should only ever return green flags, and users who are expected to raise at least one yellow or red flag.
+  - Includes a template data file in `developer_resources/actual_users.toml`.
+- Implements better timeouts and checks for empty API responses in e2e tests.
+
 ### 0.6.4
 
 #### External changes
