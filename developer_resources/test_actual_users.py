@@ -73,11 +73,18 @@ def test_actual_users(path_actual_usernames):
     with path_actual_usernames.open("rb") as f:
         data = tomllib.load(f)
 
+    print("\nTesting green users...")
     for username in data["green_users"]:
-        print(f"Testing against {username}...")
+        print(f"  Testing against {username}")
         cmd = f"uv run gh-profiler {username} --concise"
         output = run_with_timeout(cmd)
 
         assert output.count(flags.green_flag) == 3
 
-    
+    print("Testing non-green users...")
+    for username in data["non_green_users"]:
+        print(f"  Testing against {username}")
+        cmd = f"uv run gh-profiler {username} --concise"
+        output = run_with_timeout(cmd)
+
+        assert output.count(flags.green_flag) < 3
