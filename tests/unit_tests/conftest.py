@@ -33,8 +33,10 @@ def filled_pdata():
     pdata.account_age = timedelta(days=5058)
 
     pdata.opened_count = 5
-    pdata.closed_count = 1
-    pdata.merged_count = 3
+    pdata.opened_count_owned = 0
+    pdata.opened_count_external = 5
+    pdata.closed_count_external = 1
+    pdata.merged_count_external = 3
 
     pdata.flag_age = flags.green_flag
     pdata.flag_profile = flags.green_flag
