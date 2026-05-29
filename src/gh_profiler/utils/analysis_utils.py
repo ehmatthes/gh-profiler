@@ -68,15 +68,28 @@ def _process_profile_info():
 
 
 def _process_pr_activity():
-    """Evaluate recent PR activity."""
-    # Don't need to analyze PR activity if fewer than 10 PRs opened recently.
-    if pdata.opened_count < 10:
+    """Evaluate recent PR activity.
+    
+    Only evaluate PR activity against external repos, not PRs against repos
+    the user owns.
+    """
+
+
+
+    # Don't need to analyze PR activity below a small threshold.
+    min_external_pr_threshold = 3
+    if pdata.opened_count < min_external_pr_threshold:
         pdata.flag_merged_pr = flags.green_flag
         pdata.flag_closed_pr = flags.green_flag
+
+        if pdata.verbose:
+            msg = f"PR flags set green because fewer than {min_external_pr_threshold} PRs opened against external repos."
+            print(msg)
+            
         return
 
-    ratio_merged = pdata.merged_count / pdata.opened_count
-    ratio_closed = pdata.closed_count / pdata.opened_count
+    ratio_merged = pdata.merged_count_external / pdata.opened_count_external
+    ratio_closed = pdata.closed_count_external / pdata.opened_count_external
 
     if ratio_closed > 0.5:
         pdata.flag_closed_pr = flags.red_flag
