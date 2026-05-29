@@ -182,10 +182,16 @@ def _bio_summary(bio):
 
 def _pr_activity_summary():
     """Summarize recent PR activity."""
-    if pdata.opened_count < 10:
-        return f"   {flags.green_flag} Fewer than 10 PRs opened in the last 21 days.\n"
+    if pdata.opened_count == 0:
+        return f"   {flags.green_flag} No PRs opened in the last 21 days.\n"
 
     summary = ""
+
+    if pdata.opened_count == 1:
+        summary += "   1 PR opened in the last 21 days.\n"
+    else:
+        summary += f"   {pdata.opened_count} PRs opened in the last 21 days.\n"
+
     # Only show merged if it's a good sign.
     if pdata.flag_merged_pr == flags.green_flag:
         summary += f"   {pdata.flag_merged_pr} {pdata.merged_count} of {pdata.opened_count} PRs merged in the last 21 days.\n"
