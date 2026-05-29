@@ -187,17 +187,26 @@ def _pr_activity_summary():
 
     summary = ""
 
+    # Report overall PR activity, including PRs against owned and external repos.
     if pdata.opened_count == 1:
         summary += "   1 PR opened in the last 21 days.\n"
     else:
         summary += f"   {pdata.opened_count} PRs opened in the last 21 days.\n"
 
+    # Report breakdown of owned and external PRs.
+    summary += f"   {pdata.opened_count_owned} opened against repos the user owns.\n"
+    summary += f"   {pdata.opened_count_external} opened against external repos.\n\n"
+
+    # If no external PRs, there's nothing more to add.
+    if pdata.opened_count_external == 0:
+        return summary
+
     # Only show merged if it's a good sign.
     if pdata.flag_merged_pr == flags.green_flag:
-        summary += f"   {pdata.flag_merged_pr} {pdata.merged_count} of {pdata.opened_count} PRs merged in the last 21 days.\n"
+        summary += f"   {pdata.flag_merged_pr} {pdata.merged_count_external} of {pdata.opened_count_external} external PRs merged in the last 21 days.\n"
 
     # Include number closed for everyone.
-    summary += f"   {pdata.flag_closed_pr} {pdata.closed_count} of {pdata.opened_count} PRs closed without merging in the last 21 days.\n"
+    summary += f"   {pdata.flag_closed_pr} {pdata.closed_count_external} of {pdata.opened_count_external} external PRs closed without merging in the last 21 days.\n"
 
     return summary
 
