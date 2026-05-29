@@ -194,8 +194,8 @@ def _pr_activity_summary():
         summary += f"   {pdata.opened_count} PRs opened in the last 21 days.\n"
 
     # Report breakdown of owned and external PRs.
-    summary += f"   {pdata.opened_count_owned} opened against repos the user owns.\n"
-    summary += f"   {pdata.opened_count_external} opened against external repos.\n\n"
+    summary += f"      {pdata.opened_count_owned} opened against repos the user owns.\n"
+    summary += f"      {pdata.opened_count_external} opened against external repos.\n\n"
 
     # If no external PRs, there's nothing more to add.
     if pdata.opened_count_external == 0:

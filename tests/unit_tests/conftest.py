@@ -40,6 +40,8 @@ def filled_pdata():
 
     pdata.flag_age = flags.green_flag
     pdata.flag_profile = flags.green_flag
+    pdata.flag_merged_pr = flags.green_flag
+    pdata.flag_closed_pr = flags.green_flag
 
     # This is taken from analysis_utils.py:
     fields = ["name", "company", "blog", "location", "email", "bio"]
