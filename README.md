@@ -24,13 +24,18 @@ GitHub user: <redacted>
       Empty fields: company, location, bio
 
 🟢 No concerns found with recent PR activity.
-   🟢 Fewer than 10 PRs opened in the last 21 days.
+   2 PRs opened in the last 21 days.
+      0 opened against repos the user owns.
+      2 opened against external repos.
+
+   🟢 1 of 2 external PRs merged in the last 21 days.
+   🟢 1 of 2 external PRs closed without merging in the last 21 days.
 
 🔴 Significant concerns found with recent issue activity.
    🔴 79 new issues opened in the last 21 days.
-   🟢 0 issues closed as NOT_PLANNED.
-   🔴 71 issues opened with the same title:
-        📋 Documentation Enhancement Suggestion (71)
+   🟢 1 issues closed as NOT_PLANNED.
+   🔴 70 issues opened with the same title:
+        📋 Documentation Enhancement Suggestion (70)
 ```
 
 If you're working in your local project directory, you can simply provide a PR or issue number. The tool will look up the PR or issue, identify the user who opened it, and give a report on that user:
