@@ -8,11 +8,13 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
-### Unreleased
+### 0.6.5
 
 #### External changes
 
-- NA
+- Reports number of PRs opened, regardless of how many. (Previously did not report specifics under 10 PRs.)
+- Differentiates between PRs opened against repos the user owns, vs external repos.
+- Added note to README about not flagging good-faith behavior.
 
 #### Internal changes
 
