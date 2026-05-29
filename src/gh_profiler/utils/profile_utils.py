@@ -147,6 +147,7 @@ def _parse_pr_activity(pr_activity_str):
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
 
+    breakpoint()
     search = data["data"]["search"]
     prs = search["nodes"]
 
@@ -211,21 +212,27 @@ def _get_pr_query():
             search(query: $q, type: ISSUE, first: $n) {{
                 issueCount
                 pageInfo {{
-                hasNextPage
-                endCursor
+                    hasNextPage
+                    endCursor
                 }}
                 nodes {{
-                ... on PullRequest {{
-                    number
-                    state
-                    createdAt
-                    closedAt
-                    mergedAt
-                    url
-                }}
+                    ... on PullRequest {{
+                        number
+                        state
+                        createdAt
+                        closedAt
+                        mergedAt
+                        url
+                        repository {{
+                            nameWithOwner
+                            owner {{
+                                login
+                            }}
+                        }}
+                    }}
                 }}
             }}
-            }}
+        }}
     """
 
     return dedent(pr_query).strip()
