@@ -38,10 +38,19 @@ class ProfileData:
     flag_profile: str = ""
 
     # --- PR fields ---
+    # These fields are broken into PRs against repos you own, and PRs against
+    # external repos.
     opened_count: int = 0
-    merged_count: int = 0
-    closed_count: int = 0
+    opened_count_owned: int = 0
+    opened_count_external: int = 0
 
+    merged_count_owned: int = 0
+    merged_count_external: int = 0
+
+    closed_count_owned: int = 0
+    closed_count_external: int = 0
+
+    # No flags needed for PRs against your own repos; that's informational only.
     flag_merged_pr: str = ""
     flag_closed_pr: str = ""
 
