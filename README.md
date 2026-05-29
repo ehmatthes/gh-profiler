@@ -5,6 +5,8 @@ Many of us have received waves of open source contributions where many of the ne
 
 This meant to give you some quick context about how much to invest in reviewing the PR. It's not meant to give an immediate signal to close the PR or issue.
 
+This tool should not flag anyone making good-faith efforts to contribute to open source projects. If you think it is, please open an issue and describe the behavior that's being flagged.
+
 Running as a tool
 ---
 
