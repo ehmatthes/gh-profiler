@@ -147,16 +147,35 @@ def _parse_pr_activity(pr_activity_str):
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
 
-    breakpoint()
     search = data["data"]["search"]
     prs = search["nodes"]
 
     pdata.opened_count = len(prs)
-    pdata.merged_count = sum(pr["mergedAt"] is not None for pr in prs)
-    pdata.closed_count = sum(
-        pr["state"] == "CLOSED" and pr["mergedAt"] is None for pr in prs
+
+    # PRs against repos the user owns.
+    prs_owned = [
+        pr for pr in prs
+        if pr["repository"]["owner"]["login"].casefold()
+        == pdata.username.casefold()
+    ]
+
+    pdata.opened_count_owned = len(prs_owned)
+    pdata.merged_count_owned = sum(pr["mergedAt"] is not None for pr in prs_owned)
+    pdata.closed_count_owned = sum(
+        pr["state"] == "CLOSED" and pr["mergedAt"] is None for pr in prs_owned
     )
 
+    # PRs against external repos.
+    prs_external = [
+        pr for pr in prs
+        if pr["repository"]["owner"]["login"].casefold()
+        != pdata.username.casefold()
+    ]
+    pdata.opened_count_external = len(prs_external)
+    pdata.merged_count_external = sum(pr["mergedAt"] is not None for pr in prs_external)
+    pdata.closed_count_external = sum(
+        pr["state"] == "CLOSED" and pr["mergedAt"] is None for pr in prs_external
+    )
 
 def _fetch_issue_activity():
     """Fetch target user's recent public issue activity."""
