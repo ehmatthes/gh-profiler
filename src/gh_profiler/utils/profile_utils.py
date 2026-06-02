@@ -48,7 +48,7 @@ def get_data():
         issue_activity_future = executor.submit(_fetch_issue_activity)
 
         # When each call finishes, store the result.
-        status_str = status_future.result()
+        status_obj = status_future.result()
         profile_dict_str = profile_dict_future.result()
         socials_str = socials_future.result()
         pr_activity_str = pr_activity_future.result()
@@ -59,7 +59,7 @@ def get_data():
         print(f"Fetch data: {ts_after - ts_before:.2f} seconds")
 
     # Parse data. This should only happen after all data has been fetched.
-    _parse_status(status_str)
+    _parse_status(status_obj)
     _parse_profile_dict(profile_dict_str)
     _parse_socials(socials_str)
     _parse_pr_activity(pr_activity_str)
@@ -69,23 +69,35 @@ def get_data():
 # --- Helper functions ---
 
 def _fetch_status():
-    """Fetch output of `gh auth status`."""
+    """Fetch output of `gh auth status`.
+    
+    Unlike most other calls, this returns the CommandResult instance, because
+    we'll need to inspect stdout and stderr.
+    """
     cmd = "gh auth status"
-    result = infra_utils.run_cmd(cmd)
+    return infra_utils.run_cmd(cmd)
 
-    return result.stdout
-
-def _parse_status(status_str):
-    """Parse output of status call."""
-    if "Logged in to github.com account " not in status_str:
-        # Show the stdout part of `gh auth status`, if there is any.
+def _parse_status(status_obj):
+    """Parse output of status call.
+    
+    Unlike most other parsing functions, this acts no an instance of
+    CommandResult, because we need to look at stdout and stderr.
+    """
+    msg_authenticated = "Logged in to github.com account "
+    authenticated = (
+        msg_authenticated in status_obj.stdout
+        or msg_authenticated in status_obj.stderr
+    )
+    if not authenticated:
+        # Show the output of `gh auth status`, if there is any.
         # I believe this is relevant when the user has an expired token.
-        if status_str:
-            msg = f"{status_str}\n"
-        else:
-            msg = ""
+        msg = ""
+        if status_obj.stdout:
+            msg += f"\n{status_obj.stdout}\n"
+        if status_obj.stderr:
+            msg += f"\n{status_obj.stderr}\n"
 
-        msg += "The GitHub CLI tool (gh) is not authenticated."
+        msg += "\nThe GitHub CLI tool (gh) is not authenticated."
         msg += "\nRun `gh auth login` to authenticate."
         sys.exit(msg)
 
