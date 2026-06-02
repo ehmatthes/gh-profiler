@@ -21,7 +21,8 @@ def ensure_gh():
     """
     cmd = "gh --version"
     try:
-        version_info = infra_utils.run_cmd(cmd)
+        result = infra_utils.run_cmd(cmd)
+        version_info = result.stdout
     except FileNotFoundError:
         msg = "The GitHub CLI tool (gh) must be installed."
         msg += "\n  https://cli.github.com"
@@ -70,7 +71,9 @@ def get_data():
 def _fetch_status():
     """Fetch output of `gh auth status`."""
     cmd = "gh auth status"
-    return infra_utils.run_cmd(cmd)
+    result = infra_utils.run_cmd(cmd)
+
+    return result.stdout
 
 def _parse_status(status_str):
     """Parse output of status call."""
@@ -89,7 +92,9 @@ def _parse_status(status_str):
 def _fetch_profile_dict():
     """Fetch the profile information we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
-    return infra_utils.run_cmd(cmd)
+    result = infra_utils.run_cmd(cmd)
+
+    return result.stdout
 
 def _parse_profile_dict(profile_dict_str):
     """Parse the profile information that was fetched."""
@@ -115,7 +120,9 @@ def _fetch_socials():
     they require an additional API call.
     """
     cmd = f"gh api users/{pdata.username}/social_accounts"
-    return infra_utils.run_cmd(cmd)
+    result = infra_utils.run_cmd(cmd)
+
+    return result.stdout
 
 def _parse_socials(socials_str):
     """Parse the data string returned from _fetch_socials()."""
@@ -136,7 +143,9 @@ def _fetch_pr_activity():
         f"author:{pdata.username} is:pull-request is:public created:>={cutoff}"
     )
     cmd = f"gh api graphql -f query='{pr_query}' -F q='{search_query}' -F n=100"
-    return infra_utils.run_cmd(cmd)
+    result = infra_utils.run_cmd(cmd)
+
+    return result.stdout
 
 def _parse_pr_activity(pr_activity_str):
     """Parse the data returned by _fetch_pr_activity()."""
@@ -181,7 +190,9 @@ def _fetch_issue_activity():
     """Fetch target user's recent public issue activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
     gh_call = _get_gh_issues_call(pdata.username, cutoff)
-    return infra_utils.run_cmd(gh_call)
+    result = infra_utils.run_cmd(gh_call)
+
+    return result.stdout
 
 def _parse_issue_activity(issue_activity_str):
     """Parse data returned by _fetch_issue_activity()."""

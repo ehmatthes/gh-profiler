@@ -27,14 +27,14 @@ def process_pr_issue_num(pr_issue_num):
 
 def _get_repo_slug():
     """Ask `gh` for the resolved default repo (honors `gh repo set-default`)."""
-    slug = run_cmd("gh repo view --json nameWithOwner --jq .nameWithOwner").strip()
-    if not slug:
+    result = run_cmd("gh repo view --json nameWithOwner --jq .nameWithOwner").strip()
+    if not result.stdout:
         msg = (
             "Couldn't determine the default GitHub repository. "
             "Run `gh repo set-default` in this directory and try again."
         )
         sys.exit(msg)
-    return slug
+    return result.stdout
 
 
 def _process_pr(pr_issue_num, repo_slug):
@@ -42,8 +42,8 @@ def _process_pr(pr_issue_num, repo_slug):
     # pr_cmd = f'gh pr view {pr_issue_num} --repo {repo_slug} --json author --jq ".author.login"'
     pr_cmd = f"gh pr view {pr_issue_num} --repo {repo_slug} --json author --json title"
     try:
-        results = run_cmd(pr_cmd)
-        results_json = json.loads(results)
+        result = run_cmd(pr_cmd)
+        results_json = json.loads(result.stdout)
 
         pdata.is_pr = True
         pdata.pr_number = pr_issue_num
@@ -61,8 +61,8 @@ def _process_issue(pr_issue_num, repo_slug):
         f"gh issue view {pr_issue_num} --repo {repo_slug} --json author --json title"
     )
     try:
-        results = run_cmd(issue_cmd)
-        results_json = json.loads(results)
+        result = run_cmd(issue_cmd)
+        results_json = json.loads(result.stdout)
 
         pdata.is_issue = True
         pdata.issue_number = pr_issue_num
