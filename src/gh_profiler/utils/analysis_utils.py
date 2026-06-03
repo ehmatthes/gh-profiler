@@ -75,7 +75,7 @@ def _process_pr_activity():
     """
     # Don't need to analyze PR activity below a small threshold.
     min_external_pr_threshold = 4
-    if pdata.opened_count < min_external_pr_threshold:
+    if pdata.opened_count_external < min_external_pr_threshold:
         pdata.flag_merged_pr = flags.green_flag
         pdata.flag_closed_pr = flags.green_flag
 
