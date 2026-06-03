@@ -74,7 +74,7 @@ def _process_pr_activity():
     the user owns.
     """
     # Don't need to analyze PR activity below a small threshold.
-    min_external_pr_threshold = 3
+    min_external_pr_threshold = 4
     if pdata.opened_count < min_external_pr_threshold:
         pdata.flag_merged_pr = flags.green_flag
         pdata.flag_closed_pr = flags.green_flag
@@ -96,8 +96,11 @@ def _process_pr_activity():
     ratio_closed = pdata.closed_count_external / pdata.opened_count_external
 
     if ratio_closed > 0.5:
+        # The lowest threshold would be 2 out of 4 PRs closed, which might be
+        # too low but is reasonable to start with.
         pdata.flag_closed_pr = flags.red_flag
-    elif ratio_closed > 0.15:
+    elif ratio_closed > 0.2 and pdata.closed_count_external > 2:
+        # Don't set this flag if the total closed count is 2 or fewer.
         pdata.flag_closed_pr = flags.yellow_flag
     else:
         pdata.flag_closed_pr = flags.green_flag
