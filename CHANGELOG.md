@@ -8,6 +8,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### Unreleased
+
+#### External changes
+
+- Bumped PR activity thresholds slightly, so extremely low volume PR activity does not trip flags. ie, having one or two PRs closed does not raise any flags, even though the ratio of closed to opened might be above the threshold.
+- Also fixes unreported bug where overall number of PRs opened was being checked against external PR threshold.
+
+#### Internal changes
+
+- NA
+
 ### 0.6.6
 
 #### External changes
