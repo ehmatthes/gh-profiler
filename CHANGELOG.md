@@ -8,6 +8,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.6.6
+
+#### External changes
+
+- Users who are not authenticated on one account but are authenticated on another account should be able to run gh-profiler without running into an authentication failure issue.
+
+#### Internal changes
+
+- The `run_cmd()` utility returns a `CommandResult` instance instead of just stdout. The result instance has `stdout`, `stderr`, and `returncode` fields.
+- If the auth check does not pass when looking at stdout, it looks at stderr. If the "Logged in to GitHub" message is in either of those, execution proceeds.
+
 ### 0.6.5
 
 #### External changes
