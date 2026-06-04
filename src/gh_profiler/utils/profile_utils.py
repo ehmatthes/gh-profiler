@@ -273,6 +273,10 @@ def _get_gh_issues_call(username, cutoff):
                 url
                 repository {{
                 nameWithOwner
+                isInOrganization
+                owner {{
+                    __typename
+                    login
                 }}
             }}
             }}
