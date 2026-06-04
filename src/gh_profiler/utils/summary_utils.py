@@ -92,11 +92,13 @@ def _get_full_summary():
     summary += _get_issue_header()
     summary += _issue_activity_summary()
 
+    # Make sure there are no doubled blank lines in summary.
+    summary = summary.replace("\n\n\n", "\n\n")
+
     return summary.strip()
 
 
 # --- Helper functions ---
-
 
 def _redact_info():
     """Redact identifying information when --redact passed.
@@ -166,7 +168,6 @@ def _profile_summary():
         summary += f"      Empty fields: {fields_str}\n"
 
     return summary
-
 
 def _bio_summary(bio):
     """Summarize bio section of profile."""
