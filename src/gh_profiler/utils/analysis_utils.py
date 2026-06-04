@@ -111,10 +111,6 @@ def _process_pr_activity():
 
 def _process_issue_activity():
     """Evaluate recent public issue activity."""
-    # How many new issues have been opened recently?
-    pdata.new_issue_count = pdata.issue_activity["issueCount"]
-
-    # How many have been closed with a problematic state?
     _process_issue_state()
     _process_repeated_issues()
 

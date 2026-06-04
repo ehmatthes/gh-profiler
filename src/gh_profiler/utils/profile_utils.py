@@ -242,13 +242,13 @@ def _fetch_issue_activity():
 def _parse_issue_activity(issue_activity_str):
     """Parse data returned by _fetch_issue_activity()."""
     try:
-        pdata.issue_activity = json.loads(issue_activity_str)["data"]["search"]
+        issue_activity = json.loads(issue_activity_str)["data"]["search"]
     except (json.decoder.JSONDecodeError, KeyError):
         msg = "Couldn't get recent issue activity. The gh CLI may have timed out."
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
 
-    issue_dicts = pdata.issue_activity["nodes"]
+    issue_dicts = issue_activity["nodes"]
     issues_owned = [
         id for id in issue_dicts
         if id["repository"]["owner"]["login"] == pdata.username
@@ -262,6 +262,10 @@ def _parse_issue_activity(issue_activity_str):
          if id not in issues_owned
          and id not in issues_orgs
     ]
+
+    # DEV: Should we be dealing with pagination?
+    # When does issueCount != len(issue_dicts)?
+    pdata.new_issue_count = issue_activity["issueCount"]
 
     pdata.issues_owned = len(issues_owned)
     pdata.issues_orgs = len(issues_orgs)
