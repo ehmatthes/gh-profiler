@@ -206,7 +206,7 @@ def _pr_activity_summary():
 
     # Report breakdown of owned and external PRs.
     summary += f"      {pdata.opened_count_owned} opened against repos the user owns.\n"
-    summary += f"      {pdata.opened_count_orgs} opened against repos in orgs the user is publicly associated with.\n"
+    summary += f"      {pdata.opened_count_orgs} opened against repos in publicly associated orgs.\n"
     summary += f"      {pdata.opened_count_external} opened against external repos.\n\n"
 
     # If no external PRs, there's nothing more to add.
