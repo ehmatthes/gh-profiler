@@ -33,6 +33,13 @@ def test_no_issue_activity():
     assert "issues closed as NOT_PLANNED." not in summary
     assert "issues opened with the same title:" not in summary
 
+def test_summary_orgs():
+    """Test that a user's orgs shows up in the summary."""
+    pdata.orgs = ["org_1", "org_2", "org_3"]
+    summary = summary_utils._get_summary()
+
+    assert "Orgs: org_1, org_2, org_3" in summary
+
 
 def test_redact():
     """Test output when pdata.redact is True."""

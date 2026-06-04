@@ -185,7 +185,7 @@ def _bio_summary(bio):
 def _org_summary():
     """Summarize user's orgs."""
     if not pdata.orgs:
-        return
+        return ""
     
     orgs_list = ", ".join(pdata.orgs)
     return f"      Orgs: {orgs_list}\n"
