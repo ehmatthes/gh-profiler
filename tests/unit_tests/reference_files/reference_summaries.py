@@ -21,7 +21,11 @@ GitHub user: ehmatthes
    🟢 1 of 5 external PRs closed without merging in the last 21 days.
 
 🟢 No concerns found with recent issue activity.
-   🟢 7 new issues opened in the last 21 days.
-   🟢 0 issues closed as NOT_PLANNED.
-   🟢 0 issues opened with the same title.
+   7 new issues opened in the last 21 days.
+      7 opened in repos the user owns.
+      0 opened in repos in publicly associated orgs.
+      0 opened in external repos.
+
+   🟢 0 external issues closed as NOT_PLANNED.
+   🟢 0 external issues opened with the same title.
 """.strip()

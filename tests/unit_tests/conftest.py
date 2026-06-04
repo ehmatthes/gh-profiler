@@ -49,6 +49,9 @@ def filled_pdata():
 
     # Issue fields
     pdata.new_issue_count = 7
+    pdata.issues_owned = 7
+    pdata.issues_orgs = 0
+    pdata.issues_external = 0
     pdata.total_repeats = 0
     pdata.repeated_issue_titles = {}
 
