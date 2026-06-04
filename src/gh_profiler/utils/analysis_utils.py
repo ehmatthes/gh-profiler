@@ -2,7 +2,6 @@
 
 from datetime import datetime as dt, timezone
 from datetime import timezone as tz
-from collections import Counter
 
 from .profile_data import profile_data as pdata
 from . import flags
@@ -124,18 +123,7 @@ def _process_issue_activity():
 
 
 def _process_issue_state():
-    """Examine state of closed issues.
-
-    Mostly looking for statuses like "NOT_PLANNED".
-    The GraphQL endpoint
-    """
-    issue_dicts = pdata.issue_activity["nodes"]
-
-    # How many issues were closed as NOT_PLANNED?
-    pdata.issues_not_planned = len(
-        [d for d in issue_dicts if d["stateReason"] == "NOT_PLANNED"]
-    )
-
+    """Examine state of closed issues."""
     # Green flag
     if pdata.issues_not_planned <= 3:
         flag = flags.green_flag
@@ -148,16 +136,6 @@ def _process_issue_state():
 
 def _process_repeated_issues():
     """Look for spamming the same issue to multiple repositories."""
-    issue_dicts = pdata.issue_activity["nodes"]
-    issue_titles = [d["title"].strip() for d in issue_dicts]
-
-    counter = Counter(issue_titles)
-    # Only keep titles for repeated issues.
-    pdata.repeated_issue_titles = {
-        title: count for title, count in counter.items() if count > 1
-    }
-    pdata.total_repeats = sum(pdata.repeated_issue_titles.values())
-
     # There are some valid reasons for someone to open the same issue across
     # several repositories. For example if they open it on the wrong issue,
     # close it, then open it on the correct repo, that's two identical issues.

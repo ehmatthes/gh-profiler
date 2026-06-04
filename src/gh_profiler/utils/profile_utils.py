@@ -8,6 +8,7 @@ from datetime import timedelta
 from datetime import timezone as tz
 from textwrap import dedent
 from time import perf_counter
+from collections import Counter
 
 from . import infra_utils
 from .profile_data import profile_data as pdata
@@ -251,7 +252,38 @@ def _parse_issue_activity(issue_activity_str):
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
 
-    breakpoint()
+    issue_dicts = pdata.issue_activity["nodes"]
+    issues_owned = [
+        id for id in issue_dicts
+        if id["repository"]["owner"]["login"] == pdata.username
+    ]
+    issues_orgs = [
+         id for id in issue_dicts
+         if id["repository"]["owner"]["login"] in pdata.orgs
+    ]
+    issues_external = [
+         id for id in issue_dicts
+         if id not in issues_owned
+         and id not in issues_orgs
+    ]
+
+    pdata.issues_external = len(issues_external)
+    pdata.issues_not_planned = len(
+        [d for d in issues_external if d["stateReason"] == "NOT_PLANNED"]
+    )
+
+    _process_repeated_issues(issues_external)
+
+def _process_repeated_issues(issues_external):
+    """Look for issues with the same title across multiple repositories."""
+    issue_titles = [d["title"].strip() for d in issues_external]
+
+    counter = Counter(issue_titles)
+    # Only keep titles for repeated issues.
+    pdata.repeated_issue_titles = {
+        title: count for title, count in counter.items() if count > 1
+    }
+    pdata.total_repeats = sum(pdata.repeated_issue_titles.values())
 
 
 def _get_gh_issues_call(username, cutoff):
