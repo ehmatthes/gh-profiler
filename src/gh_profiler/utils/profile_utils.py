@@ -225,7 +225,6 @@ def _parse_pr_activity(pr_activity_str):
     pdata.closed_count_external = sum(
         pr["state"] == "CLOSED" and pr["mergedAt"] is None for pr in prs_external
     )
-    breakpoint()
 
 def _fetch_issue_activity():
     """Fetch target user's recent public issue activity."""
