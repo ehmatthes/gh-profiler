@@ -5,3 +5,5 @@ __pycache__/
 
 # Used for cProfile output.
 profile.txt
+
+sandbox/
