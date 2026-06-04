@@ -87,7 +87,7 @@ def _parse_status(status_obj):
     Unlike most other parsing functions, this acts no an instance of
     CommandResult, because we need to look at stdout and stderr.
     """
-    msg_authenticated = "Logged in to github.com account "
+    msg_authenticated = "Logged in to github.com "
     authenticated = (
         msg_authenticated in status_obj.stdout
         or msg_authenticated in status_obj.stderr
