@@ -26,15 +26,20 @@ GitHub user: <redacted>
 🟢 No concerns found with recent PR activity.
    2 PRs opened in the last 21 days.
       0 opened against repos the user owns.
+      0 opened against repos in publicly associated orgs.
       2 opened against external repos.
 
    🟢 1 of 2 external PRs merged in the last 21 days.
    🟢 1 of 2 external PRs closed without merging in the last 21 days.
 
 🔴 Significant concerns found with recent issue activity.
-   🔴 79 new issues opened in the last 21 days.
-   🟢 1 issues closed as NOT_PLANNED.
-   🔴 70 issues opened with the same title:
+   79 new issues opened in the last 21 days.
+      0 opened in repos the user owns.
+      0 opened in repos in publicly associated orgs.
+      79 opened in external repos.
+
+   🟢 1 external issue closed as NOT_PLANNED.
+   🔴 78 external issues opened with the same title:
         📋 Documentation Enhancement Suggestion (70)
 ```
 

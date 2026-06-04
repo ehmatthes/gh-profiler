@@ -241,6 +241,6 @@ def _issue_activity_summary():
     else:
         summary += f"   {pdata.flag_repeated_issues} {pdata.total_repeats} external issues opened with the same title:\n"
     for title, count in pdata.repeated_issue_titles.items():
-        summary += f"      {title} ({count})\n"
+        summary += f"        {title} ({count})\n"
 
     return summary
