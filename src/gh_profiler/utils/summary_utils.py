@@ -81,6 +81,7 @@ def _get_full_summary():
     age = humanize.naturaldelta(pdata.account_age)
     summary += f"   {pdata.flag_age} Account age: {age}"
     summary += _profile_summary()
+    summary += _org_summary()
     summary += "\n"
 
     # Include PR activity.
@@ -179,6 +180,15 @@ def _bio_summary(bio):
     for line in bio.splitlines():
         summary += f"          {line}\n"
     return summary
+
+
+def _org_summary():
+    """Summarize user's orgs."""
+    if not pdata.orgs:
+        return
+    
+    orgs_list = ", ".join(pdata.orgs)
+    return f"      Orgs: {orgs_list}\n"
 
 
 def _pr_activity_summary():
