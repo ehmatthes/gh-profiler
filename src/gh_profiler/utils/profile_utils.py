@@ -43,6 +43,7 @@ def get_data():
         # Make fetching calls.
         status_future = executor.submit(_fetch_status)
         profile_dict_future = executor.submit(_fetch_profile_dict)
+        orgs_future = executor.submit(_fetch_orgs)
         socials_future = executor.submit(_fetch_socials)
         pr_activity_future = executor.submit(_fetch_pr_activity)
         issue_activity_future = executor.submit(_fetch_issue_activity)
@@ -50,6 +51,7 @@ def get_data():
         # When each call finishes, store the result.
         status_obj = status_future.result()
         profile_dict_str = profile_dict_future.result()
+        orgs_str = orgs_future.result()
         socials_str = socials_future.result()
         pr_activity_str = pr_activity_future.result()
         issue_activity_str = issue_activity_future.result()
@@ -61,6 +63,7 @@ def get_data():
     # Parse data. This should only happen after all data has been fetched.
     _parse_status(status_obj)
     _parse_profile_dict(profile_dict_str)
+    _parse_orgs(orgs_str)
     _parse_socials(socials_str)
     _parse_pr_activity(pr_activity_str)
     _parse_issue_activity(issue_activity_str)
@@ -124,6 +127,31 @@ def _parse_profile_dict(profile_dict_str):
     # but every value is None.
     if pdata.profile_dict["created_at"] is None:
         sys.exit(f"GitHub user '{pdata.username}' not found.")
+
+def _fetch_orgs():
+    """Fetch the user's publicly visible orgs.
+    
+    This will be used to distinguish between PRs and issues opened against
+    external repos, and repos the user is associated with.
+    """
+    cmd = (
+        f"gh api users/{pdata.username}/orgs "
+        "--jq '[.[] | {login, description, url}]'"
+    )
+    result = infra_utils.run_cmd(cmd)
+
+    return result.stdout
+
+def _parse_orgs(orgs_str):
+    """Parse the org info that was found."""
+    try:
+        orgs = json.loads(orgs_str)
+    except json.decoder.JSONDecodeError:
+        msg = "Couldn't get org info. The gh CLI may have timed out."
+        msg += "\n  You may want to try running the command again."
+        sys.exit(msg)
+
+    pdata.orgs = [org["login"] for org in orgs]
 
 def _fetch_socials():
     """Fetch social media accounts from user's profile.

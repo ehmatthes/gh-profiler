@@ -32,6 +32,7 @@ class ProfileData:
     profile_info: dict | None = None
 
     account_age: int = 0
+    orgs: list | None = None
     socials: list | None = None
 
     flag_age: str = ""
