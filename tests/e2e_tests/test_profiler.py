@@ -58,6 +58,7 @@ def test_full_run():
         "name: Eric Matthes",
         "mastodon: https://fosstodon.org/@ehmatthes",
         "Empty fields: company, bio",
+        "Orgs: openlearningtools",
     )
 
     for expected_string in expected_strings:
