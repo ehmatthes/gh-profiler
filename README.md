@@ -234,6 +234,12 @@ $ uv run developer_resources/benchmark.py
 $ uv run developer_resources/benchmark.py <target>
 ```
 
+Benchmarking is pretty straightforward when:
+
+- Using `git switch` to switch between main and dev branches;
+- Using Git to check out different tags and commits.
+- Using `uv run --python 3.14`, `uv run --python 3.14t`, etc.
+
 New releases
 ---
 
