@@ -43,6 +43,7 @@ class ProfileData:
     # external repos.
     opened_count: int = 0
     opened_count_owned: int = 0
+    opened_count_orgs: int = 0
     opened_count_external: int = 0
 
     merged_count_owned: int = 0

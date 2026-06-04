@@ -208,17 +208,19 @@ def _parse_pr_activity(pr_activity_str):
         == pdata.username.casefold()
     ]
 
+    pdata.opened_count_owned = len(prs_owned)
+    pdata.merged_count_owned = sum(pr["mergedAt"] is not None for pr in prs_owned)
+    pdata.closed_count_owned = sum(
+        pr["state"] == "CLOSED" and pr["mergedAt"] is None for pr in prs_owned
+    )
+
     # PRS against repos in orgs the user is publicly associated with.
     prs_orgs = [
         pr for pr in prs
         if pr["repository"]["owner"]["login"] in pdata.orgs
     ]
 
-    pdata.opened_count_owned = len(prs_owned)
-    pdata.merged_count_owned = sum(pr["mergedAt"] is not None for pr in prs_owned)
-    pdata.closed_count_owned = sum(
-        pr["state"] == "CLOSED" and pr["mergedAt"] is None for pr in prs_owned
-    )
+    pdata.opened_count_orgs = len(prs_orgs)
 
     # PRs against external repos.
     prs_external = [
