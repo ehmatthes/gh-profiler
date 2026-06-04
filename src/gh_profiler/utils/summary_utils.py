@@ -228,15 +228,19 @@ def _issue_activity_summary():
     if pdata.new_issue_count == 0:
         return f"   {flags.green_flag} No new issues opened in the last 21 days.\n"
 
-    summary = f"   {pdata.flag_overall_issues} {pdata.new_issue_count} new issues opened in the last 21 days.\n"
-    summary += f"   {pdata.flag_issues_not_planned} {pdata.issues_not_planned} issues closed as NOT_PLANNED.\n"
+    summary = f"   {pdata.new_issue_count} new issues opened in the last 21 days.\n"
+    summary += f"      {pdata.issues_owned} opened in repos the user owns.\n"
+    summary += f"      {pdata.issues_orgs} opened in repos in publicly associated orgs.\n"
+    summary += f"      {pdata.issues_external} opened in external repos.\n\n"
+    summary += f"   {pdata.flag_issues_not_planned} {pdata.issues_not_planned} external issues closed as NOT_PLANNED.\n"
 
     # Repeated issues:
     if pdata.total_repeats == 0:
-        summary += f"   {pdata.flag_repeated_issues} {pdata.total_repeats} issues opened with the same title.\n"
+        # This block has a period, the else block has a colon for the list of titles that follows.
+        summary += f"   {pdata.flag_repeated_issues} {pdata.total_repeats} external issues opened with the same title.\n"
     else:
-        summary += f"   {pdata.flag_repeated_issues} {pdata.total_repeats} issues opened with the same title:\n"
+        summary += f"   {pdata.flag_repeated_issues} {pdata.total_repeats} external issues opened with the same title:\n"
     for title, count in pdata.repeated_issue_titles.items():
-        summary += f"        {title} ({count})\n"
+        summary += f"      {title} ({count})\n"
 
     return summary

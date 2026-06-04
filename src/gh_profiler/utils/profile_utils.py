@@ -267,6 +267,8 @@ def _parse_issue_activity(issue_activity_str):
          and id not in issues_orgs
     ]
 
+    pdata.issues_owned = len(issues_owned)
+    pdata.issues_orgs = len(issues_orgs)
     pdata.issues_external = len(issues_external)
     pdata.issues_not_planned = len(
         [d for d in issues_external if d["stateReason"] == "NOT_PLANNED"]
