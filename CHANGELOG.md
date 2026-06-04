@@ -8,6 +8,18 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.7.0
+
+#### External changes
+
+- Identifies PRs and issues in three categories: against repos the user owns, against orgs the user is publicly associated with, and against external orgs. All analysis for evaluating flags is based on the user's activity in external repos.
+- Reports orgs the user is publicly associated with.
+
+#### Internal changes
+
+- Ensure no doubled blank lines in summary.
+- More consistent separation of fetching, parsing, and evaluating user activity data.
+
 ### 0.6.7
 
 #### External changes
