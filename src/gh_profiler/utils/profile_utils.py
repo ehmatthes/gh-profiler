@@ -251,6 +251,8 @@ def _parse_issue_activity(issue_activity_str):
         msg += "\n  You may want to try running the command again."
         sys.exit(msg)
 
+    breakpoint()
+
 
 def _get_gh_issues_call(username, cutoff):
     """Return the gh call for recent public issue activity."""
@@ -277,6 +279,7 @@ def _get_gh_issues_call(username, cutoff):
                 owner {{
                     __typename
                     login
+                }}
                 }}
             }}
             }}
