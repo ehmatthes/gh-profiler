@@ -14,6 +14,7 @@ GitHub user: ehmatthes
 🟢 No concerns found with recent PR activity.
    5 PRs opened in the last 21 days.
       0 opened against repos the user owns.
+      0 opened against repos in orgs the user is publicly associated with.
       5 opened against external repos.
 
    🟢 3 of 5 external PRs merged in the last 21 days.
