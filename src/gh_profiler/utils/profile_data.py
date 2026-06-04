@@ -46,10 +46,7 @@ class ProfileData:
     opened_count_orgs: int = 0
     opened_count_external: int = 0
 
-    merged_count_owned: int = 0
     merged_count_external: int = 0
-
-    closed_count_owned: int = 0
     closed_count_external: int = 0
 
     # No flags needed for PRs against your own repos; that's informational only.
