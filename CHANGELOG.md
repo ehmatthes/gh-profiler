@@ -12,7 +12,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 
 #### External changes
 
-- 
+- Redacts user's org info.
 
 #### Internal changes
 
