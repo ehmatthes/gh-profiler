@@ -116,6 +116,8 @@ def _redact_info():
 
     for social in pdata.socials:
         social["url"] = "<redacted>"
+    
+    pdata.orgs = ["<redacted>"]
 
 
 def _pr_title_line():
