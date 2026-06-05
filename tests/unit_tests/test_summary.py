@@ -47,7 +47,7 @@ def test_redact():
     summary = summary_utils._get_summary()
 
     assert "ehmatthes" not in summary
-    assert summary.count("<redacted") == 5
+    assert summary.count("<redacted") == 6
 
 def test_full_concise_header_lines():
     """The full summary should include the same header lines as concise."""
