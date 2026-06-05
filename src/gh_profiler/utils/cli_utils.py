@@ -27,7 +27,9 @@ def process_pr_issue_num(pr_issue_num):
 
 def _get_repo_slug():
     """Ask `gh` for the resolved default repo (honors `gh repo set-default`)."""
-    result = run_cmd("gh repo view --json nameWithOwner --jq .nameWithOwner").strip()
+    result = run_cmd("gh repo view --json nameWithOwner --jq .nameWithOwner")
+    output = result.stdout.strip()
+    
     if not result.stdout:
         msg = (
             "Couldn't determine the default GitHub repository. "

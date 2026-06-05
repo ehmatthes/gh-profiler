@@ -41,9 +41,16 @@ def run_with_timeout(cmd):
 
 # --- Test functions ---
 
-def test_full_run():
-    """Test a standard run of gh-profiler."""
-    cmd = "uv run gh-profiler ehmatthes"
+@pytest.mark.parametrize("target", ["ehmatthes", "1", "3"])
+def test_full_run(target):
+    """Test a standard run of gh-profiler.
+    
+    Parametrization tests the three main usages:
+    - target is a GitHub username
+    - target is an issue number (1)
+    - target is a PR number (3)
+    """
+    cmd = f"uv run gh-profiler {target}"
     output = run_with_timeout(cmd)
 
     if output == "":
