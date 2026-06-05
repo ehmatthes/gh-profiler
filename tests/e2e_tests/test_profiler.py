@@ -85,3 +85,29 @@ def test_concise_run():
 
     for expected_string in expected_strings:
         assert expected_string in output
+
+def test_redact():
+    """Test a --redact run of gh-profiler."""
+    cmd = "uv run gh-profiler ehmatthes --redact"
+    output = run_with_timeout(cmd)
+
+    if output == "":
+        msg = "Output was empty, which may indicate a gh timeout rather than a problem with the code."
+        pytest.fail(msg)
+
+    # Make assertions about stable parts of output, not entire output string.
+    redacted_strings = (
+        "ehmatthes",
+        "Eric Matthes",
+        "https://mostlypython.com",
+        "western North Carolina",
+        "gmail.com",
+        "fosstodon",
+        "openlearningtools",
+    )
+
+    for redacted_string in redacted_strings:
+        assert redacted_string not in output
+
+    # Should currently see 7 redacted fields in my output.
+    assert output.count("<redacted>") == 7
