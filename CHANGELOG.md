@@ -13,10 +13,12 @@ These initial releases have usable behavior, but may have some rough edges for s
 #### External changes
 
 - Redacts user's org info.
+- Fixes broken usage against PRs and issue numbers, since 0.6.6.
 
 #### Internal changes
 
-- 
+- When parsing PR and issue numbers, treat `run_cmd()` result as an object, not a string.
+- E2e test for PR and issue number as target.
 
 ### 0.7.1
 
