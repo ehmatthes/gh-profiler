@@ -30,6 +30,9 @@ def _get_concise_summary():
 
     This is one line for each main section: name, profile, pr activity, issue activity.
     """
+    if pdata.redact:
+        _redact_info()
+    
     summary = ""
     summary += f"GitHub user: {pdata.username}\n"
     summary += _get_profile_header()

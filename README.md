@@ -125,6 +125,35 @@ GitHub user: <redacted>
 For a more detailed report, run `gh-profiler <redacted>`.
 ```
 
+Bulk profiling of recent PRs
+---
+
+You can run concise profiles of the most recently opened PRs by passing the repo URL as the target:
+
+```txt
+$ uvx gh-profiler https://github.com/django/django
+PR 21427: Fixed #37147 -- Fixed rendering empty values for models with db_default on primary key.
+https://github.com/django/django/pull/21427
+
+  GitHub user: <redacted>
+  🟢 No concerns found with user's profile.
+  ...
+
+
+PR 21426: Fixed #37130 -- Skip DB cache deletion when culling offset is zero.
+https://github.com/django/django/pull/21426
+
+  GitHub user: <redacted>
+  🟢 No concerns found with user's profile.
+  ...
+```
+
+By default, this will process the 10 most recently opened PRs. If you want to process a different number, use the `-n` arg:
+
+```txt
+$ uvx gh-profiler <repo-url> -n 3
+```
+
 False positives
 ---
 
