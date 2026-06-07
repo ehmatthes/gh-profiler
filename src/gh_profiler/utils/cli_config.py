@@ -16,6 +16,7 @@ class CLIConfig:
     back: bool | None = None
 
     redact: bool | None = None
+    compare_only: bool | None = None
 
 
 cli_config = CLIConfig()

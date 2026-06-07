@@ -19,6 +19,7 @@ from .utils.cli_config import cli_config
 @click.option("-n", "--num-targets", default=10, help="Preview: How many PRs to review?")
 # @click.option("--issues", is_flag=True, help="Profile contributors of issues rather than PRs.")
 @click.option("--back", is_flag=True, help="Look back over recently merged and closed PRs.")
+@click.option("--compare-only", is_flag=True, help="For bulk processing, only show comparison table.")
 @click.option(
     "--generate-workflow",
     is_flag=True,
@@ -27,7 +28,7 @@ from .utils.cli_config import cli_config
 @click.option("-v", "--verbose", is_flag=True, help="Verbose output, including explanations for decisions about flags.")
 @click.option("--redact", is_flag=True, help="Redact identifying information.")
 @click.option("--benchmark-fetch", is_flag=True, help="Benchmark the code that fetches external data.")
-def main(target, concise, num_targets, back, generate_workflow, verbose, redact, benchmark_fetch):
+def main(target, concise, num_targets, back, compare_only, generate_workflow, verbose, redact, benchmark_fetch):
     """Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions.
 
     You can target a GitHub username, or a PR/issue number from the repository you're working in.
@@ -65,7 +66,7 @@ def main(target, concise, num_targets, back, generate_workflow, verbose, redact,
     # Check if we're processing a repo URL.
     if "github.com" in target:
         cli_config.url = target
-        _parse_repo_options(num_targets, back, redact)
+        _parse_repo_options(num_targets, back, redact, compare_only)
         _parse_repo_info(target)
         gh_profiler.profile_url()
 
@@ -96,12 +97,13 @@ def _validate_command(target, concise, generate_workflow, verbose, redact, bench
         msg = "Please either include a target or --generate-workflow, but not both."
         sys.exit(msg)
 
-def _parse_repo_options(num_targets, back, redact):
+def _parse_repo_options(num_targets, back, redact, compare_only):
     """Get options relevant to targeting a repo URL."""
     cli_config.num_targets = num_targets
     # cli_config.issues = issues
     cli_config.back = back
     cli_config.redact = redact
+    cli_config.compare_only = compare_only
 
 def _parse_repo_info(target):
     """Parse info about the repo from the target.

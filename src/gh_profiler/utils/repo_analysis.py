@@ -16,6 +16,9 @@ def process_data(target_prs):
     Calls gh-profiler on each PR author.
     Evaluates results.
     """
+    if cli_config.compare_only:
+        print("Fetching user profiles ", end="", flush=True)
+        
     for pr in target_prs:
         # Get concise gh-profiler output for PR author.
         pdata.reset_fields()
@@ -35,9 +38,15 @@ def process_data(target_prs):
         # Also, redacting here for now.
         if cli_config.redact:
             pr.author = "<redacted>"
-        print(pr.summary)
+
+        if cli_config.back and cli_config.compare_only:
+            print(".", end="", flush=True)
+        else:
+            print(pr.summary)
 
     if cli_config.back:
+        if cli_config.compare_only:
+            print("\n")
         compare_results(target_prs)
 
 
