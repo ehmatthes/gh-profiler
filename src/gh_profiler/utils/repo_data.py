@@ -29,5 +29,11 @@ class PRData:
     # Processed info
     summary: str = ""
 
+    # User flags
+    # When pdata is not a singleton, we shouldn't need to store these here.
+    profile_flag: str = ""
+    pr_flag: str = ""
+    issue_flag: str = ""
+
 
 repo_data = RepoData()

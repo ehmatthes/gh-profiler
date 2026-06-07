@@ -21,10 +21,37 @@ def process_data(target_prs):
         author_summary = summary_utils._get_concise_summary()
         pr.summary = _get_pr_summary(pr, author_summary)
 
+        pr.profile_flag = pdata.flag_overall_profile
+        pr.pr_flag = pdata.flag_overall_pr
+        pr.issue_flag = pdata.flag_overall_issues
+
         # DEV: Print the summary here while we're not doing this in parallel.
         # When these are being processed in parallel, we'll remove this line
         # and call show_summary() from gh_profiler.
         print(pr.summary)
+
+    compare_results(target_prs)
+
+def compare_results(target_prs):
+    """Compare gh-profiler results with final merged state."""
+    comparison = "Comparison of gh-profiler results with final merged state:\n"
+    comparison += "\nPR num | Merged/closed | gh-profiler flags | PR link\n"
+    for pr in target_prs:
+        comparison += f"{pr.pr_num} | "
+        
+        if pr.merged:
+            comparison += f"{flags.merged_flag} | "
+        else:
+            comparison += f"{flags.red_flag} | "
+        
+        profile_flags = " ".join([pr.profile_flag, pr.pr_flag, pr.issue_flag])
+        comparison += f"{profile_flags} | "
+
+        comparison += f"{pr.url}\n"
+
+    print(comparison)
+
+
 
         
 def _adjust_author_summary(summary):
