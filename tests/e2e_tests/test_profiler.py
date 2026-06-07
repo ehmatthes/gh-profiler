@@ -128,3 +128,14 @@ def test_redact():
 
     # Should currently see 7 redacted fields in my output.
     assert output.count("<redacted>") == 7
+
+def test_bulk_open_prs():
+    """Test a run against a repo URL for bulk processing open PRs."""
+    # Django is likely to have many open PRs.
+    url = "https://github.com/django/django"
+    cmd = f"uv run gh-profiler {url} -n 3"
+    output = run_with_timeout(cmd)
+
+    assert output.count("PR ") == 3
+    assert output.count("https://github.com/django/django/pull/") == 3
+    assert output.count("GitHub user: ") == 3
