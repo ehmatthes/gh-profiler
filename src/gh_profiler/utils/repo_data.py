@@ -15,10 +15,14 @@ class RepoData:
 @dataclass(slots=True)
 class PRData:
     """Data store for a PR we're targeting."""
+    # Raw info
     pr_num: int | None = None
     author: str = ""
     title: str = ""
     url: str = ""
+
+    # Processed info
+    summary: str = ""
 
 
 repo_data = RepoData()

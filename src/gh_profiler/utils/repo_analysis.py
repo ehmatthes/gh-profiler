@@ -17,9 +17,7 @@ def process_data(target_prs):
         profile_utils.get_data()
         analysis_utils.process_data()
         author_summary = summary_utils._get_concise_summary()
-        pr_summary = _get_pr_summary(pr, author_summary)
-
-        print(pr_summary)
+        pr.summary = _get_pr_summary(pr, author_summary)
 
         
 def _adjust_author_summary(summary):
