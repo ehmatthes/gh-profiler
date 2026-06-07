@@ -27,6 +27,7 @@ class PRData:
 
 
     # Processed info
+    author_summary: str = ""
     summary: str = ""
 
     # User flags

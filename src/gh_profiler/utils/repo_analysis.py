@@ -25,8 +25,10 @@ def process_data(target_prs):
         pdata.username = pr.author
         profile_utils.get_data()
         analysis_utils.process_data()
-        author_summary = summary_utils._get_concise_summary()
-        pr.summary = _get_pr_summary(pr, author_summary)
+
+        pr.author_summary = summary_utils._get_concise_summary()
+
+        pr.summary = _get_pr_summary(pr, pr.author_summary)
 
         pr.profile_flag = pdata.flag_overall_profile
         pr.pr_flag = pdata.flag_overall_pr
