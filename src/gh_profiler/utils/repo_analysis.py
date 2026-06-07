@@ -46,7 +46,7 @@ def compare_results(target_prs):
     table.add_column("Merged?", justify="center")
     table.add_column("Author")
     table.add_column("gh-profiler")
-    table.add_column("PR link")
+    table.add_column("PR link", no_wrap=True)
 
     for pr in target_prs:
         if pr.merged:
