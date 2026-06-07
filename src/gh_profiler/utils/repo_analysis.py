@@ -22,6 +22,8 @@ def process_data(target_prs):
         summary = _indent_summary(summary)
 
         print(f"PR {pr.pr_num}: {pr.title}")
+        print(f"  {pr.url}")
+        print("")
         print(summary)
         print("\n")
 
