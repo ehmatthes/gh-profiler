@@ -12,6 +12,7 @@ from collections import Counter
 
 from . import infra_utils
 from .profile_data import profile_data as pdata
+from .repo_data import repo_data
 from .cli_config import cli_config
 
 import httpx2
@@ -37,7 +38,7 @@ def get_data():
 
         # When each call finishes, store the result.
         reachable_str = reachable_future.result()
-        prs_str = prs_future.result()
+        prs_obj = prs_future.result()
 
     ts_after = perf_counter()
     if pdata.benchmark_fetch:
@@ -45,7 +46,7 @@ def get_data():
 
     # Parse data. This should only happen after all data has been fetched.
     _parse_reachable(reachable_str)
-    _parse_prs(prs_str)
+    _parse_prs(prs_obj)
 
 
 # --- Helper functions ---
@@ -74,8 +75,41 @@ def _fetch_prs():
     For each PR:
     - username, title, id
     """
-    ...
+    pr_query = _get_pr_query()
+    result = infra_utils.run_cmd(pr_query)
+    return result
 
-def _parse_prs(prs_str):
-    """Parse required info from PR string."""
-    ...
+
+def _parse_prs(prs_obj):
+    """Parse required info from PR query."""
+    prs_str = prs_obj.stdout
+    prs_json = json.loads(prs_str)
+    breakpoint()
+
+
+def _get_pr_query():
+    """Return the gh call for recent open PRs in a repo."""
+    gh_call = f"""
+        gh api graphql -f query='
+        query($owner: String!, $repo: String!, $n: Int!) {{
+        repository(owner: $owner, name: $repo) {{
+            pullRequests(
+            first: $n,
+            states: OPEN,
+            orderBy: {{field: CREATED_AT, direction: DESC}}
+            ) {{
+            nodes {{
+                id
+                number
+                title
+                url
+                author {{
+                login
+                }}
+            }}
+            }}
+        }}
+        }}' -F owner='{repo_data.owner}' -F repo='{repo_data.repo_name}' -F n={cli_config.num_targets}
+    """
+
+    return dedent(gh_call).strip()
