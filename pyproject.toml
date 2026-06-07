@@ -9,6 +9,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "click>=8.3.3",
+    "httpx2>=2.3.0",
     "humanize>=4.15.0",
 ]
 

@@ -45,4 +45,6 @@ def profile_url():
     # Most recently opened issues:
     $ gh-profiler <repo> --issues
     """
+    # Make sure gh is available.
+    profile_utils.ensure_gh()
     
