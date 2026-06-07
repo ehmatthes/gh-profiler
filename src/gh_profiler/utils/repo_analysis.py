@@ -19,6 +19,11 @@ def process_data(target_prs):
         author_summary = summary_utils._get_concise_summary()
         pr.summary = _get_pr_summary(pr, author_summary)
 
+        # DEV: Print the summary here while we're not doing this in parallel.
+        # When these are being processed in parallel, we'll remove this line
+        # and call show_summary() from gh_profiler.
+        print(pr.summary)
+
         
 def _adjust_author_summary(summary):
     """Modify standard concise output to fit bulk reporting needs.
