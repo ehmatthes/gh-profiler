@@ -146,6 +146,23 @@ def test_bulk_open_prs():
     assert len(matches) == 3
 
 
+def test_bulk_closed_prs():
+    """Test a run against a repo URL for bulk processing closed PRs."""
+    # Django is likely to have many closed PRs.
+    url = "https://github.com/django/django"
+    cmd = f"uv run gh-profiler {url} --back -n 3"
+    output = run_with_timeout(cmd)
+
+    assert output.count("https://github.com/django/django/pull/") == 3
+    assert output.count("GitHub user: ") + output.count("`ghost`") == 3
+    assert output.count("Merged") + output.count("Closed") == 3
+
+    # Check that there are 3 PR numbers and titles in output.
+    re_pr_title = r"(PR \d+: ).*"
+    matches = re.findall(re_pr_title, output)
+    assert len(matches) == 3
+
+
 @pytest.mark.parametrize("mode", ["", "--concise"])
 def test_ghost_profile(mode):
     """Test a run against the `ghost` user.
