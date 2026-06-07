@@ -45,15 +45,14 @@ def process_data(target_prs):
         if cli_config.redact:
             pr.author = "<redacted>"
 
-        if cli_config.back and cli_config.table_only:
+        if cli_config.table_only:
             print(".", end="", flush=True)
         else:
             print(pr.summary)
 
-    if cli_config.back:
-        if cli_config.table_only:
-            print("\n")
-        compare_results(target_prs)
+    if cli_config.table_only:
+        print("\n")
+    show_table(target_prs)
 
 def _get_cached_author_info(username, target_prs):
     """Get an existing author summary if it's already been built."""
@@ -69,25 +68,33 @@ def _get_cached_author_info(username, target_prs):
             )
 
 
-def compare_results(target_prs):
-    """Compare gh-profiler results with final merged state."""
+def show_table(target_prs):
+    """Show table of results.
+    
+    If looking back, show final merged state as well.
+    """
     table = Table(title="Comparison of gh-profiler results with final merged state:")
 
     table.add_column("PR num", justify="center")
-    table.add_column("Merged?", justify="center")
+    if cli_config.back:
+        table.add_column("Merged?", justify="center")
     table.add_column("Author")
     table.add_column("gh-profiler")
     table.add_column("PR link", no_wrap=True)
 
     for pr in target_prs:
-        if pr.merged:
-            merged_flag = flags.merged_flag
-        else:
-            merged_flag = flags.red_flag
+        if cli_config.back:
+            if pr.merged:
+                merged_flag = flags.merged_flag
+            else:
+                merged_flag = flags.red_flag
         
         profile_flags = " ".join([pr.profile_flag, pr.pr_flag, pr.issue_flag])
 
-        table.add_row(str(pr.pr_num), merged_flag, pr.author, profile_flags, pr.url)
+        if cli_config.back:
+            table.add_row(str(pr.pr_num), merged_flag, pr.author, profile_flags, pr.url)
+        else:
+            table.add_row(str(pr.pr_num), pr.author, profile_flags, pr.url)
 
     console = Console()
     console.print(table)
