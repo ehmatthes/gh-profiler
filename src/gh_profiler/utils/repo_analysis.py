@@ -66,7 +66,7 @@ def _get_status_line(pr):
     if not cli_config.back:
         return f"\n{pr.url}\n\n"
     
-    if pr.closed_state == "MERGED":
+    if pr.merged:
         status = f"{flags.merged_flag} Merged."
     else:
         status = f"{flags.red_flag} Closed."
