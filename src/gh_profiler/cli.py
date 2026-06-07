@@ -65,7 +65,7 @@ def main(target, concise, num_targets, back, generate_workflow, verbose, redact,
     # Check if we're processing a repo URL.
     if "github.com" in target:
         cli_config.url = target
-        _parse_repo_options(num_targets, back)
+        _parse_repo_options(num_targets, back, redact)
         _parse_repo_info(target)
         gh_profiler.profile_url()
 
@@ -96,11 +96,12 @@ def _validate_command(target, concise, generate_workflow, verbose, redact, bench
         msg = "Please either include a target or --generate-workflow, but not both."
         sys.exit(msg)
 
-def _parse_repo_options(num_targets, back):
+def _parse_repo_options(num_targets, back, redact):
     """Get options relevant to targeting a repo URL."""
     cli_config.num_targets = num_targets
     # cli_config.issues = issues
     cli_config.back = back
+    cli_config.redact = redact
 
 def _parse_repo_info(target):
     """Parse info about the repo from the target.

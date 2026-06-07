@@ -32,6 +32,9 @@ def process_data(target_prs):
         # DEV: Print the summary here while we're not doing this in parallel.
         # When these are being processed in parallel, we'll remove this line
         # and call show_summary() from gh_profiler.
+        # Also, redacting here for now.
+        if cli_config.redact:
+            pr.author = "<redacted>"
         print(pr.summary)
 
     if cli_config.back:
