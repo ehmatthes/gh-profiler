@@ -36,7 +36,7 @@ def _adjust_author_summary(summary):
     if pdata.username != "ghost":
         # Remove "For a more detailed report..."
         lines = lines[:-2]
-        
+
     # Indent lines.
     lines = [f"  {l}" for l in lines]
 

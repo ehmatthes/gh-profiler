@@ -23,7 +23,7 @@ class PRData:
     url: str = ""
     
     closed_state: str = ""
-    closed_at: dt | None = None
+    created_at: dt | None = None
 
 
     # Processed info

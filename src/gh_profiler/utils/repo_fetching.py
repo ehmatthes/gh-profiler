@@ -45,6 +45,11 @@ def get_data():
     # _parse_reachable(reachable_str)
     target_prs = _parse_prs(prs_obj)
 
+    # Sort PRs by createdAt timestamp. This helps address the fact that gh
+    # typically returns PR data based on updated times, not opened times.
+    if cli_config.back:
+        target_prs.sort(key=lambda pr: pr.created_at, reverse=True)
+
     return target_prs
 
 
@@ -98,7 +103,7 @@ def _parse_prs(prs_obj):
         if cli_config.back:
             _add_pr_back_fields(pr_dict, pr_data)
         target_prs.append(pr_data)
-    breakpoint()
+    # breakpoint()
     return target_prs
 
 def _get_author(pr_dict):
@@ -114,7 +119,7 @@ def _get_author(pr_dict):
 
 def _add_pr_back_fields(pr_dict, pr_data):
     """Add fields to PRData object that only related to looking back."""
-    pr_data.closed_at = _parse_gh_timestamp(pr_dict["closedAt"])
+    pr_data.created_at = _parse_gh_timestamp(pr_dict["createdAt"])
 
     if pr_dict["merged"]:
         pr_data.closed_state = "merged"
@@ -127,7 +132,6 @@ def _parse_gh_timestamp(ts):
     return dt.strptime(ts, "%Y-%m-%dT%H:%M:%SZ").replace(
         tzinfo=timezone.utc
     )
-
 
 def _get_pr_query():
     """Return the gh call for recent PRs in a repo."""
