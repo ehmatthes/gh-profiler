@@ -98,20 +98,36 @@ def _parse_prs(prs_obj):
     return target_prs
 
 
-def _get_pr_query():
-    """Return the gh call for recent open PRs in a repo."""
+def _get_pr_query(state="open"):
+    """Return the gh call for recent PRs in a repo."""
+    state = state.lower()
+
+    if state == "open":
+        gh_state = "OPEN"
+        order_field = "CREATED_AT"
+    elif state == "closed":
+        gh_state = "CLOSED"
+        order_field = "UPDATED_AT"
+    else:
+        raise ValueError(f"Unknown PR state: {state}")
+
     gh_call = f"""
         gh api graphql -f query='
         query($owner: String!, $repo: String!, $n: Int!) {{
         repository(owner: $owner, name: $repo) {{
             pullRequests(
             first: $n,
-            states: OPEN,
-            orderBy: {{field: CREATED_AT, direction: DESC}}
+            states: {gh_state},
+            orderBy: {{field: {order_field}, direction: DESC}}
             ) {{
             nodes {{
                 number
                 title
+                state
+                merged
+                createdAt
+                closedAt
+                mergedAt
                 url
                 author {{
                 login
