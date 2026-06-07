@@ -23,10 +23,13 @@ def process_data(target_prs):
         # Get concise gh-profiler output for PR author.
         pdata.reset_fields()
         pdata.username = pr.author
-        profile_utils.get_data()
-        analysis_utils.process_data()
 
-        pr.author_summary = summary_utils._get_concise_summary()
+        if author_summary := _get_cached_author_summary(pdata.username, target_prs):
+            pr.author_summary = author_summary
+        else:
+            profile_utils.get_data()
+            analysis_utils.process_data()
+            pr.author_summary = summary_utils._get_concise_summary()
 
         pr.summary = _get_pr_summary(pr, pr.author_summary)
 
@@ -50,6 +53,15 @@ def process_data(target_prs):
         if cli_config.compare_only:
             print("\n")
         compare_results(target_prs)
+
+def _get_cached_author_summary(username, target_prs):
+    """Get an existing author summary if it's already been built."""
+    author_prs = [pr for pr in target_prs if pr.author == username]
+
+    for pr in author_prs:
+        if pr.author_summary:
+            return pr.author_summary
+
 
 
 def compare_results(target_prs):
