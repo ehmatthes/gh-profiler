@@ -14,11 +14,15 @@ These initial releases have usable behavior, but may have some rough edges for s
 
 - Redacts user's org info.
 - Fixes broken usage against PRs and issue numbers, since 0.6.6.
+- Supports bulk processing of recently opened PRs.
 
 #### Internal changes
 
 - When parsing PR and issue numbers, treat `run_cmd()` result as an object, not a string.
 - E2e test for PR and issue number as target.
+- Uses a `cli_config` object, to store CLI args and behavioral settings off the pdata object.
+- Adds `httpx2`, for checking if provided URL is reachable.
+- In `test_all.sh`, run e2e and live user tests in parallel. ~14s -> ~5s.
 
 ### 0.7.1
 
