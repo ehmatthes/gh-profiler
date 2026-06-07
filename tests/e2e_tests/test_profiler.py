@@ -6,6 +6,7 @@ to use.
 """
 
 import subprocess
+import re
 
 import pytest
 
@@ -136,6 +137,11 @@ def test_bulk_open_prs():
     cmd = f"uv run gh-profiler {url} -n 3"
     output = run_with_timeout(cmd)
 
-    assert output.count("PR ") == 3
     assert output.count("https://github.com/django/django/pull/") == 3
     assert output.count("GitHub user: ") == 3
+
+    # Check that there are 3 PR numbers and titles in output.
+    re_pr_title = r"(PR \d+: ).*"
+    matches = re.findall(re_pr_title, output)
+    assert len(matches) == 3
+
