@@ -5,6 +5,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from textwrap import dedent
 from time import perf_counter
+from datetime import datetime as dt, timezone
 
 from . import infra_utils
 from .profile_data import profile_data as pdata
@@ -97,7 +98,7 @@ def _parse_prs(prs_obj):
         if cli_config.back:
             _add_pr_back_fields(pr_dict, pr_data)
         target_prs.append(pr_data)
-    # breakpoint()
+    breakpoint()
     return target_prs
 
 def _get_author(pr_dict):
@@ -111,13 +112,21 @@ def _get_author(pr_dict):
         return pr_dict["author"]["login"]
     
 
-
 def _add_pr_back_fields(pr_dict, pr_data):
     """Add fields to PRData object that only related to looking back."""
+    pr_data.closed_at = _parse_gh_timestamp(pr_dict["closedAt"])
+
     if pr_dict["merged"]:
         pr_data.closed_state = "merged"
     else:
         pr_data.closed_state = "closed without merging"
+
+
+def _parse_gh_timestamp(ts):
+    """Parse a gh API timestamp."""
+    return dt.strptime(ts, "%Y-%m-%dT%H:%M:%SZ").replace(
+        tzinfo=timezone.utc
+    )
 
 
 def _get_pr_query():

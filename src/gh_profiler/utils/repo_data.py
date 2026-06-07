@@ -1,6 +1,7 @@
 """One place to store all data about the targeted repo."""
 
 from dataclasses import dataclass
+from datetime import datetime as dt, timezone
 
 
 @dataclass(slots=True)
@@ -22,6 +23,7 @@ class PRData:
     url: str = ""
     
     closed_state: str = ""
+    closed_at: dt | None = None
 
 
     # Processed info
