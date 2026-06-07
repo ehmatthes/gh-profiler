@@ -24,18 +24,19 @@ def process_data(target_prs):
         pdata.reset_fields()
         pdata.username = pr.author
 
-        if author_summary := _get_cached_author_summary(pdata.username, target_prs):
-            pr.author_summary = author_summary
+        if author_info := _get_cached_author_info(pdata.username, target_prs):
+            # breakpoint()
+            pr.author_summary, pr.profile_flag, pr.pr_flag, pr.issue_flag = author_info
         else:
             profile_utils.get_data()
             analysis_utils.process_data()
             pr.author_summary = summary_utils._get_concise_summary()
 
-        pr.summary = _get_pr_summary(pr, pr.author_summary)
+            pr.profile_flag = pdata.flag_overall_profile
+            pr.pr_flag = pdata.flag_overall_pr
+            pr.issue_flag = pdata.flag_overall_issues
 
-        pr.profile_flag = pdata.flag_overall_profile
-        pr.pr_flag = pdata.flag_overall_pr
-        pr.issue_flag = pdata.flag_overall_issues
+        pr.summary = _get_pr_summary(pr, pr.author_summary)
 
         # DEV: Print the summary here while we're not doing this in parallel.
         # When these are being processed in parallel, we'll remove this line
@@ -54,14 +55,18 @@ def process_data(target_prs):
             print("\n")
         compare_results(target_prs)
 
-def _get_cached_author_summary(username, target_prs):
+def _get_cached_author_info(username, target_prs):
     """Get an existing author summary if it's already been built."""
     author_prs = [pr for pr in target_prs if pr.author == username]
 
     for pr in author_prs:
         if pr.author_summary:
-            return pr.author_summary
-
+            return (
+                pr.author_summary,
+                pr.profile_flag,
+                pr.pr_flag,
+                pr.issue_flag,
+            )
 
 
 def compare_results(target_prs):
