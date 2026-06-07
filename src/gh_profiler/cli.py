@@ -46,8 +46,14 @@ def main(target, concise, num_targets, back, table_only, generate_workflow, verb
 
     \b
     Bulk concise profiling of most recently opened PRs:
-    $ gh-profiler <repo-url>    # 10 most recent PRs
+    $ gh-profiler <repo-url>  # 10 most recent PRs
     $ gh-profiler <repo-url> -n 3
+    $ gh-profiler <repo-url> --table-only
+
+    \b
+    Look back at most recently merged/closed PRs:
+    $ gh-profiler <repo-url> --back
+    $ gh-profiler <repo-url> --back -n 20 --table-only
     """
     _validate_command(target, concise, generate_workflow, verbose, redact, benchmark_fetch)
 
