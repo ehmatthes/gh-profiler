@@ -22,8 +22,6 @@ def process_data(target_prs):
         print(pr_summary)
 
         
-
-
 def _adjust_author_summary(summary):
     """Modify standard concise output to fit bulk reporting needs.
 
@@ -43,8 +41,8 @@ def _get_pr_summary(pr, author_summary):
     author_summary = _adjust_author_summary(author_summary)
 
     pr_summary = f"PR {pr.pr_num}: {pr.title}"
-    pr_summary += f"\n  {pr.url}\n\n"
+    pr_summary += f"\n{pr.url}\n\n"
     pr_summary += author_summary
-    pr_summary += "\n"
+    pr_summary += "\n\n"
 
     return pr_summary
