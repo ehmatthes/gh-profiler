@@ -97,7 +97,6 @@ def _get_status_line(pr):
     For closed PRs, flag and state.
     For all, this is where the PR URL goes as well.
     """
-    # breakpoint()
     if not cli_config.back:
         return f"\n{pr.url}\n\n"
     

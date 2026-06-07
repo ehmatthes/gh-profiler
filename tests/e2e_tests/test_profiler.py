@@ -153,9 +153,10 @@ def test_bulk_closed_prs():
     cmd = f"uv run gh-profiler {url} --back -n 3"
     output = run_with_timeout(cmd)
 
-    assert output.count("https://github.com/django/django/pull/") == 3
+    assert output.count("https://github.com/django/django/pull/") == 6
+    # If ghost is there, it's there twice.
     assert output.count("GitHub user: ") + output.count("`ghost`") == 3
-    assert output.count("Merged") + output.count("Closed") == 3
+    assert output.count("Merged.") + output.count("Closed.") == 3
 
     # Check that there are 3 PR numbers and titles in output.
     re_pr_title = r"(PR \d+: ).*"

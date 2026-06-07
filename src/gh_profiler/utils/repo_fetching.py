@@ -88,7 +88,6 @@ def _parse_prs(prs_obj):
     # and number.
     target_prs = []
     for pr_dict in prs_json["data"]["repository"]["pullRequests"]["nodes"]:
-        # breakpoint()
         pr_data = PRData(
             pr_num=pr_dict["number"],
             author=_get_author(pr_dict),
@@ -101,7 +100,6 @@ def _parse_prs(prs_obj):
 
     # When looking back, we grabbed more PRs than we need. Sort them by 
     # closedAt, and return the number that were actually requested.
-    # breakpoint()
     if cli_config.back:
         target_prs.sort(key=lambda pr: pr.closed_at, reverse=True)
         target_prs = target_prs[:cli_config.num_targets]
@@ -123,7 +121,6 @@ def _get_author(pr_dict):
 def _add_pr_back_fields(pr_dict, pr_data):
     """Add fields to PRData object that only related to looking back."""
     pr_data.closed_at = _parse_gh_timestamp(pr_dict["closedAt"])
-    # breakpoint()
 
     if pr_dict["merged"]:
         pr_data.merged = True
