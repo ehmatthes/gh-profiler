@@ -94,7 +94,7 @@ def show_table(target_prs):
         if cli_config.back:
             table.add_row(str(pr.pr_num), merged_flag, profile_flags, pr.author, pr.url)
         else:
-            table.add_row(str(pr.pr_num), pr.author, profile_flags, pr.url)
+            table.add_row(str(pr.pr_num), profile_flags, pr.author, pr.url)
 
     console = Console()
     console.print(table)
