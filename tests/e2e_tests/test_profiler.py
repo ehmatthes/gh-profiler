@@ -154,7 +154,6 @@ def test_bulk_closed_prs():
     output = run_with_timeout(cmd)
 
     assert output.count("https://github.com/django/django/pull/") == 6
-    # If ghost is there, it's there twice.
     assert output.count("GitHub user: ") + output.count("`ghost`") == 3
     assert output.count("Merged.") + output.count("Closed.") == 3
 
@@ -162,6 +161,24 @@ def test_bulk_closed_prs():
     re_pr_title = r"(PR \d+: ).*"
     matches = re.findall(re_pr_title, output)
     assert len(matches) == 3
+
+
+def test_bulk_closed_prs_table_only():
+    """Test a table-only run against a repo URL for bulk processing closed PRs."""
+    # Django is likely to have many closed PRs.
+    url = "https://github.com/django/django"
+    cmd = f"uv run gh-profiler {url} --back -n 3 --table-only"
+    output = run_with_timeout(cmd)
+
+    assert output.count("https://github.com/django/django/pull/") == 3
+    assert "GitHub user: " not in output
+    assert "Merged." not in output
+    assert "Closed." not in output
+
+    # Check that there are no PR numbers and titles in output.
+    re_pr_title = r"(PR \d+: ).*"
+    matches = re.findall(re_pr_title, output)
+    assert len(matches) == 0
 
 
 @pytest.mark.parametrize("mode", ["", "--concise"])
