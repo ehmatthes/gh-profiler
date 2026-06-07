@@ -15,6 +15,7 @@ def process_data(target_prs):
     """
     for pr in target_prs:
         # Get concise gh-profiler output for PR author.
+        pdata.reset_fields()
         pdata.username = pr.author
         profile_utils.get_data()
         analysis_utils.process_data()
@@ -36,7 +37,7 @@ def process_data(target_prs):
 def compare_results(target_prs):
     """Compare gh-profiler results with final merged state."""
     comparison = "Comparison of gh-profiler results with final merged state:\n"
-    comparison += "\nPR num | Merged/closed | gh-profiler flags | PR link\n"
+    comparison += "\nPR num | Merged/closed | author | gh-profiler flags | PR link\n"
     for pr in target_prs:
         comparison += f"{pr.pr_num} | "
         
@@ -44,6 +45,8 @@ def compare_results(target_prs):
             comparison += f"{flags.merged_flag} | "
         else:
             comparison += f"{flags.red_flag} | "
+
+        comparison += f"{pr.author} | "
         
         profile_flags = " ".join([pr.profile_flag, pr.pr_flag, pr.issue_flag])
         comparison += f"{profile_flags} | "

@@ -11,7 +11,7 @@ def process_data():
     """Process all data."""
     if pdata.username == "ghost":
         # This is GitHub's deleted user, and we don't need to do anything.
-        pdata.flag_overall_profile == flags.red_flag
+        pdata.flag_overall_profile = flags.red_flag
         return
         
     _process_account_age()

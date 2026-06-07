@@ -1,6 +1,6 @@
 """One place to store all data about the user."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, MISSING
 
 
 @dataclass(slots=True)
