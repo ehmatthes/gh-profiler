@@ -98,18 +98,12 @@ def _parse_prs(prs_obj):
     return target_prs
 
 
-def _get_pr_query(state="open"):
+def _get_pr_query():
     """Return the gh call for recent PRs in a repo."""
-    state = state.lower()
-
-    if state == "open":
-        gh_state = "OPEN"
-        order_field = "CREATED_AT"
-    elif state == "closed":
+    if cli_config.back:
         gh_state = "CLOSED"
-        order_field = "UPDATED_AT"
     else:
-        raise ValueError(f"Unknown PR state: {state}")
+        gh_state = "OPEN"
 
     gh_call = f"""
         gh api graphql -f query='
