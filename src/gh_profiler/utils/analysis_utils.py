@@ -9,6 +9,10 @@ from . import flags
 
 def process_data():
     """Process all data."""
+    if pdata.username == "ghost":
+        # This is GitHub's deleted user, and we don't need to do anything.
+        return
+        
     _process_account_age()
     _process_profile_info()
     _process_pr_activity()

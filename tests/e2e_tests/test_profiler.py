@@ -156,7 +156,7 @@ def test_ghost_profile():
 
     See: https://github.com/ghost
     """
-    cmd = "uv run gh-profiler ghost --concise"
+    cmd = "uv run gh-profiler ghost"
     output = run_with_timeout(cmd)
 
-    assert output == f"🔴 The `ghost` account is GitHub's reference to a deleted user."
+    assert output.strip() == f"🔴 The `ghost` account is GitHub's reference to a deleted user."

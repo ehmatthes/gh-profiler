@@ -16,6 +16,10 @@ def show_summary():
 
 def _get_summary():
     """Build a summary string."""
+    if pdata.username == "ghost":
+        # This is GitHub's deleted user, and we don't need to do anything.
+        return f"🔴 The `ghost` account is GitHub's reference to a deleted user."
+
     if pdata.redact:
         _redact_info()
 

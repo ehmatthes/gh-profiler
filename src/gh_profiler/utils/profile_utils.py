@@ -36,6 +36,10 @@ def get_data():
     Fetch all data we'll need, then parse it into the data structures that
     can be analyzed and processed.
     """
+    if pdata.username == "ghost":
+        # This is GitHub's deleted user, and we don't need to do anything.
+        return
+        
     # Fetch data. This can all be done in parallel. The benchmarking is here
     # because this is the slowest part of the program, and it's helpful at
     # times to benchmark just this fetching code.
