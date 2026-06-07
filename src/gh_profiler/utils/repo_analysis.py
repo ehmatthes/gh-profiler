@@ -48,7 +48,7 @@ def _get_pr_summary(pr, author_summary):
     """Get the summary for an individual PR."""
     author_summary = _adjust_author_summary(author_summary)
 
-    pr_summary = f"PR {pr.pr_num}: {pr.title}"
+    pr_summary = f"PR {pr.pr_num}: {pr.title.strip()}"
     pr_summary += _get_status_line(pr)
     pr_summary += author_summary
     pr_summary += "\n\n"
