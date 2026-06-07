@@ -19,8 +19,15 @@ def process_data(target_prs):
         profile_utils.get_data()
         analysis_utils.process_data()
         summary = summary_utils._get_concise_summary()
+        summary = _indent_summary(summary)
 
-        print(f"\nPR number: {pr.pr_num}")
-        print(f"  {pr.title}")
+        print(f"PR {pr.pr_num}: {pr.title}")
         print(summary)
+        print("\n")
 
+
+def _indent_summary(summary):
+    """Indent the summary, to fit in this larger set of output."""
+    lines = summary.splitlines()
+    lines = [f"  {l}" for l in lines]
+    return "\n".join(lines)
