@@ -30,7 +30,8 @@ def process_data(target_prs):
         # and call show_summary() from gh_profiler.
         print(pr.summary)
 
-    compare_results(target_prs)
+    if cli_config.back:
+        compare_results(target_prs)
 
 def compare_results(target_prs):
     """Compare gh-profiler results with final merged state."""
