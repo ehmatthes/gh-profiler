@@ -145,3 +145,18 @@ def test_bulk_open_prs():
     matches = re.findall(re_pr_title, output)
     assert len(matches) == 3
 
+
+def test_ghost_profile():
+    """Test a run against the `ghost` user.
+
+    GitHub has a special user account named `ghost` that stands in for
+    deleted users in completed actions, such as closed PRs.
+
+    This should return a single red flag, with an explanation of this role.
+
+    See: https://github.com/ghost
+    """
+    cmd = "uv run gh-profiler ghost --concise"
+    output = run_with_timeout(cmd)
+
+    assert output == f"🔴 The `ghost` account is GitHub's reference to a deleted user."
