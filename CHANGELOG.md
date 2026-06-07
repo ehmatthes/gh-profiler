@@ -14,7 +14,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 
 - Redacts user's org info.
 - Fixes broken usage against PRs and issue numbers, since 0.6.6.
-- Supports bulk processing of recently opened PRs.
+- Supports bulk processing of recently opened and closed PRs.
 
 #### Internal changes
 
@@ -23,6 +23,9 @@ These initial releases have usable behavior, but may have some rough edges for s
 - Uses a `cli_config` object, to store CLI args and behavioral settings off the pdata object.
 - Adds `httpx2`, for checking if provided URL is reachable.
 - In `test_all.sh`, run e2e and live user tests in parallel. ~14s -> ~5s.
+- Uses Rich for tabular output. Will be easier to clean up existing output as well.
+- Special case for handling GitHub's `ghost` user, a stand-in for deleted accounts.
+- Method to reset `pdata` instances, should be removed when `pdata` is not a singleton.
 
 ### 0.7.1
 
