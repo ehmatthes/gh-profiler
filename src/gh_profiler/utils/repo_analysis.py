@@ -42,10 +42,10 @@ def compare_results(target_prs):
     """Compare gh-profiler results with final merged state."""
     table = Table(title="Comparison of gh-profiler results with final merged state:")
 
-    table.add_column("PR num")
-    table.add_column("Merged/closed")
+    table.add_column("PR num", justify="center")
+    table.add_column("Merged?", justify="center")
     table.add_column("Author")
-    table.add_column("gh-profiler flags")
+    table.add_column("gh-profiler")
     table.add_column("PR link")
 
     for pr in target_prs:
