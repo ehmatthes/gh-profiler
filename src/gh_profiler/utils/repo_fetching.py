@@ -87,23 +87,36 @@ def _parse_prs(prs_obj):
     # and number.
     target_prs = []
     for pr_dict in prs_json["data"]["repository"]["pullRequests"]["nodes"]:
+        breakpoint()
         pr_data = PRData(
             pr_num=pr_dict["number"],
             author=pr_dict["author"]["login"],
             title=pr_dict["title"],
             url=pr_dict["url"],
         )
+        if cli_config.back:
+            _add_pr_back_fields(pr_dict, pr_data)
         target_prs.append(pr_data)
-
+    breakpoint()
     return target_prs
+
+
+def _add_pr_back_fields(pr_dict, pr_data):
+    """Add fields to PRData object that only related to looking back."""
+    if pr_dict["merged"]:
+        pr_data.closed_state = "merged"
+    else:
+        pr_data.closed_state = "closed without merging"
 
 
 def _get_pr_query():
     """Return the gh call for recent PRs in a repo."""
     if cli_config.back:
         gh_state = "CLOSED"
+        order_field = "UPDATED_AT"
     else:
         gh_state = "OPEN"
+        order_field = "CREATED_AT"
 
     gh_call = f"""
         gh api graphql -f query='

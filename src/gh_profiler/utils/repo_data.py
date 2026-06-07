@@ -20,6 +20,9 @@ class PRData:
     author: str = ""
     title: str = ""
     url: str = ""
+    
+    closed_state: str = ""
+
 
     # Processed info
     summary: str = ""
