@@ -12,4 +12,13 @@ class RepoData:
     repo_name: str = ""
 
 
+@dataclass(slots=True)
+class PRData:
+    """Data store for a PR we're targeting."""
+    pr_id: int | None = None
+    author: str = ""
+    title: str = ""
+    url: str = ""
+
+
 repo_data = RepoData()

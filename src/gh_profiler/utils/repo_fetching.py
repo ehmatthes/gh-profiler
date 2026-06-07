@@ -12,7 +12,7 @@ from collections import Counter
 
 from . import infra_utils
 from .profile_data import profile_data as pdata
-from .repo_data import repo_data
+from .repo_data import repo_data, PRData
 from .cli_config import cli_config
 
 import httpx2
@@ -84,6 +84,18 @@ def _parse_prs(prs_obj):
     """Parse required info from PR query."""
     prs_str = prs_obj.stdout
     prs_json = json.loads(prs_str)
+
+    # Build a list of usernames to profile, along with relevant PR title
+    # and number.
+    target_prs = []
+    for pr_dict in prs_json["data"]["repository"]["pullRequests"]["nodes"]:
+        pr_data = PRData(
+            pr_id=pr_dict["id"],
+            author=pr_dict["author"],
+            title=pr_dict["title"],
+            url=pr_dict["url"],
+        )
+        target_prs.append(pr_data)
     breakpoint()
 
 
