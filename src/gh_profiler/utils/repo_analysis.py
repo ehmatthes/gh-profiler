@@ -78,8 +78,8 @@ def show_table(target_prs):
     table.add_column("PR num", justify="center")
     if cli_config.back:
         table.add_column("Merged?", justify="center")
-    table.add_column("Author")
     table.add_column("gh-profiler")
+    table.add_column("Author")
     table.add_column("PR link", no_wrap=True)
 
     for pr in target_prs:
@@ -92,7 +92,7 @@ def show_table(target_prs):
         profile_flags = "".join([pr.profile_flag, pr.pr_flag, pr.issue_flag])
 
         if cli_config.back:
-            table.add_row(str(pr.pr_num), merged_flag, pr.author, profile_flags, pr.url)
+            table.add_row(str(pr.pr_num), merged_flag, profile_flags, pr.author, pr.url)
         else:
             table.add_row(str(pr.pr_num), pr.author, profile_flags, pr.url)
 
