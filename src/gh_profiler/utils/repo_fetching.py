@@ -33,9 +33,11 @@ def get_data():
     with ThreadPoolExecutor() as executor:
         # Make fetching calls.
         reachable_future = executor.submit(_fetch_reachable)
+        prs_future = executor.submit(_fetch_prs)
 
         # When each call finishes, store the result.
         reachable_str = reachable_future.result()
+        prs_str = prs_future.result()
 
     ts_after = perf_counter()
     if pdata.benchmark_fetch:
@@ -43,6 +45,7 @@ def get_data():
 
     # Parse data. This should only happen after all data has been fetched.
     _parse_reachable(reachable_str)
+    _parse_prs(prs_str)
 
 
 # --- Helper functions ---
@@ -63,3 +66,16 @@ def _parse_reachable(reachable_str):
     msg = f"URL returned status code {reachable_str}."
     msg += "\n  Is the URL correct?"
     sys.exit(msg)
+
+def _fetch_prs():
+    """Fetch relevant PRs.
+    
+    Need: n most recently opened PRs.
+    For each PR:
+    - username, title, id
+    """
+    ...
+
+def _parse_prs(prs_str):
+    """Parse required info from PR string."""
+    ...

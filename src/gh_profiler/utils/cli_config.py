@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(slots=True)
 class CLIConfig:
     """The main place to store options that are passed in the gh-profiler cmd.
     """
@@ -11,6 +11,9 @@ class CLIConfig:
     # If target is a URL, store that here.
     url: str = ""
     num_targets: int | None = None
+
+    issues: bool | None = None
+    back: bool | None = None
 
 
 cli_config = CLIConfig()

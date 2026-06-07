@@ -1,12 +1,14 @@
 """Main CLI entry point for gh-profiler."""
 
 import sys
+from urllib.parse import urlparse
 
 import click
 
 from . import gh_profiler
 from .utils import cli_utils
 from .utils.profile_data import profile_data as pdata
+from .utils.repo_data import repo_data
 from .utils.cli_config import cli_config
 
 
@@ -59,6 +61,7 @@ def main(target, concise, num_targets, issues, back, generate_workflow, verbose,
     if "github.com" in target:
         cli_config.url = target
         _parse_repo_options(num_targets, issues, back)
+        _parse_repo_info(target)
         gh_profiler.profile_url()
 
     # If the main argument is an integer, process the PR/issue number.
@@ -93,3 +96,13 @@ def _parse_repo_options(num_targets, issues, back):
     cli_config.num_targets = num_targets
     cli_config.issues = issues
     cli_config.back = back
+
+def _parse_repo_info(target):
+    """Parse info about the repo from the target.
+
+    Looking for owner and repo name.
+    """
+    parsed_url = urlparse(target)
+    url_parts = parsed_url.path.split("/")
+    repo_data.owner = url_parts[1]
+    repo_data.repo_name = url_parts[2]
