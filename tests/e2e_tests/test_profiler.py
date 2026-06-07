@@ -146,6 +146,27 @@ def test_bulk_open_prs():
     assert len(matches) == 3
 
 
+def test_bulk_open_prs_table_only():
+    """Test a table-only run against a repo URL for bulk processing open PRs."""
+    # Django is likely to have many open PRs.
+    url = "https://github.com/django/django"
+    cmd = f"uv run gh-profiler {url} -n 3 --table-only"
+    output = run_with_timeout(cmd)
+
+    assert output.count("https://github.com/django/django/pull/") == 3
+    assert "GitHub user: " not in output
+    assert "Merged." not in output
+    assert "Closed." not in output
+
+    # Make sure Merged? column is not in output for open PRs.
+    assert "Merged?" not in output
+
+    # Check that there are no PR numbers and titles in output.
+    re_pr_title = r"(PR \d+: ).*"
+    matches = re.findall(re_pr_title, output)
+    assert len(matches) == 0
+
+
 def test_bulk_closed_prs():
     """Test a run against a repo URL for bulk processing closed PRs."""
     # Django is likely to have many closed PRs.
