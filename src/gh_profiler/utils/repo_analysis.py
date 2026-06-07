@@ -5,6 +5,9 @@ from . import profile_utils, analysis_utils, summary_utils
 from . import flags
 from .cli_config import cli_config
 
+from rich.console import Console
+from rich.table import Table
+
 
 def process_data(target_prs):
     """Process a list of PRs.
@@ -34,28 +37,29 @@ def process_data(target_prs):
     if cli_config.back:
         compare_results(target_prs)
 
+
 def compare_results(target_prs):
     """Compare gh-profiler results with final merged state."""
-    comparison = "Comparison of gh-profiler results with final merged state:\n"
-    comparison += "\nPR num | Merged/closed | author | gh-profiler flags | PR link\n"
-    for pr in target_prs:
-        comparison += f"{pr.pr_num} | "
-        
-        if pr.merged:
-            comparison += f"{flags.merged_flag} | "
-        else:
-            comparison += f"{flags.red_flag} | "
+    table = Table(title="Comparison of gh-profiler results with final merged state:")
 
-        comparison += f"{pr.author} | "
+    table.add_column("PR num")
+    table.add_column("Merged/closed")
+    table.add_column("Author")
+    table.add_column("gh-profiler flags")
+    table.add_column("PR link")
+
+    for pr in target_prs:
+        if pr.merged:
+            merged_flag = flags.merged_flag
+        else:
+            merged_flag = flags.red_flag
         
         profile_flags = " ".join([pr.profile_flag, pr.pr_flag, pr.issue_flag])
-        comparison += f"{profile_flags} | "
 
-        comparison += f"{pr.url}\n"
+        table.add_row(str(pr.pr_num), merged_flag, pr.author, profile_flags, pr.url)
 
-    print(comparison)
-
-
+    console = Console()
+    console.print(table)
 
         
 def _adjust_author_summary(summary):
