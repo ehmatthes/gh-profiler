@@ -28,3 +28,21 @@ def main():
 
     # Summarize findings.
     summary_utils.show_summary()
+
+def profile_url():
+    """Profile contributors of PRs or issues on a specific repo.
+    
+    Usage:
+    # Profile contributors of the most recent 10 open PRs (concise):
+    $ gh-profiler <repo>
+
+    # Most recent 20 PRs:
+    $ gh-profiler <repo> -n 20
+
+    # Most recent merged/closed PRs (shows profile, and end state):
+    $ gh-profiler <repo> --back
+
+    # Most recently opened issues:
+    $ gh-profiler <repo> --issues
+    """
+    

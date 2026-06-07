@@ -25,7 +25,7 @@ from .utils.cli_config import cli_config
 @click.option("-v", "--verbose", is_flag=True, help="Verbose output, including explanations for decisions about flags.")
 @click.option("--redact", is_flag=True, help="Redact identifying information.")
 @click.option("--benchmark-fetch", is_flag=True, help="Benchmark the code that fetches external data.")
-def main(target, concise, generate_workflow, verbose, redact, benchmark_fetch):
+def main(target, concise, num_targets, issues, back, generate_workflow, verbose, redact, benchmark_fetch):
     """Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions.
 
     You can target a GitHub username, or a PR/issue number from the repository you're working in.
@@ -55,6 +55,12 @@ def main(target, concise, generate_workflow, verbose, redact, benchmark_fetch):
         gh_profiler.main()
         sys.exit()
 
+    # Check if we're processing a repo URL.
+    if "github.com" in target:
+        cli_config.url = target
+        _parse_repo_options(num_targets, issues, back)
+        gh_profiler.profile_url()
+
     # If the main argument is an integer, process the PR/issue number.
     # Otherwise, assume it's the username.
     try:
@@ -81,3 +87,9 @@ def _validate_command(target, concise, generate_workflow, verbose, redact, bench
     if target and generate_workflow:
         msg = "Please either include a target or --generate-workflow, but not both."
         sys.exit(msg)
+
+def _parse_repo_options(num_targets, issues, back):
+    """Get options relevant to targeting a repo URL."""
+    cli_config.num_targets = num_targets
+    cli_config.issues = issues
+    cli_config.back = back
