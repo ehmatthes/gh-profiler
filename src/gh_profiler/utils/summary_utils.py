@@ -34,6 +34,10 @@ def _get_concise_summary():
 
     This is one line for each main section: name, profile, pr activity, issue activity.
     """
+    if pdata.username == "ghost":
+        # This is GitHub's deleted user, and we don't need to do anything.
+        return f"🔴 The `ghost` account is GitHub's reference to a deleted user."
+        
     if pdata.redact:
         _redact_info()
     

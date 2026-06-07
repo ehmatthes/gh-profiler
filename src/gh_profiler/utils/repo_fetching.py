@@ -87,18 +87,29 @@ def _parse_prs(prs_obj):
     # and number.
     target_prs = []
     for pr_dict in prs_json["data"]["repository"]["pullRequests"]["nodes"]:
-        breakpoint()
+        # breakpoint()
         pr_data = PRData(
             pr_num=pr_dict["number"],
-            author=pr_dict["author"]["login"],
+            author=_get_author(pr_dict),
             title=pr_dict["title"],
             url=pr_dict["url"],
         )
         if cli_config.back:
             _add_pr_back_fields(pr_dict, pr_data)
         target_prs.append(pr_data)
-    breakpoint()
+    # breakpoint()
     return target_prs
+
+def _get_author(pr_dict):
+    """Get the author of the PR.
+    
+    When a user deletes their account, GitHub shows the author as `ghost`.
+    """
+    if pr_dict["author"] is None:
+        return "ghost"
+    else:
+        return pr_dict["author"]["login"]
+    
 
 
 def _add_pr_back_fields(pr_dict, pr_data):
