@@ -16,9 +16,9 @@ from .utils.cli_config import cli_config
 @click.argument("target", required=False)
 @click.version_option(package_name="gh-profiler")
 @click.option("--concise", is_flag=True, help="Show concise output; one flag per category.")
-@click.option("-n", "--num-targets", default=10, help="Preview: How many PRs or issues to review?")
-@click.option("--issues", is_flag=True, help="Profile contributors of issues rather than PRs.")
-@click.option("--back", is_flag=True, help="Look back over recently merged and closed PRs/issues.")
+@click.option("-n", "--num-targets", default=10, help="Preview: How many PRs to review?")
+# @click.option("--issues", is_flag=True, help="Profile contributors of issues rather than PRs.")
+@click.option("--back", is_flag=True, help="Look back over recently merged and closed PRs.")
 @click.option(
     "--generate-workflow",
     is_flag=True,
