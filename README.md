@@ -184,7 +184,7 @@ Fetching user profiles ..........
 ```
 
 > [!NOTE]
-> When using `--back` to look at merged and closed PRs, the output may differ from what you see on GitHub's PR tab in the corresponding repo. The gh API returns a different filtered set than what we see when we click "closed" on the PR tab in a browser.
+> When using `--back` to look at merged and closed PRs, the output may differ from what you see on GitHub's PR tab in the corresponding repo. The gh API returns a different filtered set than what we see when we click "closed" on the PR tab in a browser. The data you see for each PR should be accurate; if it's not, please open an issue.
 
 False positives
 ---
