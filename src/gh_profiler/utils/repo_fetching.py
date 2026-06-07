@@ -33,11 +33,11 @@ def get_data():
     ts_before = perf_counter()
     with ThreadPoolExecutor() as executor:
         # Make fetching calls.
-        reachable_future = executor.submit(_fetch_reachable)
+        # reachable_future = executor.submit(_fetch_reachable)
         prs_future = executor.submit(_fetch_prs)
 
         # When each call finishes, store the result.
-        reachable_str = reachable_future.result()
+        # reachable_str = reachable_future.result()
         prs_obj = prs_future.result()
 
     ts_after = perf_counter()
@@ -45,7 +45,7 @@ def get_data():
         print(f"Fetch data: {ts_after - ts_before:.2f} seconds")
 
     # Parse data. This should only happen after all data has been fetched.
-    _parse_reachable(reachable_str)
+    # _parse_reachable(reachable_str)
     target_prs = _parse_prs(prs_obj)
 
     return target_prs
@@ -93,7 +93,7 @@ def _parse_prs(prs_obj):
     for pr_dict in prs_json["data"]["repository"]["pullRequests"]["nodes"]:
         pr_data = PRData(
             pr_num=pr_dict["number"],
-            author=pr_dict["author"],
+            author=pr_dict["author"]["login"],
             title=pr_dict["title"],
             url=pr_dict["url"],
         )

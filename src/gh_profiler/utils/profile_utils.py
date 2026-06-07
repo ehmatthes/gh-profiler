@@ -109,7 +109,6 @@ def _fetch_profile_dict():
     """Fetch the profile information we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
     result = infra_utils.run_cmd(cmd)
-
     return result.stdout
 
 def _parse_profile_dict(profile_dict_str):

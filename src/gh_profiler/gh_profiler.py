@@ -11,7 +11,7 @@ from .utils import profile_utils
 from .utils import analysis_utils
 from .utils import workflow_utils
 from .utils import summary_utils
-from .utils import repo_fetching
+from .utils import repo_fetching, repo_analysis
 
 
 def main():
