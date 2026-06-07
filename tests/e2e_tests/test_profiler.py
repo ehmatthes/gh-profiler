@@ -146,7 +146,8 @@ def test_bulk_open_prs():
     assert len(matches) == 3
 
 
-def test_ghost_profile():
+@pytest.mark.parametrize("mode", ["", "--concise"])
+def test_ghost_profile(mode):
     """Test a run against the `ghost` user.
 
     GitHub has a special user account named `ghost` that stands in for
@@ -156,7 +157,7 @@ def test_ghost_profile():
 
     See: https://github.com/ghost
     """
-    cmd = "uv run gh-profiler ghost"
+    cmd = f"uv run gh-profiler ghost {mode}"
     output = run_with_timeout(cmd)
 
     assert output.strip() == f"🔴 The `ghost` account is GitHub's reference to a deleted user."
