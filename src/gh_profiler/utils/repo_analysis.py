@@ -89,7 +89,7 @@ def show_table(target_prs):
             else:
                 merged_flag = flags.red_flag
         
-        profile_flags = " ".join([pr.profile_flag, pr.pr_flag, pr.issue_flag])
+        profile_flags = "".join([pr.profile_flag, pr.pr_flag, pr.issue_flag])
 
         if cli_config.back:
             table.add_row(str(pr.pr_num), merged_flag, pr.author, profile_flags, pr.url)
