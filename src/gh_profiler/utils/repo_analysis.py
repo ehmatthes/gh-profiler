@@ -12,23 +12,39 @@ def process_data(target_prs):
     Evaluates results.
     """
     for pr in target_prs:
-        # Get concise gh-profiler output for author.
+        # Get concise gh-profiler output for PR author.
         pdata.username = pr.author
-        # breakpoint()
         profile_utils.get_data()
         analysis_utils.process_data()
-        summary = summary_utils._get_concise_summary()
-        summary = _indent_summary(summary)
+        author_summary = summary_utils._get_concise_summary()
+        pr_summary = _get_pr_summary(pr, author_summary)
 
-        print(f"PR {pr.pr_num}: {pr.title}")
-        print(f"  {pr.url}")
-        print("")
-        print(summary)
-        print("\n")
+        print(pr_summary)
+
+        
 
 
-def _indent_summary(summary):
-    """Indent the summary, to fit in this larger set of output."""
+def _adjust_author_summary(summary):
+    """Modify standard concise output to fit bulk reporting needs.
+
+    - Remove closing line about running a detailed report.
+    - Indent lines
+    """
     lines = summary.splitlines()
+    # Remove "For a more detailed report..."
+    lines = lines[:-2]
+    # Indent lines.
     lines = [f"  {l}" for l in lines]
+
     return "\n".join(lines)
+
+def _get_pr_summary(pr, author_summary):
+    """Get the summary for an individual PR."""
+    author_summary = _adjust_author_summary(author_summary)
+
+    pr_summary = f"PR {pr.pr_num}: {pr.title}"
+    pr_summary += f"\n  {pr.url}\n\n"
+    pr_summary += author_summary
+    pr_summary += "\n"
+
+    return pr_summary
