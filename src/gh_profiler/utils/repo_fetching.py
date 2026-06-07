@@ -32,10 +32,10 @@ def get_data():
     ts_before = perf_counter()
     with ThreadPoolExecutor() as executor:
         # Make fetching calls.
-        status_reachable = executor.submit(_fetch_reachable)
+        reachable_future = executor.submit(_fetch_reachable)
 
         # When each call finishes, store the result.
-        reachable_str = status_future.result()
+        reachable_str = reachable_future.result()
 
     ts_after = perf_counter()
     if pdata.benchmark_fetch:
@@ -60,6 +60,6 @@ def _parse_reachable(reachable_str):
     if reachable_str == 200:
         return
 
-    msg = f"URL returned status code {reachable_str}"
-    msg += "  Is the URL correct?"
+    msg = f"URL returned status code {reachable_str}."
+    msg += "\n  Is the URL correct?"
     sys.exit(msg)

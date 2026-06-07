@@ -11,6 +11,7 @@ from .utils import profile_utils
 from .utils import analysis_utils
 from .utils import workflow_utils
 from .utils import summary_utils
+from .utils import repo_fetching
 
 
 def main():
@@ -28,6 +29,9 @@ def main():
 
     # Summarize findings.
     summary_utils.show_summary()
+
+    # Don't return to cli.
+    sys.exit()
 
 def profile_url():
     """Profile contributors of PRs or issues on a specific repo.
@@ -47,4 +51,9 @@ def profile_url():
     """
     # Make sure gh is available.
     profile_utils.ensure_gh()
-    
+
+    # Get and analyze all the data we'll need.
+    repo_fetching.get_data()
+
+    # Don't return to cli.
+    sys.exit()
