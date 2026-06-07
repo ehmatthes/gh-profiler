@@ -42,6 +42,11 @@ def main(target, concise, num_targets, back, generate_workflow, verbose, redact,
     $ gh-profiler ehmatthes
     $ python -m gh_profiler ehmatthes
       ...
+
+    \b
+    Bulk concise profiling of most recently opened PRs:
+    $ gh-profiler <repo-url>    # 10 most recent PRs
+    $ gh-profiler <repo-url> -n 3
     """
     _validate_command(target, concise, generate_workflow, verbose, redact, benchmark_fetch)
 
