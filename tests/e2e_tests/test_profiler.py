@@ -5,7 +5,6 @@ Makes an actual gh-profiler call. Currently calls against my own user account
 to use.
 """
 
-import sys
 import subprocess
 
 import pytest

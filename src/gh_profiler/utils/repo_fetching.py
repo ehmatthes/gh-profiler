@@ -3,12 +3,8 @@
 import json
 import sys
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime as dt
-from datetime import timedelta
-from datetime import timezone as tz
 from textwrap import dedent
 from time import perf_counter
-from collections import Counter
 
 from . import infra_utils
 from .profile_data import profile_data as pdata

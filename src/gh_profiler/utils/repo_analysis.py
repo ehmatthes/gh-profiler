@@ -2,7 +2,6 @@
 
 from .profile_data import profile_data as pdata
 from . import profile_utils, analysis_utils, summary_utils
-from . import flags
 
 
 def process_data(target_prs):

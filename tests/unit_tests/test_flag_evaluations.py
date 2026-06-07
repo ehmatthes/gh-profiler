@@ -4,7 +4,6 @@ from gh_profiler.utils import analysis_utils
 from gh_profiler.utils import summary_utils
 from gh_profiler.utils.profile_data import profile_data as pdata
 from gh_profiler.utils import flags
-from reference_files import reference_summaries
 
 
 
