@@ -53,7 +53,8 @@ def profile_url():
     profile_utils.ensure_gh()
 
     # Get and analyze all the data we'll need.
-    repo_fetching.get_data()
+    target_prs = repo_fetching.get_data()
+    repo_analysis.process_data(target_prs)
 
     # Don't return to cli.
     sys.exit()

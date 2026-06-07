@@ -46,7 +46,9 @@ def get_data():
 
     # Parse data. This should only happen after all data has been fetched.
     _parse_reachable(reachable_str)
-    _parse_prs(prs_obj)
+    target_prs = _parse_prs(prs_obj)
+
+    return target_prs
 
 
 # --- Helper functions ---
@@ -90,13 +92,14 @@ def _parse_prs(prs_obj):
     target_prs = []
     for pr_dict in prs_json["data"]["repository"]["pullRequests"]["nodes"]:
         pr_data = PRData(
-            pr_id=pr_dict["id"],
+            pr_num=pr_dict["number"],
             author=pr_dict["author"],
             title=pr_dict["title"],
             url=pr_dict["url"],
         )
         target_prs.append(pr_data)
-    breakpoint()
+
+    return target_prs
 
 
 def _get_pr_query():
@@ -111,7 +114,6 @@ def _get_pr_query():
             orderBy: {{field: CREATED_AT, direction: DESC}}
             ) {{
             nodes {{
-                id
                 number
                 title
                 url
