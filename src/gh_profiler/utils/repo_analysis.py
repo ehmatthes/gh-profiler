@@ -2,6 +2,8 @@
 
 from .profile_data import profile_data as pdata
 from . import profile_utils, analysis_utils, summary_utils
+from . import flags
+from .cli_config import cli_config
 
 
 def process_data(target_prs):
@@ -47,8 +49,27 @@ def _get_pr_summary(pr, author_summary):
     author_summary = _adjust_author_summary(author_summary)
 
     pr_summary = f"PR {pr.pr_num}: {pr.title}"
-    pr_summary += f"\n{pr.url}\n\n"
+    pr_summary += _get_status_line(pr)
     pr_summary += author_summary
     pr_summary += "\n\n"
 
     return pr_summary
+
+def _get_status_line(pr):
+    """Get the line that shows the status of the PR.
+
+    For open PRs, no symbol.
+    For closed PRs, flag and state.
+    For all, this is where the PR URL goes as well.
+    """
+    # breakpoint()
+    if not cli_config.back:
+        return f"\n{pr.url}\n\n"
+    
+    if pr.closed_state == "MERGED":
+        status = f"{flags.merged_flag} Merged."
+    else:
+        status = f"{flags.red_flag} Closed."
+
+    return f"\n{status} {pr.url}\n\n"
+    
