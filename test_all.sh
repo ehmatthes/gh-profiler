@@ -8,7 +8,7 @@
 uv run pytest
 
 # E2e tests.
-uv run pytest tests/e2e_tests
+uv run pytest tests/e2e_tests -n auto
 
 # Tests against actual users.
-uv run pytest developer_resources/test_actual_users.py -s
+uv run pytest developer_resources/test_actual_users.py -s -n auto
