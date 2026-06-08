@@ -79,7 +79,7 @@ def show_table(target_prs):
     if cli_config.back:
         table.add_column("Merged?", justify="center")
     table.add_column("gh-profiler")
-    table.add_column("Author")
+    table.add_column("Author", no_wrap=True)
     table.add_column("PR link", no_wrap=True)
 
     for pr in target_prs:
