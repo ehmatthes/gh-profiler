@@ -145,8 +145,10 @@ def _get_pr_query():
 
     if cli_config.back:
         # Get 5x as many PRs as requested. This query is sorted by updatedAt,
-        # We want to show by closedAt.
+        # We want to show by closedAt. Make sure we don't request more than
+        # 100 records.
         num_prs = 5 * cli_config.num_targets
+        num_prs = min(num_prs, 100)
     else:
         # When looking at open PRs, no need to modify count.
         num_prs = cli_config.num_targets
