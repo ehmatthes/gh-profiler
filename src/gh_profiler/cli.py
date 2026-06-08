@@ -55,7 +55,7 @@ def main(target, concise, num_targets, back, table_only, generate_workflow, verb
     $ gh-profiler <repo-url> --back
     $ gh-profiler <repo-url> --back -n 20 --table-only
     """
-    _validate_command(target, concise, generate_workflow, verbose, redact, benchmark_fetch)
+    _validate_command(target, concise, num_targets, generate_workflow, verbose, redact, benchmark_fetch)
 
     # Parse CLI options.
     pdata.concise = concise
@@ -89,7 +89,7 @@ def main(target, concise, num_targets, back, table_only, generate_workflow, verb
         cli_utils.process_pr_issue_num(pr_issue_num)
         gh_profiler.main()
 
-def _validate_command(target, concise, generate_workflow, verbose, redact, benchmark_fetch):
+def _validate_command(target, concise, num_targets, generate_workflow, verbose, redact, benchmark_fetch):
     """Validate arguments that were passed in the CLI call."""
 
     # If target is not passed, --generate-workflow must be passed.
@@ -101,6 +101,11 @@ def _validate_command(target, concise, generate_workflow, verbose, redact, bench
     # If target is passed, --generate-workflow can not be passed.
     if target and generate_workflow:
         msg = "Please either include a target or --generate-workflow, but not both."
+        sys.exit(msg)
+    
+    # For any bulk request, you can request up to 100 records.
+    if num_targets > 100:
+        msg = "You can request up to 100 targets. (-n, --num-targets)"
         sys.exit(msg)
 
 def _parse_repo_options(num_targets, back, redact, table_only):
