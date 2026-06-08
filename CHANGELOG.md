@@ -8,7 +8,18 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
-### Unreleased
+### 0.8.1
+
+#### External changes
+
+- Validates `--num-targets` `-n` is no greater than 100.
+- Don't wrap author column in summary table for bulk reporting.
+
+#### Internal changes
+
+- When looking --back, allow n up to 100 but don't request more than 100 records.
+
+### 0.8.0
 
 #### External changes
 
