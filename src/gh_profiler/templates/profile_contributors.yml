@@ -30,14 +30,17 @@ jobs:
             echo "number=${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Run gh-profiler
+      - name: Run gh-profiler (=== Expand this to see full profile output ===)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Running gh-profiler for: '${{ steps.meta.outputs.login }}'"
           uvx gh-profiler@latest ${{ steps.meta.outputs.login }} --concise > profiler.txt
-          echo "=== gh-profiler output ==="
-          cat profiler.txt
+          echo
+          echo "======================== Full profile ========================="
+          echo
+          uvx gh-profiler@latest ${{ steps.meta.outputs.login }}
+          echo
+          echo "==============================================================="
 
       - name: Comment on issue or PR
         env:
@@ -49,6 +52,8 @@ jobs:
             echo '```text'
             cat profiler.txt
             echo '```'
+            echo
+            echo '<a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.check_run_id }}">Full profile</a>'
           } > body.txt
 
           jq -Rs '{body: .}' body.txt > payload.json
