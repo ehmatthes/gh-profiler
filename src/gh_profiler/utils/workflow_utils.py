@@ -74,7 +74,7 @@ def _confirm_write_workflow(path_workflow, workflow_choice):
     else:
         msg = "This will generate a GitHub action that will automatically run gh-profiler"
         msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
-        msg += "\noutput will be written to the Actions log. A link to the Actions log
+        msg += "\noutput will be written to the Actions log. A link to the Actions log"
         msg += "\nwill be written as a comment on the issue or PR."
 
     msg += "\n\nThe workflow will be written at the following location:"
