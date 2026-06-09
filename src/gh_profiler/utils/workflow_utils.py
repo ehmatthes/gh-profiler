@@ -7,10 +7,37 @@ import importlib.resources
 
 def generate_workflow():
     """Write a profile_contributors.yml workflow file to the user's repo."""
+    workflow_choice = _get_workflow_choice()
+
     path = _get_workflow_path()
-    _confirm_write_workflow(path)
-    _write_workflow(path)
+    _confirm_write_workflow(path, workflow_choice)
+    _write_workflow(path, workflow_choice)
     _show_closing_message(path)
+
+def _get_workflow_choice():
+    """Prompt the user for the kind of workflow they'd like to generate.
+
+    They can choose to write profile output as a comment on PRs and issues, 
+    or just write a link to the Actions log that contains the profile output.
+    """
+    msg = "Would you like to write the concise profile output as a comment,"
+    msg += "\nor just write a link to the Actions log containing the profile output?"
+    msg += "\n\n1) Write concise profile output as a comment."
+    msg += "\n2) Only write the link to the Actions log."
+
+    response = ""
+    while response not in ("1", "2"):
+        response = click.prompt(msg, default="1")
+
+        if response not in ("1", "2"):
+            msg_invalid = "\nPlease enter 1 or 2."
+            click.echo(msg_invalid)
+
+    if response == "1":
+        return "concise_profile"
+    else:
+        return "link_only"
+
 
 def _get_workflow_path():
     """Determine the path we'd like to write the workflow to."""
@@ -38,11 +65,18 @@ def _get_workflow_path():
     # No conflicts found. Note that .github/workflows/ may not exist.
     return path_pc_workflow
 
-def _confirm_write_workflow(path_workflow):
+def _confirm_write_workflow(path_workflow, workflow_choice):
     """Confirm the user wants the file written to the calculated location."""
-    msg = "This will generate a GitHub action that will automatically run gh-profiler"
-    msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
-    msg += "\noutput will be written as a comment on the issue or PR."
+    if workflow_choice == "concise_profile":
+        msg = "This will generate a GitHub action that will automatically run gh-profiler"
+        msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
+        msg += "\noutput will be written as a comment on the issue or PR."
+    else:
+        msg = "This will generate a GitHub action that will automatically run gh-profiler"
+        msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
+        msg += "\noutput will be written to the Actions log. A link to the Actions log
+        msg += "\nwill be written as a comment on the issue or PR."
+
     msg += "\n\nThe workflow will be written at the following location:"
     msg += f"\n  {path_workflow.as_posix()}"
     msg += "\n\nAre you sure you want to do this? (y/n) "
@@ -55,11 +89,14 @@ def _confirm_write_workflow(path_workflow):
         elif confirmed.lower() in ("n", "no"):
             sys.exit()
 
-def _write_workflow(path_workflow):
+def _write_workflow(path_workflow, workflow_choice):
     """Write the workflow file to the correct location."""
     # Read source file.
     path_templates = importlib.resources.files("gh_profiler") / "templates"
-    path_src = path_templates / "profile_contributors.yml"
+    if workflow_choice == "concise_profile":
+        path_src = path_templates / "profile_contributors.yml"
+    else:
+        path_src = path_templates / "profile_contributors_link_only.yml"
     contents = path_src.read_text()
 
     # Make .github/workflows dirs as needed.
