@@ -4,6 +4,8 @@ from pathlib import Path
 import sys
 import importlib.resources
 
+import click
+
 
 def generate_workflow():
     """Write a profile_contributors.yml workflow file to the user's repo."""
@@ -20,14 +22,15 @@ def _get_workflow_choice():
     They can choose to write profile output as a comment on PRs and issues, 
     or just write a link to the Actions log that contains the profile output.
     """
-    msg = "Would you like to write the concise profile output as a comment,"
+    msg = "Would you like to write the concise profile output as a comment on each new PR/issue,"
     msg += "\nor just write a link to the Actions log containing the profile output?"
     msg += "\n\n1) Write concise profile output as a comment."
     msg += "\n2) Only write the link to the Actions log."
+    msg += "\n\nWorkflow type"
 
     response = ""
     while response not in ("1", "2"):
-        response = click.prompt(msg, default="1")
+        response = click.prompt(msg)
 
         if response not in ("1", "2"):
             msg_invalid = "\nPlease enter 1 or 2."
@@ -68,11 +71,11 @@ def _get_workflow_path():
 def _confirm_write_workflow(path_workflow, workflow_choice):
     """Confirm the user wants the file written to the calculated location."""
     if workflow_choice == "concise_profile":
-        msg = "This will generate a GitHub action that will automatically run gh-profiler"
+        msg = "\n\nThis will generate a GitHub action that will automatically run gh-profiler"
         msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
         msg += "\noutput will be written as a comment on the issue or PR."
     else:
-        msg = "This will generate a GitHub action that will automatically run gh-profiler"
+        msg = "\n\nThis will generate a GitHub action that will automatically run gh-profiler"
         msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
         msg += "\noutput will be written to the Actions log. A link to the Actions log"
         msg += "\nwill be written as a comment on the issue or PR."
