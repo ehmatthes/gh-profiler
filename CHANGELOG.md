@@ -8,6 +8,18 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.8.3
+
+#### External changes
+
+- Workflow for this repo writes full output in Actions log. PR/issue comments include link to the full profile.
+- When running `--generate-workflow`, user gets the choice of an action that writes concise output as a comment, or only writes a link to the profile output in the Actions log.
+- [Demo repo](https://github.com/ehmatthes/workflow_sandbox), where you can open an issue and see both workflows run.
+
+#### Internal changes
+
+- NA
+
 ### 0.8.2
 
 #### External changes
