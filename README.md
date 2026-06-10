@@ -196,32 +196,28 @@ If you see an example of red or yellow flags being raised with no clear indicati
 GitHub Actions
 ---
 
-gh-profiler can write a GitHub Action that will automatically run `gh-profiler --concise` any time a new PR or issue is opened on your project. The output will be written as a comment on the new PR or issue.
+gh-profiler can write a GitHub Action that will automatically run `gh-profiler --concise` any time a new PR or issue is opened on your project. You can choose to have the profile output written as a comment on the new PR or issue, or you can have the workflow only write a link to the Action log containing the profile output.
 
-The `--generate-workflow` flag does this by writing a `profile_contributors.yml` file to `.github/workflows`:
+See a [working demo](https://github.com/ehmatthes/workflow_sandbox), where you can open a new issue and see both kinds of output.
+
+The `--generate-workflow` option asks which kind of workflow you'd like to use, and then writes a `profile_contributors.yml` file to `.github/workflows`:
 
 ```txt
 $ uvx gh-profiler --generate-workflow
-This will generate a GitHub action that will automatically run gh-profiler
-whenever someone opens a new issue or PR in your repository. The profile
-output will be written as a comment on the issue or PR.
+Would you like to write the concise profile output as a comment on each new PR/issue,
+or just write a link to the Actions log containing the profile output?
 
-The workflow will be written at the following location:
-  /.../.github/workflows/profile_contributors.yml
+1) Write concise profile output as a comment.
+2) Only write the link to the Actions log.
 
-Are you sure you want to do this? (y/n) y
-
-The new workflow file was written:
-  /.../.github/workflows/profile_contributors.yml
-
-To start seeing profiles when new issues and PRs are opened:
-- Commit the workflow file to your main branch.
-- Push your main branch to GitHub.
+Workflow type: 
   ...
 ```
 
 > [!NOTE]
-> You don't need Python if you want to run gh-profiler each time a PR or issue is opened in a repository. You can copy the [profiler_contributors.yml](https://github.com/ehmatthes/gh-profiler/blob/main/src/gh_profiler/templates/profile_contributors.yml) file and paste it into your own `.github/workflows/` directory. From that point forward, you'll see a comment on each new PR and issue with a concise summary of the user that opened the PR or issue. [Example](https://github.com/ehmatthes/gh-profiler/issues/67#issuecomment-4492670239)
+> You don't need Python if you want to run gh-profiler each time a PR or issue is opened in a repository. You can copy the [profiler_contributors.yml](https://github.com/ehmatthes/gh-profiler/blob/main/src/gh_profiler/templates/profile_contributors.yml) file or the [profiler_contributors_link_only.yml](https://github.com/ehmatthes/gh-profiler/blob/main/src/gh_profiler/templates/profile_contributors_link_only.yml) file and paste it into your own `.github/workflows/` directory.
+> 
+> From that point forward, you'll see a comment on each new PR and issue with a concise summary of the user that opened the PR or issue or a link to the Actions log containing the profile output. [Example](https://github.com/ehmatthes/gh-profiler/issues/67#issuecomment-4492670239)
 
 Talks & discussion
 ---
