@@ -17,6 +17,8 @@ These initial releases have usable behavior, but may have some rough edges for s
 #### Internal changes
 
 - Integration test that runs zizmor against generated workflow.
+- Generated workflows use `$GITHUB` env vars.
+- Generated workflows pass zizmor checks.
 
 ### 0.8.3
 
