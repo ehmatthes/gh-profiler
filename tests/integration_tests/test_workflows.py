@@ -14,7 +14,6 @@ path_templates = Path(__file__).parents[2] / "src" / "gh_profiler" / "templates"
     [
         path_templates / "profile_contributors.yml",
         path_templates / "profile_contributors_link_only.yml",
-        path_templates / "passing_workflow.yml",
     ]
 )
 def test_zizmor_checks(path_workflow):

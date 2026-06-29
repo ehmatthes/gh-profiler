@@ -8,6 +8,16 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### Unreleased
+
+#### External changes
+
+- NA
+
+#### Internal changes
+
+- Integration test that runs zizmor against generated workflow.
+
 ### 0.8.3
 
 #### External changes
