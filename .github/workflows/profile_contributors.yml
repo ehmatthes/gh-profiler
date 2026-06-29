@@ -5,7 +5,9 @@ name: Profile contributors
 on:
   issues:
     types: [opened]
-  pull_request_target:
+  # This workflow never checks out or executes PR code; it only reads the
+  # author login to post a comment, so pull_request_target is safe here.
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
     types: [opened]
 
 permissions:
@@ -18,33 +20,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6.8.0
       - name: Determine target login and issue number
         id: meta
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_USER_LOGIN: ${{ github.event.issue.user.login }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          PR_USER_LOGIN: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          if [ "${{ github.event_name }}" = "issues" ]; then
-            echo "login=${{ github.event.issue.user.login }}" >> "$GITHUB_OUTPUT"
-            echo "number=${{ github.event.issue.number }}" >> "$GITHUB_OUTPUT"
+          if [ "$EVENT_NAME" = "issues" ]; then
+            echo "login=$ISSUE_USER_LOGIN" >> "$GITHUB_OUTPUT"
+            echo "number=$ISSUE_NUMBER" >> "$GITHUB_OUTPUT"
           else
-            echo "login=${{ github.event.pull_request.user.login }}" >> "$GITHUB_OUTPUT"
-            echo "number=${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
+            echo "login=$PR_USER_LOGIN" >> "$GITHUB_OUTPUT"
+            echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run gh-profiler (=== Expand this to see full profile output ===)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LOGIN: ${{ steps.meta.outputs.login }}
         run: |
-          uvx gh-profiler@latest ${{ steps.meta.outputs.login }} --concise > profiler.txt
+          uvx gh-profiler@latest "$LOGIN" --concise > profiler.txt
           echo
           echo "======================== Full profile ========================="
           echo
-          uvx gh-profiler@latest ${{ steps.meta.outputs.login }}
+          uvx gh-profiler@latest "$LOGIN"
           echo
           echo "==============================================================="
 
       - name: Comment on issue or PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SERVER_URL: ${{ github.server_url }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          CHECK_RUN_ID: ${{ job.check_run_id }}
+          NUMBER: ${{ steps.meta.outputs.number }}
         run: |
           {
             echo "Profile summary:"
@@ -53,11 +67,11 @@ jobs:
             cat profiler.txt
             echo '```'
             echo
-            echo '<a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.check_run_id }}">Full profile</a>'
+            echo "<a href=\"$SERVER_URL/$REPOSITORY/actions/runs/$RUN_ID/job/$CHECK_RUN_ID\">Full profile</a>"
           } > body.txt
 
           jq -Rs '{body: .}' body.txt > payload.json
 
           gh api \
-            repos/${{ github.repository }}/issues/${{ steps.meta.outputs.number }}/comments \
+            "repos/$REPOSITORY/issues/$NUMBER/comments" \
             --input payload.json
