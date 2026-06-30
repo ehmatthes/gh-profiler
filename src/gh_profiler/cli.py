@@ -12,7 +12,7 @@ from .utils.repo_data import repo_data
 from .utils.cli_config import cli_config
 
 
-@click.command()
+@click.command(context_settings={"help_option_names": ["-h", "--help"]})
 @click.argument("target", required=False)
 @click.version_option(package_name="gh-profiler")
 @click.option("--concise", is_flag=True, help="Show concise output; one flag per category.")
