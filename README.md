@@ -22,6 +22,8 @@ GitHub user: <redacted>
 For a more detailed report, run `gh-profiler <redacted>`.
 ```
 
+You can pass either a bare username (`<redacted>`) or a full profile URL (`https://github.com/<redacted>`) as the target.
+
 This is the concise output, which gives you a quick sense of whether the user has any recent activity that indicates problematic open source behavior.
 
 The full output gives you much more specific information:

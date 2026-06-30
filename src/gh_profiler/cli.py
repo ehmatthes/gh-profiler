@@ -31,11 +31,12 @@ from .utils.cli_config import cli_config
 def main(target, concise, num_targets, back, table_only, generate_workflow, verbose, redact, benchmark_fetch):
     """Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions.
 
-    You can target a GitHub username, or a PR/issue number from the repository you're working in.
+    You can target a GitHub username, a profile URL, or a PR/issue number from the repository you're working in.
 
     \b
     Usage as a tool:
     $ uvx gh-profiler ehmatthes
+    $ uvx gh-profiler https://github.com/ehmatthes
     $ uvx gh-profiler 8
 
     \b
@@ -69,8 +70,15 @@ def main(target, concise, num_targets, back, table_only, generate_workflow, verb
         gh_profiler.main()
         sys.exit()
 
-    # Check if we're processing a repo URL.
+    # Check if we're processing a GitHub URL.
     if "github.com" in target:
+        # A profile URL (https://github.com/octocat) has only an owner and
+        # no repo, so treat it as a username target.
+        username = _parse_profile_url(target)
+        if username:
+            pdata.username = username
+            gh_profiler.main()
+
         cli_config.url = target
         _parse_repo_options(num_targets, back, redact, table_only)
         _parse_repo_info(target)
@@ -107,6 +115,22 @@ def _validate_command(target, concise, num_targets, generate_workflow, verbose, 
     if num_targets > 100:
         msg = "You can request up to 100 targets. (-n, --num-targets)"
         sys.exit(msg)
+
+
+def _parse_profile_url(target):
+    """Return the username if target is a profile URL, else None.
+
+    A profile URL (https://github.com/octocat) has only an owner and no
+    repo name. A repo URL (https://github.com/octocat/Hello-World) has
+    both, in which case we return None.
+    """
+    parsed_url = urlparse(target)
+    # Drop empty segments from leading/trailing slashes.
+    url_parts = [part for part in parsed_url.path.split("/") if part]
+    if len(url_parts) == 1:
+        return url_parts[0]
+    return None
+
 
 def _parse_repo_options(num_targets, back, redact, table_only):
     """Get options relevant to targeting a repo URL."""
