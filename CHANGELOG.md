@@ -8,17 +8,19 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
-### Unreleased
+### 0.8.4
 
 #### External changes
 
-- NA
+- Handles GitHub profile URLs as well as simple usernames.
+- Adds `-h` arg for `--help`.
 
 #### Internal changes
 
 - Integration test that runs zizmor against generated workflow.
 - Generated workflows use `$GITHUB` env vars.
 - Generated workflows pass zizmor checks.
+- This repo uses updated profiling workflow.
 - Add zizmor as a dev dependency.
 
 ### 0.8.3
