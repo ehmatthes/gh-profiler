@@ -53,8 +53,8 @@ def _get_workflow_path():
 
     # If the workflow already exists, ask whether to overwrite the existing file.
     if path_pc_workflow.exists():
-        msg = f"The file {path_pc_workflow.as_posix()} already exists."
-        msg += "\nDo you want to replace the existing file? (y/n) "
+        msg = f"\nThe file {path_pc_workflow.as_posix()} already exists."
+        msg += "\nDo you want to replace the existing file? (y/n)"
 
         response = ""
         while response.lower() not in ("y", "yes", "n", "no"):
@@ -68,10 +68,9 @@ def _get_workflow_path():
             msg = "Okay, replacing existing workflow file."
             click.echo(msg)
         else:
-            msg = "Leaving existing file in place."
-            msg += "\n  You can only have one gh-profiler workflow active at a time."
-            msg += "\n  If you think there's a reason to have multiple workflows, please open an issue"
-            msg += "\n  on the gh-profiler repo and share your use case."
+            msg = "\nLeaving existing file in place. A project can only have one gh-profiler workflow "
+            msg += "\nactive at a time. If you think there's a reason to have multiple workflows, "
+            msg += "\nplease open an issue on the gh-profiler repo and share your use case."
             click.echo(msg)
             sys.exit()
 
