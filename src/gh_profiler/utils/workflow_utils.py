@@ -16,6 +16,9 @@ def generate_workflow():
     # link to the Actions log containing the profile output.
     workflow_choice = _get_workflow_choice()
 
+    # Confirm auto-deletion of profile output.
+    auto_delete = _get_deletion_choice()
+
     # Confirm they want to write this workflow.
     _confirm_write_workflow(path, workflow_choice)
 
@@ -48,6 +51,40 @@ def _get_workflow_choice():
     else:
         return "link_only"
 
+def _get_deletion_choice():
+    """Confirm that it's okay to delete profile output after an issue or PR is closed.
+
+    The recommended behavior is to have all profile output auto-delete after each
+    issue or PR is closed. This balances the needs of maintainers to see profile output
+    when evaluating issues and PRs, while respecting the long-term privacy of users.
+    There's no need to have snapshots of a user's profile lingering for years in comments,
+    and months in actions logs.
+    """
+    msg = "\nWe recommend that all profile output be configured to auto-delete when each "
+    msg += "\nissue or PR is closed. This keeps profile output available while maintainers "
+    msg += "\nare evaluating contributions, and avoids retaining personal information once it's "
+    msg += "\nno longer needed."
+    msg += "\n\nWould you like profile output to be automatically deleted once each issue or PR is closed?"
+    msg += "\n  D: DELETE profile output after each issue or PR is closed."
+    msg += "\n  R: RETAIN profile output even after each issue or PR is closed."
+    msg += "\n  D/R"
+
+    response = ""
+    while response.lower() not in ("d", "r"):
+        response = click.prompt(msg)
+
+        if response.lower() not in ("d", "r"):
+            msg_invalid = "\nPlease enter 'D' or 'R'."
+            click.echo(msg_invalid)
+
+    if response.lower() == "d":
+        msg = "Okay, the workflow will delete profile information when each issue or PR is closed."
+        click.echo(msg)
+        return True
+    else:
+        msg = "Okay, the workflow will not delete profile information when each issue or PR is closed."
+        click.echo(msg)
+        return False
 
 def _get_workflow_path():
     """Determine the path we'd like to write the workflow to."""
