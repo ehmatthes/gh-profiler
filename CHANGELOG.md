@@ -8,6 +8,18 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### 0.9.0
+
+#### External changes
+
+- Generates workflows that automatically delete profile output after the related issue or PR is closed.
+- When generating a workflow, the user can choose to replace an existing *profile_contributors.yml* file.
+- Update this repo's profiler workflow to use the auto-deleting version.
+
+#### Internal changes
+
+- NA
+
 ### 0.8.4
 
 #### External changes

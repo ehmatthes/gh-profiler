@@ -1,22 +1,24 @@
 # Run gh-profiler against the author of each new issue and PR.
+# Delete the profile output when the issue or PR is closed.
 
 name: Profile contributors
 
 on:
   issues:
-    types: [opened]
+    types: [opened, closed]
   # This workflow never checks out or executes PR code; it only reads the
   # author login to post a comment, so pull_request_target is safe here.
   pull_request_target: # zizmor: ignore[dangerous-triggers]
-    types: [opened]
-
-permissions:
-  contents: read
-  issues: write
-  pull-requests: write
+    types: [opened, closed]
 
 jobs:
   profile-author:
+    if: github.event.action == 'opened'
+
+    permissions:
+      issues: write
+      pull-requests: write
+
     runs-on: ubuntu-latest
 
     steps:
@@ -29,13 +31,16 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           PR_USER_LOGIN: ${{ github.event.pull_request.user.login }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          
         run: |
           if [ "$EVENT_NAME" = "issues" ]; then
             echo "login=$ISSUE_USER_LOGIN" >> "$GITHUB_OUTPUT"
             echo "number=$ISSUE_NUMBER" >> "$GITHUB_OUTPUT"
+            echo "issue_pr=issue" >> "$GITHUB_OUTPUT"
           else
             echo "login=$PR_USER_LOGIN" >> "$GITHUB_OUTPUT"
             echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+            echo "issue_pr=PR" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run gh-profiler (=== Expand this to see full profile output ===)
@@ -66,9 +71,13 @@ jobs:
           RUN_ID: ${{ github.run_id }}
           CHECK_RUN_ID: ${{ job.check_run_id }}
           NUMBER: ${{ steps.meta.outputs.number }}
+          ISSUE_PR: ${{ steps.meta.outputs.issue_pr }}
         run: |
           {
+            echo "<!-- gh-profiler:profile-link run-id=$RUN_ID -->"
             echo "<a href=\"$SERVER_URL/$REPOSITORY/actions/runs/$RUN_ID/job/$CHECK_RUN_ID\">Contributor profile</a>"
+            echo
+            echo "(This comment and the linked profile output will auto-delete when this $ISSUE_PR is closed.)"
           } > body.txt
 
           jq -Rs '{body: .}' body.txt > payload.json
@@ -76,3 +85,52 @@ jobs:
           gh api \
             "repos/$REPOSITORY/issues/$NUMBER/comments" \
             --input payload.json
+
+  delete-profile:
+    if: github.event.action == 'closed'
+
+    permissions:
+      actions: write
+      issues: write
+      pull-requests: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Determine issue or PR number
+        id: meta
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          if [ "$EVENT_NAME" = "issues" ]; then
+            echo "number=$ISSUE_NUMBER" >> "$GITHUB_OUTPUT"
+          else
+            echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Delete profile comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ steps.meta.outputs.number }}
+        run: |
+          gh api --paginate \
+            "repos/$REPOSITORY/issues/$NUMBER/comments" \
+            --jq '
+              .[]
+              | select(.user.login == "github-actions[bot]")
+              | select(.body | startswith("<!-- gh-profiler:profile-link run-id="))
+              | [.id, (.body | capture("gh-profiler:profile-link run-id=(?<id>[0-9]+)").id)]
+              | @tsv
+            ' |
+          while IFS=$'\t' read -r comment_id run_id; do
+            echo "Deleting logs from workflow run $run_id."
+            gh api --method DELETE \
+              "repos/$REPOSITORY/actions/runs/$run_id/logs"
+
+            echo "Deleting profile comment $comment_id."
+            gh api --method DELETE \
+              "repos/$REPOSITORY/issues/comments/$comment_id"
+          done

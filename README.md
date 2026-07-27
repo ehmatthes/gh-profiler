@@ -200,7 +200,9 @@ GitHub Actions
 
 gh-profiler can write a GitHub Action that will automatically run `gh-profiler --concise` any time a new PR or issue is opened on your project. You can choose to have the profile output written as a comment on the new PR or issue, or you can have the workflow only write a link to the Action log containing the profile output.
 
-See a [working demo](https://github.com/ehmatthes/workflow_sandbox), where you can open a new issue and see both kinds of output.
+These comments, and the profile output that's written to the Actions log, are deleted automatically when the issue or PR is closed. This keeps the profile information visible while maintainers are evaluating new contributions, but ensures that the profiling information is not retained any longer than it's needed.
+
+If you want to see this in action, visit the [working demo](https://github.com/ehmatthes/workflow_sandbox). You can open a new issue, and after a moment you should see a concise profile of your recent activity. You'll see a link to the full profile information in the Actions log. When you close the issue, you should see the profile comment disappear after a moment. The Actions log will retain a record of the profiling action having run, but the profiling output will no longer be available.
 
 The `--generate-workflow` option asks which kind of workflow you'd like to use, and then writes a `profile_contributors.yml` file to `.github/workflows`:
 
@@ -219,7 +221,7 @@ Workflow type:
 > [!NOTE]
 > You don't need Python if you want to run gh-profiler each time a PR or issue is opened in a repository. You can copy the [profiler_contributors.yml](https://github.com/ehmatthes/gh-profiler/blob/main/src/gh_profiler/templates/profile_contributors.yml) file or the [profiler_contributors_link_only.yml](https://github.com/ehmatthes/gh-profiler/blob/main/src/gh_profiler/templates/profile_contributors_link_only.yml) file and paste it into your own `.github/workflows/` directory.
 > 
-> From that point forward, you'll see a comment on each new PR and issue with a concise summary of the user that opened the PR or issue or a link to the Actions log containing the profile output. [Example](https://github.com/ehmatthes/gh-profiler/issues/131#issuecomment-4665371446)
+> From that point forward, you'll see a comment on each new PR and issue with a concise summary of the user that opened the PR or issue or a link to the Actions log containing the profile output.
 
 Talks & discussion
 ---
