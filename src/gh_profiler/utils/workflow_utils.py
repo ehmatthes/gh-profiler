@@ -94,18 +94,15 @@ def _get_workflow_path():
 def _confirm_write_workflow(path_workflow, workflow_choice):
     """Confirm the user wants the file written to the calculated location."""
     if workflow_choice == "concise_profile":
-        msg = "\n\nThis will generate a GitHub action that will automatically run gh-profiler"
-        msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
-        msg += "\noutput will be written as a comment on the issue or PR. The comment, along "
-        msg += "\nwith the profile output in the Actions log, will be deleted automatically "
-        msg += "\nwhen the issue or PR is closed."
+        msg = "\n\nThis will generate a GitHub action that will automatically run gh-profiler whenever someone opens a new issue or PR in your repository."
+        msg += "\n- The concise profile output will be written as a comment on the issue or PR."
+        msg += "\n- The comment will include a link to the Actions log where you can find the full profile output."
+        msg += "\n- The comment, along with the profile output in the Actions log, will automatically be deleted when the issue or PR is closed."
     else:
-        msg = "\n\nThis will generate a GitHub action that will automatically run gh-profiler"
-        msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
-        msg += "\noutput will be written to the Actions log. A link to the Actions log will "
-        msg += "\nbe written as a comment on the issue or PR. The comment, along with the "
-        msg += "\nprofile output in the Actions log, will be deleted automatically when the"
-        msg += "\nissue or PR is closed."
+        msg = "\n\nThis will generate a GitHub action that will automatically run gh-profiler whenever someone opens a new issue or PR in your repository."
+        msg += "\n- The profile output will be written to the Actions log."
+        msg += "\n- A link to the Actions log will be written as a comment on the issue or PR."
+        msg += "\n- The comment, along with the profile output in the Actions log, will automatically be deleted when the issue or PR is closed."
 
     msg += "\n\nThe workflow will be written at the following location:"
     msg += f"\n  {path_workflow.as_posix()}"
