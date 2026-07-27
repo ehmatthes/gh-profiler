@@ -51,11 +51,29 @@ def _get_workflow_path():
     if path_workflows.exists() and not path_pc_workflow.exists():
         return path_pc_workflow
 
-    # If the workflow already exists, inform and exit.
+    # If the workflow already exists, ask whether to overwrite the existing file.
     if path_pc_workflow.exists():
         msg = f"The file {path_pc_workflow.as_posix()} already exists."
-        msg += "\nIf you want to regenerate this file, please delete the existing file and run this command again."
-        sys.exit(msg)
+        msg += "\nDo you want to replace the existing file? (y/n) "
+
+        response = ""
+        while response.lower() not in ("y", "yes", "n", "no"):
+            response = click.prompt(msg)
+
+            if response.lower() not in ("y", "yes", "n", "no"):
+                msg_invalid = "\nPlease enter 'y' or 'n'."
+                click.echo(msg_invalid)
+
+        if response.lower() in ("y", "yes"):
+            msg = "Okay, replacing existing workflow file."
+            click.echo(msg)
+        else:
+            msg = "Leaving existing file in place."
+            msg += "\n  You can only have one gh-profiler workflow active at a time."
+            msg += "\n  If you think there's a reason to have multiple workflows, please open an issue"
+            msg += "\n  on the gh-profiler repo and share your use case."
+            click.echo(msg)
+            sys.exit()
 
     path_git_dir = Path.cwd() / ".git"
 
