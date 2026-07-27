@@ -23,7 +23,7 @@ def generate_workflow():
     _confirm_write_workflow(path, workflow_choice)
 
     # Write the workflow, and show a concluding message.
-    _write_workflow(path, workflow_choice)
+    _write_workflow(path, workflow_choice, auto_delete)
     _show_closing_message(path)
 
 def _get_workflow_choice():
@@ -153,14 +153,19 @@ def _confirm_write_workflow(path_workflow, workflow_choice):
         elif confirmed.lower() in ("n", "no"):
             sys.exit()
 
-def _write_workflow(path_workflow, workflow_choice):
+def _write_workflow(path_workflow, workflow_choice, auto_delete):
     """Write the workflow file to the correct location."""
     # Read source file.
-    path_templates = importlib.resources.files("gh_profiler") / "templates"
     if workflow_choice == "concise_profile":
-        path_src = path_templates / "profile_contributors.yml"
+        template_name = "profile_contributors.yml"
     else:
-        path_src = path_templates / "profile_contributors_link_only.yml"
+        template_name = "profile_contributors_link_only.yml"
+
+    if auto_delete:
+        template_name = template_name.replace(".yml", "_auto_delete.yml")
+
+    path_templates = importlib.resources.files("gh_profiler") / "templates"
+    path_src = path_templates / template_name
     contents = path_src.read_text()
 
     # Make .github/workflows dirs as needed.
