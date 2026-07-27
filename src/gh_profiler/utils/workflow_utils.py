@@ -9,10 +9,17 @@ import click
 
 def generate_workflow():
     """Write a profile_contributors.yml workflow file to the user's repo."""
+    # Make sure we have a path we can write to before doing anything else.
+    path = _get_workflow_path()
+
+    # Find out whether they want to write profile output in the comment, or just
+    # link to the Actions log containing the profile output.
     workflow_choice = _get_workflow_choice()
 
-    path = _get_workflow_path()
+    # Confirm they want to write this workflow.
     _confirm_write_workflow(path, workflow_choice)
+
+    # Write the workflow, and show a concluding message.
     _write_workflow(path, workflow_choice)
     _show_closing_message(path)
 
@@ -22,7 +29,7 @@ def _get_workflow_choice():
     They can choose to write profile output as a comment on PRs and issues, 
     or just write a link to the Actions log that contains the profile output.
     """
-    msg = "Would you like to write the concise profile output as a comment on each new PR/issue,"
+    msg = "\nWould you like to write the concise profile output as a comment on each new PR/issue,"
     msg += "\nor just write a link to the Actions log containing the profile output?"
     msg += "\n\n1) Write concise profile output as a comment."
     msg += "\n2) Only write the link to the Actions log."
@@ -53,7 +60,7 @@ def _get_workflow_path():
 
     # If the workflow already exists, ask whether to overwrite the existing file.
     if path_pc_workflow.exists():
-        msg = f"\nThe file {path_pc_workflow.as_posix()} already exists."
+        msg = f"The file {path_pc_workflow.as_posix()} already exists."
         msg += "\nDo you want to replace the existing file? (y/n)"
 
         response = ""
