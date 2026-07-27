@@ -11,15 +11,14 @@ on:
   pull_request_target: # zizmor: ignore[dangerous-triggers]
     types: [opened, closed]
 
-permissions:
-  contents: read
-  actions: write
-  issues: write
-  pull-requests: write
-
 jobs:
   profile-author:
     if: github.event.action == 'opened'
+
+    permissions:
+      issues: write
+      pull-requests: write
+
     runs-on: ubuntu-latest
 
     steps:
@@ -89,6 +88,12 @@ jobs:
 
   delete-profile:
     if: github.event.action == 'closed'
+
+    permissions:
+      actions: write
+      issues: write
+      pull-requests: write
+
     runs-on: ubuntu-latest
 
     steps:
