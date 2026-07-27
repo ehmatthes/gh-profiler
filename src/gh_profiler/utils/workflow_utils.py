@@ -16,14 +16,11 @@ def generate_workflow():
     # link to the Actions log containing the profile output.
     workflow_choice = _get_workflow_choice()
 
-    # Confirm auto-deletion of profile output.
-    auto_delete = _get_deletion_choice()
-
     # Confirm they want to write this workflow.
     _confirm_write_workflow(path, workflow_choice)
 
     # Write the workflow, and show a concluding message.
-    _write_workflow(path, workflow_choice, auto_delete)
+    _write_workflow(path, workflow_choice)
     _show_closing_message(path)
 
 def _get_workflow_choice():
@@ -50,41 +47,6 @@ def _get_workflow_choice():
         return "concise_profile"
     else:
         return "link_only"
-
-def _get_deletion_choice():
-    """Confirm that it's okay to delete profile output after an issue or PR is closed.
-
-    The recommended behavior is to have all profile output auto-delete after each
-    issue or PR is closed. This balances the needs of maintainers to see profile output
-    when evaluating issues and PRs, while respecting the long-term privacy of users.
-    There's no need to have snapshots of a user's profile lingering for years in comments,
-    and months in actions logs.
-    """
-    msg = "\nWe recommend that all profile output be configured to auto-delete when each "
-    msg += "\nissue or PR is closed. This keeps profile output available while maintainers "
-    msg += "\nare evaluating contributions, and avoids retaining personal information once it's "
-    msg += "\nno longer needed."
-    msg += "\n\nWould you like profile output to be automatically deleted once each issue or PR is closed?"
-    msg += "\n  D: DELETE profile output after each issue or PR is closed."
-    msg += "\n  R: RETAIN profile output even after each issue or PR is closed."
-    msg += "\n  D/R"
-
-    response = ""
-    while response.lower() not in ("d", "r"):
-        response = click.prompt(msg)
-
-        if response.lower() not in ("d", "r"):
-            msg_invalid = "\nPlease enter 'D' or 'R'."
-            click.echo(msg_invalid)
-
-    if response.lower() == "d":
-        msg = "Okay, the workflow will delete profile information when each issue or PR is closed."
-        click.echo(msg)
-        return True
-    else:
-        msg = "Okay, the workflow will not delete profile information when each issue or PR is closed."
-        click.echo(msg)
-        return False
 
 def _get_workflow_path():
     """Determine the path we'd like to write the workflow to."""
@@ -134,12 +96,16 @@ def _confirm_write_workflow(path_workflow, workflow_choice):
     if workflow_choice == "concise_profile":
         msg = "\n\nThis will generate a GitHub action that will automatically run gh-profiler"
         msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
-        msg += "\noutput will be written as a comment on the issue or PR."
+        msg += "\noutput will be written as a comment on the issue or PR. The comment, along "
+        msg += "\nwith the profile output in the Actions log, will be deleted automatically "
+        msg += "\nwhen the issue or PR is closed."
     else:
         msg = "\n\nThis will generate a GitHub action that will automatically run gh-profiler"
         msg += "\nwhenever someone opens a new issue or PR in your repository. The profile"
-        msg += "\noutput will be written to the Actions log. A link to the Actions log"
-        msg += "\nwill be written as a comment on the issue or PR."
+        msg += "\noutput will be written to the Actions log. A link to the Actions log will "
+        msg += "\nbe written as a comment on the issue or PR. The comment, along with the "
+        msg += "\nprofile output in the Actions log, will be deleted automatically when the"
+        msg += "\nissue or PR is closed."
 
     msg += "\n\nThe workflow will be written at the following location:"
     msg += f"\n  {path_workflow.as_posix()}"
@@ -153,16 +119,13 @@ def _confirm_write_workflow(path_workflow, workflow_choice):
         elif confirmed.lower() in ("n", "no"):
             sys.exit()
 
-def _write_workflow(path_workflow, workflow_choice, auto_delete):
+def _write_workflow(path_workflow, workflow_choice):
     """Write the workflow file to the correct location."""
     # Read source file.
     if workflow_choice == "concise_profile":
         template_name = "profile_contributors.yml"
     else:
         template_name = "profile_contributors_link_only.yml"
-
-    if auto_delete:
-        template_name = template_name.replace(".yml", "_auto_delete.yml")
 
     path_templates = importlib.resources.files("gh_profiler") / "templates"
     path_src = path_templates / template_name
