@@ -1,10 +1,10 @@
 """Utils for analyzing account information."""
 
-from datetime import datetime as dt, timezone
-from datetime import timezone as tz
+from datetime import UTC
+from datetime import datetime as dt
 
-from .profile_data import profile_data as pdata
 from . import flags
+from .profile_data import profile_data as pdata
 
 
 def process_data():
@@ -13,7 +13,7 @@ def process_data():
         # This is GitHub's deleted user, and we don't need to do anything.
         pdata.flag_overall_profile = flags.red_flag
         return
-        
+
     _process_account_age()
     _process_profile_info()
     _process_pr_activity()
@@ -37,9 +37,9 @@ def _process_account_age():
         ts_created = dt.strptime(
             pdata.profile_dict["created_at"],
             "%Y-%m-%dT%H:%M:%SZ",
-        ).replace(tzinfo=timezone.utc)
+        ).replace(tzinfo=UTC)
 
-    pdata.account_age = dt.now(tz.utc) - ts_created
+    pdata.account_age = dt.now(UTC) - ts_created
 
     if pdata.account_age.days > 3 * 365:
         pdata.flag_age = flags.green_flag
@@ -162,6 +162,7 @@ def _set_overall_flags():
     _process_pr_flags()
     _process_issue_flags()
 
+
 def _process_profile_flags():
     """Determine a flag for the overall profile section."""
     profile_flags = (
@@ -169,6 +170,7 @@ def _process_profile_flags():
         pdata.flag_profile,
     )
     pdata.flag_overall_profile = _get_overall_flag(profile_flags)
+
 
 def _process_pr_flags():
     """Determine a flag for the overall PR section."""
@@ -179,6 +181,7 @@ def _process_pr_flags():
     )
     pdata.flag_overall_pr = _get_overall_flag(pr_flags)
 
+
 def _process_issue_flags():
     """Determine a flag for the overall issue section."""
     issues_flags = (
@@ -186,6 +189,7 @@ def _process_issue_flags():
         pdata.flag_repeated_issues,
     )
     pdata.flag_overall_issues = _get_overall_flag(issues_flags)
+
 
 def _get_overall_flag(component_flags):
     """Get an overall flag based on individual flags from a section.
@@ -199,6 +203,7 @@ def _get_overall_flag(component_flags):
     if flags.yellow_flag in component_flags:
         return flags.yellow_flag
     return flags.green_flag
+
 
 def _adjust_flags():
     """Make final adjustments to flags.
@@ -217,6 +222,7 @@ def _adjust_flags():
     """
     _adjust_account_age_flag()
     _adjust_profile_flag_no_pr_issue_activity()
+
 
 def _adjust_account_age_flag():
     """Reevaluate the account age flag.
@@ -244,6 +250,7 @@ def _adjust_account_age_flag():
     msg += "\n  but they have no other concerning activity."
     if pdata.verbose:
         print(msg)
+
 
 def _adjust_profile_flag_no_pr_issue_activity():
     """If user has no recent PRs or issues, profile flags should be green.

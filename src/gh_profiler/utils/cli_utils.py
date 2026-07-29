@@ -3,7 +3,6 @@
 import json
 import sys
 
-
 from .infra_utils import run_cmd
 from .profile_data import profile_data as pdata
 
@@ -13,9 +12,7 @@ def process_pr_issue_num(pr_issue_num):
     repo_slug = _get_repo_slug()
 
     # Try as a PR, then as an issue.
-    if username := _process_pr(pr_issue_num, repo_slug):
-        pdata.username = username
-    elif username := _process_issue(pr_issue_num, repo_slug):
+    if (username := _process_pr(pr_issue_num, repo_slug)) or (username := _process_issue(pr_issue_num, repo_slug)):
         pdata.username = username
     else:
         msg = f"Couldn't find a PR or issue #{pr_issue_num} in the repository {repo_slug}."
@@ -29,7 +26,7 @@ def _get_repo_slug():
     """Ask `gh` for the resolved default repo (honors `gh repo set-default`)."""
     result = run_cmd("gh repo view --json nameWithOwner --jq .nameWithOwner")
     output = result.stdout.strip()
-    
+
     if not result.stdout:
         msg = (
             "Couldn't determine the default GitHub repository. "

@@ -18,11 +18,11 @@ $ uv run developer_resources/benchmark.py
 $ uv run developer_resources/benchmark.py <target>
 """
 
-from time import perf_counter
 import shlex
-import subprocess
 import statistics
+import subprocess
 import sys
+from time import perf_counter
 
 # Benchmark against any target.
 try:
@@ -46,7 +46,7 @@ while len(run_times) < 5:
     except subprocess.TimeoutExpired:
         print("Failed run, timed out.")
         continue
-        
+
     # The run was faster than the cutoff time, so keep it.
     ts_end = perf_counter()
     run_time = round((ts_end - ts_start), 2)

@@ -6,12 +6,15 @@ to invest in reviewing PRs, and general interaction on open source projects.
 
 import sys
 
+from .utils import (
+    analysis_utils,
+    profile_utils,
+    repo_analysis,
+    repo_fetching,
+    summary_utils,
+    workflow_utils,
+)
 from .utils.profile_data import profile_data as pdata
-from .utils import profile_utils
-from .utils import analysis_utils
-from .utils import workflow_utils
-from .utils import summary_utils
-from .utils import repo_fetching, repo_analysis, repo_summary
 
 
 def main():
@@ -32,6 +35,7 @@ def main():
 
     # Don't return to cli.
     sys.exit()
+
 
 def profile_url():
     """Profile contributors of PRs or issues on a specific repo.

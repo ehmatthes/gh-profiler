@@ -1,10 +1,7 @@
 """Tests for whether the correct flags are assigned, based on what's found."""
 
-from gh_profiler.utils import analysis_utils
-from gh_profiler.utils import summary_utils
+from gh_profiler.utils import analysis_utils, flags, summary_utils
 from gh_profiler.utils.profile_data import profile_data as pdata
-from gh_profiler.utils import flags
-
 
 
 def test_low_pr_volume_one_external_pr_closed():

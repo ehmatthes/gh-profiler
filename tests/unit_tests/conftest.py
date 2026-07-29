@@ -4,8 +4,8 @@ from datetime import timedelta
 
 import pytest
 
-from gh_profiler.utils.profile_data import profile_data as pdata
 from gh_profiler.utils import flags
+from gh_profiler.utils.profile_data import profile_data as pdata
 
 
 @pytest.fixture(autouse=True)
@@ -64,7 +64,7 @@ def filled_pdata():
     pdata.flag_overall_issues = flags.green_flag
 
 
-@pytest.fixture()
+@pytest.fixture
 def empty_profile_info():
     """Empty the profile dict.
 

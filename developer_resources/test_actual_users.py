@@ -30,18 +30,17 @@ with this command:
     uv run pytest developer_resources/test_actual_users.py -rs
 """
 
-from pathlib import Path
-import tomllib
-import subprocess
 import os
+import subprocess
+import tomllib
+from pathlib import Path
 
 import pytest
 
-from gh_profiler.utils import infra_utils
-from gh_profiler.utils import flags
-
+from gh_profiler.utils import flags, infra_utils
 
 # --- Helper functions ---
+
 
 def get_users(category):
     """Return data object containing green and non-green user lists."""
@@ -51,18 +50,19 @@ def get_users(category):
     else:
         path_src_dir = Path(__file__).parents[2]
         path = path_src_dir / "gh-profiler_support" / "actual_users.toml"
-    
+
     if not path.exists():
         msg = f"No actual_users.toml file found. Tried {path}"
         pytest.skip(msg, allow_module_level=True)
 
     with path.open("rb") as f:
         data = tomllib.load(f)
-    
+
     if category == "green":
         return data["green_users"]
-    elif category == "non_green":
+    if category == "non_green":
         return data["non_green_users"]
+
 
 def run_with_timeout(cmd):
     """Run gh-profiler command, with a timeout."""
@@ -78,11 +78,10 @@ def run_with_timeout(cmd):
             # Did not time out, but check that we got a response.
             if output:
                 return output
-            else:
-                print("Got an empty response.")
-                num_attempts += 1
-                continue
-    
+            print("Got an empty response.")
+            num_attempts += 1
+            continue
+
     msg = "Too many timeouts."
     pytest.exit(msg)
 
@@ -101,6 +100,7 @@ def test_green_users(username):
 
     assert flags.yellow_flag not in output
     assert flags.red_flag not in output
+
 
 @pytest.mark.parametrize("username", get_users("non_green"))
 def test_non_green_users(username):

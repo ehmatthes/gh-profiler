@@ -5,15 +5,15 @@ Makes an actual gh-profiler call. Currently calls against my own user account
 to use.
 """
 
-import subprocess
 import re
+import subprocess
 
 import pytest
 
 from gh_profiler.utils import infra_utils
 
-
 # --- Helper functions ---
+
 
 def run_with_timeout(cmd):
     """Run gh-profiler command, with a timeout."""
@@ -29,11 +29,10 @@ def run_with_timeout(cmd):
             # Did not time out, but check that we got a response.
             if output:
                 return output
-            else:
-                print("Got an empty response.")
-                num_attempts += 1
-                continue
-    
+            print("Got an empty response.")
+            num_attempts += 1
+            continue
+
     # Skip this entire module if there are too many timeouts.
     msg = "Too many timeouts."
     pytest.skip(msg, allow_module_level=True)
@@ -82,6 +81,7 @@ def test_full_run(target):
     for expected_string in expected_strings:
         assert expected_string in output
 
+
 def test_concise_run():
     """Test a --concise run of gh-profiler."""
     cmd = "uv run gh-profiler ehmatthes --concise"
@@ -103,6 +103,7 @@ def test_concise_run():
 
     for expected_string in expected_strings:
         assert expected_string in output
+
 
 def test_redact():
     """Test a --redact run of gh-profiler."""
@@ -129,6 +130,7 @@ def test_redact():
 
     # Should currently see 7 redacted fields in my output.
     assert output.count("<redacted>") == 7
+
 
 def test_bulk_open_prs():
     """Test a run against a repo URL for bulk processing open PRs."""
@@ -216,4 +218,4 @@ def test_ghost_profile(mode):
     cmd = f"uv run gh-profiler ghost {mode}"
     output = run_with_timeout(cmd)
 
-    assert output.strip() == f"🔴 The `ghost` account is GitHub's reference to a deleted user."
+    assert output.strip() == "🔴 The `ghost` account is GitHub's reference to a deleted user."

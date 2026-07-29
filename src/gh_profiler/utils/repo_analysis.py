@@ -1,12 +1,11 @@
 """Utils for analyzing repo data."""
 
-from .profile_data import profile_data as pdata
-from . import profile_utils, analysis_utils, summary_utils
-from . import flags
-from .cli_config import cli_config
-
 from rich.console import Console
 from rich.table import Table
+
+from . import analysis_utils, flags, profile_utils, summary_utils
+from .cli_config import cli_config
+from .profile_data import profile_data as pdata
 
 
 def process_data(target_prs):
@@ -18,7 +17,7 @@ def process_data(target_prs):
     """
     if cli_config.table_only:
         print("Fetching user profiles ", end="", flush=True)
-        
+
     for pr in target_prs:
         # Get concise gh-profiler output for PR author.
         pdata.reset_fields()
@@ -54,6 +53,7 @@ def process_data(target_prs):
         print("\n")
     show_table(target_prs)
 
+
 def _get_cached_author_info(username, target_prs):
     """Get an existing author summary if it's already been built."""
     author_prs = [pr for pr in target_prs if pr.author == username]
@@ -88,7 +88,7 @@ def show_table(target_prs):
                 merged_flag = flags.merged_flag
             else:
                 merged_flag = flags.red_flag
-        
+
         profile_flags = "".join([pr.profile_flag, pr.pr_flag, pr.issue_flag])
 
         if cli_config.back:
@@ -99,7 +99,7 @@ def show_table(target_prs):
     console = Console()
     console.print(table)
 
-        
+
 def _adjust_author_summary(summary):
     """Modify standard concise output to fit bulk reporting needs.
 
@@ -117,6 +117,7 @@ def _adjust_author_summary(summary):
 
     return "\n".join(lines)
 
+
 def _get_pr_summary(pr, author_summary):
     """Get the summary for an individual PR."""
     author_summary = _adjust_author_summary(author_summary)
@@ -128,6 +129,7 @@ def _get_pr_summary(pr, author_summary):
 
     return pr_summary
 
+
 def _get_status_line(pr):
     """Get the line that shows the status of the PR.
 
@@ -137,11 +139,10 @@ def _get_status_line(pr):
     """
     if not cli_config.back:
         return f"\n{pr.url}\n\n"
-    
+
     if pr.merged:
         status = f"{flags.merged_flag} Merged."
     else:
         status = f"{flags.red_flag} Closed."
 
     return f"\n{status} {pr.url}\n\n"
-    

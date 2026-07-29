@@ -7,9 +7,9 @@ import click
 
 from . import gh_profiler
 from .utils import cli_utils
+from .utils.cli_config import cli_config
 from .utils.profile_data import profile_data as pdata
 from .utils.repo_data import repo_data
-from .utils.cli_config import cli_config
 
 
 @click.command(context_settings={"help_option_names": ["-h", "--help"]})
@@ -97,6 +97,7 @@ def main(target, concise, num_targets, back, table_only, generate_workflow, verb
         cli_utils.process_pr_issue_num(pr_issue_num)
         gh_profiler.main()
 
+
 def _validate_command(target, concise, num_targets, generate_workflow, verbose, redact, benchmark_fetch):
     """Validate arguments that were passed in the CLI call."""
 
@@ -110,7 +111,7 @@ def _validate_command(target, concise, num_targets, generate_workflow, verbose, 
     if target and generate_workflow:
         msg = "Please either include a target or --generate-workflow, but not both."
         sys.exit(msg)
-    
+
     # For any bulk request, you can request up to 100 records.
     if num_targets > 100:
         msg = "You can request up to 100 targets. (-n, --num-targets)"
@@ -139,6 +140,7 @@ def _parse_repo_options(num_targets, back, redact, table_only):
     cli_config.back = back
     cli_config.redact = redact
     cli_config.table_only = table_only
+
 
 def _parse_repo_info(target):
     """Parse info about the repo from the target.

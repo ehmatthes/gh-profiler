@@ -2,13 +2,12 @@
 
 import json
 import sys
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
+from datetime import UTC, timedelta
 from datetime import datetime as dt
-from datetime import timedelta
-from datetime import timezone as tz
 from textwrap import dedent
 from time import perf_counter
-from collections import Counter
 
 from . import infra_utils
 from .profile_data import profile_data as pdata
@@ -39,7 +38,7 @@ def get_data():
     if pdata.username == "ghost":
         # This is GitHub's deleted user, and we don't need to do anything.
         return
-        
+
     # Fetch data. This can all be done in parallel. The benchmarking is here
     # because this is the slowest part of the program, and it's helpful at
     # times to benchmark just this fetching code.
@@ -85,6 +84,7 @@ def _fetch_status():
     cmd = "gh auth status"
     return infra_utils.run_cmd(cmd)
 
+
 def _parse_status(status_obj):
     """Parse output of status call.
     
@@ -109,11 +109,13 @@ def _parse_status(status_obj):
         msg += "\nRun `gh auth login` to authenticate."
         sys.exit(msg)
 
+
 def _fetch_profile_dict():
     """Fetch the profile information we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
     result = infra_utils.run_cmd(cmd)
     return result.stdout
+
 
 def _parse_profile_dict(profile_dict_str):
     """Parse the profile information that was fetched."""
@@ -132,6 +134,7 @@ def _parse_profile_dict(profile_dict_str):
     if pdata.profile_dict["created_at"] is None:
         sys.exit(f"GitHub user '{pdata.username}' not found.")
 
+
 def _fetch_orgs():
     """Fetch the user's publicly visible orgs.
     
@@ -146,6 +149,7 @@ def _fetch_orgs():
 
     return result.stdout
 
+
 def _parse_orgs(orgs_str):
     """Parse the org info that was found."""
     try:
@@ -157,6 +161,7 @@ def _parse_orgs(orgs_str):
 
     pdata.orgs = [org["login"] for org in orgs]
 
+
 def _fetch_socials():
     """Fetch social media accounts from user's profile.
     
@@ -167,6 +172,7 @@ def _fetch_socials():
     result = infra_utils.run_cmd(cmd)
 
     return result.stdout
+
 
 def _parse_socials(socials_str):
     """Parse the data string returned from _fetch_socials()."""
@@ -180,7 +186,7 @@ def _parse_socials(socials_str):
 
 def _fetch_pr_activity():
     """Fetch information about recent PR activity."""
-    cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
+    cutoff = (dt.now(UTC) - timedelta(days=21)).date().isoformat()
 
     pr_query = _get_pr_query()
     search_query = (
@@ -190,6 +196,7 @@ def _fetch_pr_activity():
     result = infra_utils.run_cmd(cmd)
 
     return result.stdout
+
 
 def _parse_pr_activity(pr_activity_str):
     """Parse the data returned by _fetch_pr_activity()."""
@@ -234,13 +241,15 @@ def _parse_pr_activity(pr_activity_str):
         pr["state"] == "CLOSED" and pr["mergedAt"] is None for pr in prs_external
     )
 
+
 def _fetch_issue_activity():
     """Fetch target user's recent public issue activity."""
-    cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
+    cutoff = (dt.now(UTC) - timedelta(days=21)).date().isoformat()
     gh_call = _get_gh_issues_call(pdata.username, cutoff)
     result = infra_utils.run_cmd(gh_call)
 
     return result.stdout
+
 
 def _parse_issue_activity(issue_activity_str):
     """Parse data returned by _fetch_issue_activity()."""
@@ -278,6 +287,7 @@ def _parse_issue_activity(issue_activity_str):
     )
 
     _process_repeated_issues(issues_external)
+
 
 def _process_repeated_issues(issues_external):
     """Look for issues with the same title across multiple repositories."""
@@ -329,34 +339,34 @@ def _get_gh_issues_call(username, cutoff):
 
 def _get_pr_query():
     """Return the graphql query for recent PR activity."""
-    pr_query = f"""
-        query($q: String!, $n: Int!) {{
-            search(query: $q, type: ISSUE, first: $n) {{
+    pr_query = """
+        query($q: String!, $n: Int!) {
+            search(query: $q, type: ISSUE, first: $n) {
                 issueCount
-                pageInfo {{
+                pageInfo {
                     hasNextPage
                     endCursor
-                }}
-                nodes {{
-                    ... on PullRequest {{
+                }
+                nodes {
+                    ... on PullRequest {
                         number
                         state
                         createdAt
                         closedAt
                         mergedAt
                         url
-                        repository {{
+                        repository {
                             nameWithOwner
                             isInOrganization
-                            owner {{
+                            owner {
                                 __typename
                                 login
-                            }}
-                        }}
-                    }}
-                }}
-            }}
-        }}
+                            }
+                        }
+                    }
+                }
+            }
+        }
     """
 
     return dedent(pr_query).strip()

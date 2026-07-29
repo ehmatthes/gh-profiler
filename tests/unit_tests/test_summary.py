@@ -1,8 +1,9 @@
 """Tests for the summary that's generated."""
 
+from reference_files import reference_summaries
+
 from gh_profiler.utils import summary_utils
 from gh_profiler.utils.profile_data import profile_data as pdata
-from reference_files import reference_summaries
 
 
 def test_summary():
@@ -33,6 +34,7 @@ def test_no_issue_activity():
     assert "issues closed as NOT_PLANNED." not in summary
     assert "issues opened with the same title:" not in summary
 
+
 def test_summary_orgs():
     """Test that a user's orgs shows up in the summary."""
     pdata.orgs = ["org_1", "org_2", "org_3"]
@@ -49,6 +51,7 @@ def test_redact():
     assert "ehmatthes" not in summary
     assert summary.count("<redacted") == 6
 
+
 def test_full_concise_header_lines():
     """The full summary should include the same header lines as concise."""
     summary_full = summary_utils._get_summary()
@@ -61,6 +64,7 @@ def test_full_concise_header_lines():
     assert "No concerns found with user's profile." in summary_concise
     assert "No concerns found with recent PR activity." in summary_concise
     assert "No concerns found with recent issue activity." in summary_concise
+
 
 def test_concise():
     """Test output with pdata.concise set to True."""

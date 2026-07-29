@@ -1,6 +1,6 @@
 """One place to store all data about the user."""
 
-from dataclasses import dataclass, fields, MISSING
+from dataclasses import MISSING, dataclass, fields
 
 
 @dataclass(slots=True)
@@ -108,8 +108,6 @@ class ProfileData:
                 value = field.default
 
             setattr(self, field.name, value)
-
-
 
 
 profile_data = ProfileData()

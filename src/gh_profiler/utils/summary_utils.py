@@ -1,8 +1,9 @@
 """Utils for summarizing findings."""
 
 import humanize
-from .profile_data import profile_data as pdata
+
 from . import flags
+from .profile_data import profile_data as pdata
 
 
 def show_summary():
@@ -18,15 +19,14 @@ def _get_summary():
     """Build a summary string."""
     if pdata.username == "ghost":
         # This is GitHub's deleted user, and we don't need to do anything.
-        return f"🔴 The `ghost` account is GitHub's reference to a deleted user."
+        return "🔴 The `ghost` account is GitHub's reference to a deleted user."
 
     if pdata.redact:
         _redact_info()
 
     if pdata.concise:
         return _get_concise_summary()
-    else:
-        return _get_full_summary()
+    return _get_full_summary()
 
 
 def _get_concise_summary():
@@ -36,11 +36,11 @@ def _get_concise_summary():
     """
     if pdata.username == "ghost":
         # This is GitHub's deleted user, and we don't need to do anything.
-        return f"🔴 The `ghost` account is GitHub's reference to a deleted user."
-        
+        return "🔴 The `ghost` account is GitHub's reference to a deleted user."
+
     if pdata.redact:
         _redact_info()
-    
+
     summary = ""
     summary += f"GitHub user: {pdata.username}\n"
     summary += _get_profile_header()
@@ -70,9 +70,9 @@ def _get_section_header(flag, section):
     """Return a single line header for each main section of the summary."""
     if flag == flags.green_flag:
         return f"{flag} No concerns found with {section}.\n"
-    elif flag == flags.yellow_flag:
+    if flag == flags.yellow_flag:
         return f"{flag} Some concerns found with {section}.\n"
-    elif flag == flags.red_flag:
+    if flag == flags.red_flag:
         return f"{flag} Significant concerns found with {section}.\n"
 
 
@@ -127,7 +127,7 @@ def _redact_info():
 
     for social in pdata.socials:
         social["url"] = "<redacted>"
-    
+
     pdata.orgs = ["<redacted>"]
 
 
@@ -183,6 +183,7 @@ def _profile_summary():
 
     return summary
 
+
 def _bio_summary(bio):
     """Summarize bio section of profile."""
     if bio.count("\n") == 0:
@@ -199,7 +200,7 @@ def _org_summary():
     """Summarize user's orgs."""
     if not pdata.orgs:
         return ""
-    
+
     orgs_list = ", ".join(pdata.orgs)
     return f"      Orgs: {orgs_list}\n"
 

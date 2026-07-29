@@ -1,8 +1,8 @@
 """Utils for writing a profile_contributors workflow to the user's repo."""
 
-from pathlib import Path
-import sys
 import importlib.resources
+import sys
+from pathlib import Path
 
 import click
 
@@ -22,6 +22,7 @@ def generate_workflow():
     # Write the workflow, and show a concluding message.
     _write_workflow(path, workflow_choice)
     _show_closing_message(path)
+
 
 def _get_workflow_choice():
     """Prompt the user for the kind of workflow they'd like to generate.
@@ -45,8 +46,8 @@ def _get_workflow_choice():
 
     if response == "1":
         return "concise_profile"
-    else:
-        return "link_only"
+    return "link_only"
+
 
 def _get_workflow_path():
     """Determine the path we'd like to write the workflow to."""
@@ -91,6 +92,7 @@ def _get_workflow_path():
     # No conflicts found. Note that .github/workflows/ may not exist.
     return path_pc_workflow
 
+
 def _confirm_write_workflow(path_workflow, workflow_choice):
     """Confirm the user wants the file written to the calculated location."""
     if workflow_choice == "concise_profile":
@@ -113,8 +115,9 @@ def _confirm_write_workflow(path_workflow, workflow_choice):
         confirmed = input(msg)
         if confirmed.lower() in ("y", "yes"):
             return
-        elif confirmed.lower() in ("n", "no"):
+        if confirmed.lower() in ("n", "no"):
             sys.exit()
+
 
 def _write_workflow(path_workflow, workflow_choice):
     """Write the workflow file to the correct location."""
@@ -135,6 +138,7 @@ def _write_workflow(path_workflow, workflow_choice):
 
     # Write profile_contributors.yml file.
     path_workflow.write_text(contents)
+
 
 def _show_closing_message(path):
     """Workflow was written, describe next steps."""

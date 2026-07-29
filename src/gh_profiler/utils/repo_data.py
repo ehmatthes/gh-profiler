@@ -1,7 +1,7 @@
 """One place to store all data about the targeted repo."""
 
 from dataclasses import dataclass
-from datetime import datetime as dt, timezone
+from datetime import datetime as dt
 
 
 @dataclass(slots=True)
@@ -21,10 +21,9 @@ class PRData:
     author: str = ""
     title: str = ""
     url: str = ""
-    
+
     merged: bool | None = None
     closed_at: dt | None = None
-
 
     # Processed info
     author_summary: str = ""

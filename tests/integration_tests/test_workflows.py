@@ -1,14 +1,14 @@
 """Test the workflows that gh-profiler generates."""
 
+import shlex
 import subprocess
 from pathlib import Path
-import shlex
 
 import pytest
 
-
 path_templates = Path(__file__).parents[2] / "src" / "gh_profiler" / "templates"
-        
+
+
 @pytest.mark.parametrize(
     "path_workflow",
     [

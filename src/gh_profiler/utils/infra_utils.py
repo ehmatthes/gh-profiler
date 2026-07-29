@@ -5,12 +5,12 @@ import shlex
 import subprocess
 from dataclasses import dataclass
 
-
 DEFAULT_ENV = {
     **os.environ,
     "CLICOLOR_FORCE": "0",
     "NO_COLOR": "1",
 }
+
 
 @dataclass
 class CommandResult:

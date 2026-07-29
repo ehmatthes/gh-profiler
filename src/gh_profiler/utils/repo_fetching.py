@@ -3,16 +3,17 @@
 import json
 import sys
 from concurrent.futures import ThreadPoolExecutor
+from datetime import UTC
+from datetime import datetime as dt
 from textwrap import dedent
 from time import perf_counter
-from datetime import datetime as dt, timezone
-
-from . import infra_utils
-from .profile_data import profile_data as pdata
-from .repo_data import repo_data, PRData
-from .cli_config import cli_config
 
 import httpx2
+
+from . import infra_utils
+from .cli_config import cli_config
+from .profile_data import profile_data as pdata
+from .repo_data import PRData, repo_data
 
 
 def get_data():
@@ -58,6 +59,7 @@ def _fetch_reachable():
     r = httpx2.get(cli_config.url)
     return r.status_code
 
+
 def _parse_reachable(reachable_str):
     """Parse output of reachable call."""
     if reachable_str == 200:
@@ -66,6 +68,7 @@ def _parse_reachable(reachable_str):
     msg = f"URL returned status code {reachable_str}."
     msg += "\n  Is the URL correct?"
     sys.exit(msg)
+
 
 def _fetch_prs():
     """Fetch relevant PRs.
@@ -98,14 +101,14 @@ def _parse_prs(prs_obj):
             _add_pr_back_fields(pr_dict, pr_data)
         target_prs.append(pr_data)
 
-    # When looking back, we grabbed more PRs than we need. Sort them by 
+    # When looking back, we grabbed more PRs than we need. Sort them by
     # closedAt, and return the number that were actually requested.
     if cli_config.back:
         target_prs.sort(key=lambda pr: pr.closed_at, reverse=True)
         target_prs = target_prs[:cli_config.num_targets]
 
-
     return target_prs
+
 
 def _get_author(pr_dict):
     """Get the author of the PR.
@@ -114,9 +117,8 @@ def _get_author(pr_dict):
     """
     if pr_dict["author"] is None:
         return "ghost"
-    else:
-        return pr_dict["author"]["login"]
-    
+    return pr_dict["author"]["login"]
+
 
 def _add_pr_back_fields(pr_dict, pr_data):
     """Add fields to PRData object that only related to looking back."""
@@ -131,8 +133,9 @@ def _add_pr_back_fields(pr_dict, pr_data):
 def _parse_gh_timestamp(ts):
     """Parse a gh API timestamp."""
     return dt.strptime(ts, "%Y-%m-%dT%H:%M:%SZ").replace(
-        tzinfo=timezone.utc
+        tzinfo=UTC
     )
+
 
 def _get_pr_query():
     """Return the gh call for recent PRs in a repo."""
@@ -152,7 +155,6 @@ def _get_pr_query():
     else:
         # When looking at open PRs, no need to modify count.
         num_prs = cli_config.num_targets
-
 
     gh_call = f"""
         gh api graphql -f query='
