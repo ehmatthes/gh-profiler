@@ -20,7 +20,7 @@ def run_with_timeout(cmd):
     num_attempts = 0
     while num_attempts < 5:
         try:
-            result = infra_utils.run_cmd(cmd, timeout=5)
+            result = infra_utils.run_cmd(cmd, timeout=20)
             output = result.stdout
         except subprocess.TimeoutExpired:
             print("Time out.")

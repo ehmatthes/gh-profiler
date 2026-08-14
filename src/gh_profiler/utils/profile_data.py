@@ -1,6 +1,7 @@
 """One place to store all data about the user."""
 
 from dataclasses import dataclass, fields, MISSING
+from datetime import timedelta
 
 
 @dataclass(slots=True)
@@ -31,7 +32,7 @@ class ProfileData:
     profile_dict: dict | None = None
     profile_info: dict | None = None
 
-    account_age: int = 0
+    account_age: timedelta = timedelta(0)
     orgs: list | None = None
     socials: list | None = None
 

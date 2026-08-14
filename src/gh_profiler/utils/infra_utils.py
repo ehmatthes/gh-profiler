@@ -23,10 +23,17 @@ class CommandResult:
 def run_cmd(cmd, env=DEFAULT_ENV, timeout=None):
     """Run a subprocess command, return CommandResult instance."""
     cmd_parts = shlex.split(cmd)
-    output_obj = subprocess.run(cmd_parts, capture_output=True, env=env, timeout=timeout)
+    output_obj = subprocess.run(
+        cmd_parts,
+        capture_output=True,
+        env=env,
+        timeout=timeout,
+        encoding="utf-8",
+        errors="replace",
+    )
 
     return CommandResult(
-        stdout=output_obj.stdout.decode(),
-        stderr=output_obj.stderr.decode(),
+        stdout=output_obj.stdout,
+        stderr=output_obj.stderr,
         returncode=output_obj.returncode,
     )

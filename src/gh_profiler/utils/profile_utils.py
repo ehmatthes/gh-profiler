@@ -46,20 +46,30 @@ def get_data():
     ts_before = perf_counter()
     with ThreadPoolExecutor() as executor:
         # Make fetching calls.
-        status_future = executor.submit(_fetch_status)
-        profile_dict_future = executor.submit(_fetch_profile_dict)
-        orgs_future = executor.submit(_fetch_orgs)
-        socials_future = executor.submit(_fetch_socials)
-        pr_activity_future = executor.submit(_fetch_pr_activity)
-        issue_activity_future = executor.submit(_fetch_issue_activity)
+        fetch_calls = {
+            "status": executor.submit(_fetch_status),
+            "profile": executor.submit(_fetch_profile_dict),
+            "orgs": executor.submit(_fetch_orgs),
+            "socials": executor.submit(_fetch_socials),
+            "recent PR activity": executor.submit(_fetch_pr_activity),
+            "recent issue activity": executor.submit(_fetch_issue_activity),
+        }
 
-        # When each call finishes, store the result.
-        status_obj = status_future.result()
-        profile_dict_str = profile_dict_future.result()
-        orgs_str = orgs_future.result()
-        socials_str = socials_future.result()
-        pr_activity_str = pr_activity_future.result()
-        issue_activity_str = issue_activity_future.result()
+        # Auth is the one failure we want to explain ourselves, so resolve and
+        # check that call first.
+        status_obj = fetch_calls["status"].result()
+
+        # If a fetch fails, the gh call itself went wrong and the message says
+        # what happened. One bad call shouldn't take down the whole run with an
+        # opaque traceback, so guard each call as we collect results.
+        fetch_results = {}
+        for name, future in fetch_calls.items():
+            if name == "status":
+                continue
+            try:
+                fetch_results[name] = future.result()
+            except ValueError as e:
+                sys.exit(e)
 
     ts_after = perf_counter()
     if pdata.benchmark_fetch:
@@ -67,14 +77,33 @@ def get_data():
 
     # Parse data. This should only happen after all data has been fetched.
     _parse_status(status_obj)
-    _parse_profile_dict(profile_dict_str)
-    _parse_orgs(orgs_str)
-    _parse_socials(socials_str)
-    _parse_pr_activity(pr_activity_str)
-    _parse_issue_activity(issue_activity_str)
+    _parse_profile_dict(fetch_results["profile"])
+    _parse_orgs(fetch_results["orgs"])
+    _parse_socials(fetch_results["socials"])
+    _parse_pr_activity(fetch_results["recent PR activity"])
+    _parse_issue_activity(fetch_results["recent issue activity"])
 
 
 # --- Helper functions ---
+
+def _run_gh_cmd(cmd, context):
+    """Run a gh command and make sure it actually worked.
+
+    We used to parse whatever came back and blame timeouts whenever parsing
+    failed, which hid the real problem (bad token, 404, rate limit, and so on).
+    Checking the return code and reading stderr gives the user a much better
+    message. This raises ValueError, which callers can catch or let ride.
+    """
+    result = infra_utils.run_cmd(cmd)
+    if result.returncode != 0:
+        msg = f"Couldn't fetch {context} from GitHub."
+        if result.stderr:
+            msg += f"\n  gh said: {result.stderr.strip()}"
+        else:
+            msg += "\n  The gh CLI may have timed out."
+        msg += "\n  You may want to try running the command again."
+        raise ValueError(msg)
+    return result
 
 def _fetch_status():
     """Fetch output of `gh auth status`.
@@ -113,6 +142,20 @@ def _fetch_profile_dict():
     """Fetch the profile information we'll need."""
     cmd = f"gh api users/{pdata.username} --jq '{{login, name, created_at, company, blog, location, email, bio}}'"
     result = infra_utils.run_cmd(cmd)
+
+    # A nonexistent user comes back as a 404, so give that a clear message
+    # instead of a generic failure.
+    if result.returncode != 0:
+        if "404" in result.stderr:
+            sys.exit(f"GitHub user '{pdata.username}' not found.")
+        msg = f"Couldn't fetch profile info from GitHub."
+        if result.stderr:
+            msg += f"\n  gh said: {result.stderr.strip()}"
+        else:
+            msg += "\n  The gh CLI may have timed out."
+        msg += "\n  You may want to try running the command again."
+        raise ValueError(msg)
+
     return result.stdout
 
 def _parse_profile_dict(profile_dict_str):
@@ -142,7 +185,7 @@ def _fetch_orgs():
         f"gh api users/{pdata.username}/orgs "
         "--jq '[.[] | {login, description, url}]'"
     )
-    result = infra_utils.run_cmd(cmd)
+    result = _run_gh_cmd(cmd, "org info")
 
     return result.stdout
 
@@ -157,6 +200,36 @@ def _parse_orgs(orgs_str):
 
     pdata.orgs = [org["login"] for org in orgs]
 
+def _classify_repos(nodes, username, orgs):
+    """Split nodes into owned, org, and external repos.
+
+    GitHub logins are case-insensitive, so we compare casefolded values
+    everywhere. The original PR and issue parsers each did this by hand, and
+    they drifted apart (issues were case-sensitive, PRs were not). One helper
+    keeps them in sync.
+    """
+    username_casefold = username.casefold()
+    orgs_casefold = {org.casefold() for org in orgs}
+
+    owned = [
+        node for node in nodes
+        if node["repository"]["owner"]["login"].casefold() == username_casefold
+    ]
+
+    in_orgs = [
+        node for node in nodes
+        if node not in owned
+        and node["repository"]["owner"]["login"].casefold() in orgs_casefold
+    ]
+
+    external = [
+        node for node in nodes
+        if node not in owned
+        and node not in in_orgs
+    ]
+
+    return owned, in_orgs, external
+
 def _fetch_socials():
     """Fetch social media accounts from user's profile.
     
@@ -164,7 +237,7 @@ def _fetch_socials():
     they require an additional API call.
     """
     cmd = f"gh api users/{pdata.username}/social_accounts"
-    result = infra_utils.run_cmd(cmd)
+    result = _run_gh_cmd(cmd, "social account info")
 
     return result.stdout
 
@@ -187,7 +260,7 @@ def _fetch_pr_activity():
         f"author:{pdata.username} is:pull-request is:public created:>={cutoff}"
     )
     cmd = f"gh api graphql -f query='{pr_query}' -F q='{search_query}' -F n=100"
-    result = infra_utils.run_cmd(cmd)
+    result = _run_gh_cmd(cmd, "recent PR activity")
 
     return result.stdout
 
@@ -205,29 +278,10 @@ def _parse_pr_activity(pr_activity_str):
 
     pdata.opened_count = len(prs)
 
-    # PRs against repos the user owns.
-    prs_owned = [
-        pr for pr in prs
-        if pr["repository"]["owner"]["login"].casefold()
-        == pdata.username.casefold()
-    ]
+    prs_owned, prs_orgs, prs_external = _classify_repos(prs, pdata.username, pdata.orgs)
 
     pdata.opened_count_owned = len(prs_owned)
-
-    # PRS against repos in orgs the user is publicly associated with.
-    prs_orgs = [
-        pr for pr in prs
-        if pr["repository"]["owner"]["login"] in pdata.orgs
-    ]
-
     pdata.opened_count_orgs = len(prs_orgs)
-
-    # PRs against external repos.
-    prs_external = [
-        pr for pr in prs
-        if pr not in prs_owned
-        and pr not in prs_orgs
-    ]
     pdata.opened_count_external = len(prs_external)
     pdata.merged_count_external = sum(pr["mergedAt"] is not None for pr in prs_external)
     pdata.closed_count_external = sum(
@@ -238,7 +292,7 @@ def _fetch_issue_activity():
     """Fetch target user's recent public issue activity."""
     cutoff = (dt.now(tz.utc) - timedelta(days=21)).date().isoformat()
     gh_call = _get_gh_issues_call(pdata.username, cutoff)
-    result = infra_utils.run_cmd(gh_call)
+    result = _run_gh_cmd(gh_call, "recent issue activity")
 
     return result.stdout
 
@@ -252,23 +306,14 @@ def _parse_issue_activity(issue_activity_str):
         sys.exit(msg)
 
     issue_dicts = issue_activity["nodes"]
-    issues_owned = [
-        id for id in issue_dicts
-        if id["repository"]["owner"]["login"] == pdata.username
-    ]
-    issues_orgs = [
-         id for id in issue_dicts
-         if id["repository"]["owner"]["login"] in pdata.orgs
-    ]
-    issues_external = [
-         id for id in issue_dicts
-         if id not in issues_owned
-         and id not in issues_orgs
-    ]
+    issues_owned, issues_orgs, issues_external = _classify_repos(
+        issue_dicts, pdata.username, pdata.orgs
+    )
 
-    # DEV: Should we be dealing with pagination?
-    # When does issueCount != len(issue_dicts)?
-    pdata.new_issue_count = issue_activity["issueCount"]
+    # The search API caps results at 100 nodes, but issueCount can report a
+    # higher number. Report what we actually analyzed, so the count always
+    # matches the rest of the issue analysis.
+    pdata.new_issue_count = len(issue_dicts)
 
     pdata.issues_owned = len(issues_owned)
     pdata.issues_orgs = len(issues_orgs)

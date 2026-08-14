@@ -90,12 +90,6 @@ def _process_pr_activity():
         return
 
     # All the following analysis focuses on PRs against external repos.
-    if pdata.opened_count_external == 0:
-        # DEV: Do these need to be set?
-        pdata.flag_merged_pr = flags.green_flag
-        pdata.flag_closed_pr = flags.green_flag
-        return
-
     ratio_merged = pdata.merged_count_external / pdata.opened_count_external
     ratio_closed = pdata.closed_count_external / pdata.opened_count_external
 

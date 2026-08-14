@@ -11,7 +11,7 @@ from .utils import profile_utils
 from .utils import analysis_utils
 from .utils import workflow_utils
 from .utils import summary_utils
-from .utils import repo_fetching, repo_analysis, repo_summary
+from .utils import repo_fetching, repo_analysis
 
 
 def main():
@@ -55,10 +55,6 @@ def profile_url():
     # Get and analyze all the data we'll need.
     target_prs = repo_fetching.get_data()
     repo_analysis.process_data(target_prs)
-
-    # DEV: This will be used when bulk processing of PRs is done in parallel.
-    # That requires pdata to not be a singleton.
-    # repo_summary.show_summary(target_prs)
 
     # Don't return to cli.
     sys.exit()

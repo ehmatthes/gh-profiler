@@ -234,6 +234,9 @@ This is a list of talks and discussions related to gh-profiler.
 Maintaining
 ---
 
+For a detailed look at the codebase, the data model, flag logic, Windows
+specifics, and the full test suite, see [documentation.md](documentation.md).
+
 ### `--redact`
 
 For live demos and screenshots, you can pass the `--redact` flag. The username and profile information sections will show "\<redacted\>" in place of identifying information:
