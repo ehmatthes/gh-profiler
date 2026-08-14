@@ -84,7 +84,7 @@ def _get_workflow_path():
 
     # If there's no .git directory, we probably shouldn't proceed.
     if not path_git_dir.exists() or not path_git_dir.is_dir():
-        msg = f"Could not find a .git dir at: {path_cwd.as_posix()}"
+        msg = f"Could not find a .git dir at: {Path.cwd().as_posix()}"
         msg += "\nAre you in the root directory of your project's repository?"
         sys.exit(msg)
 
@@ -106,15 +106,10 @@ def _confirm_write_workflow(path_workflow, workflow_choice):
 
     msg += "\n\nThe workflow will be written at the following location:"
     msg += f"\n  {path_workflow.as_posix()}"
-    msg += "\n\nAre you sure you want to do this? (y/n) "
+    msg += "\n\nAre you sure you want to do this?"
 
-    confirmed = ""
-    while confirmed.lower() not in ("y", "yes", "n", "no"):
-        confirmed = input(msg)
-        if confirmed.lower() in ("y", "yes"):
-            return
-        elif confirmed.lower() in ("n", "no"):
-            sys.exit()
+    if not click.confirm(msg):
+        sys.exit()
 
 def _write_workflow(path_workflow, workflow_choice):
     """Write the workflow file to the correct location."""

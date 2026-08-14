@@ -17,7 +17,6 @@ from .utils.cli_config import cli_config
 @click.version_option(package_name="gh-profiler")
 @click.option("--concise", is_flag=True, help="Show concise output; one flag per category.")
 @click.option("-n", "--num-targets", default=10, help="Preview: How many PRs to review?")
-# @click.option("--issues", is_flag=True, help="Profile contributors of issues rather than PRs.")
 @click.option("--back", is_flag=True, help="Look back over recently merged and closed PRs.")
 @click.option("--table-only", is_flag=True, help="For bulk processing, only show comparison table.")
 @click.option(
@@ -56,6 +55,8 @@ def main(target, concise, num_targets, back, table_only, generate_workflow, verb
     $ gh-profiler <repo-url> --back
     $ gh-profiler <repo-url> --back -n 20 --table-only
     """
+    _ensure_utf8_output()
+
     _validate_command(target, concise, num_targets, generate_workflow, verbose, redact, benchmark_fetch)
 
     # Parse CLI options.
@@ -79,7 +80,6 @@ def main(target, concise, num_targets, back, table_only, generate_workflow, verb
             pdata.username = username
             gh_profiler.main()
 
-        cli_config.url = target
         _parse_repo_options(num_targets, back, redact, table_only)
         _parse_repo_info(target)
         gh_profiler.profile_url()
@@ -97,6 +97,19 @@ def main(target, concise, num_targets, back, table_only, generate_workflow, verb
         cli_utils.process_pr_issue_num(pr_issue_num)
         gh_profiler.main()
 
+def _ensure_utf8_output():
+    """Make sure stdout and stderr can hold the emoji flags.
+
+    On Windows, output defaults to the system codepage (cp1252 here), which
+    has no room for emoji. That made rich crash with a UnicodeEncodeError
+    whenever a flag was printed. Forcing UTF-8 keeps that from happening,
+    whether the output goes to a terminal or is piped.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
+
+
 def _validate_command(target, concise, num_targets, generate_workflow, verbose, redact, benchmark_fetch):
     """Validate arguments that were passed in the CLI call."""
 
@@ -111,9 +124,13 @@ def _validate_command(target, concise, num_targets, generate_workflow, verbose, 
         msg = "Please either include a target or --generate-workflow, but not both."
         sys.exit(msg)
     
-    # For any bulk request, you can request up to 100 records.
+    # For any bulk request, you can request up to 100 records, but at least 1.
     if num_targets > 100:
         msg = "You can request up to 100 targets. (-n, --num-targets)"
+        sys.exit(msg)
+
+    if num_targets < 1:
+        msg = "You must request at least 1 target. (-n, --num-targets)"
         sys.exit(msg)
 
 
@@ -135,7 +152,6 @@ def _parse_profile_url(target):
 def _parse_repo_options(num_targets, back, redact, table_only):
     """Get options relevant to targeting a repo URL."""
     cli_config.num_targets = num_targets
-    # cli_config.issues = issues
     cli_config.back = back
     cli_config.redact = redact
     cli_config.table_only = table_only
