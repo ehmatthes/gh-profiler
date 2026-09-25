@@ -228,7 +228,7 @@ Talks & discussion
 
 This is a list of talks and discussions related to gh-profiler.
 
-- PyCon US 2026 lightning talk (video not released yet)
+- [PyCon US 2026 lightning talk](https://youtu.be/VA3O7UxuZO4?t=1100)
 - Real Python [episode 296](https://realpython.com/podcasts/rpp/296/#t=2296) (brief overview of project)
 
 Maintaining
