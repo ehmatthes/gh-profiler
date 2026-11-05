@@ -31,7 +31,8 @@ def check_trusted_contributors(username):
 
     # This is a trusted user.
     msg = f"User {username} is a trusted contributor."
-    msg += f"\nSee {path.as_posix()}"
+    if pdata.verbose:
+        msg += f"\nSee {path.as_posix()}"
     print(msg)
 
     # There's nothing more for gh-profiler to do.
