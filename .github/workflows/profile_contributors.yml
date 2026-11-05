@@ -54,8 +54,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LOGIN: ${{ steps.meta.outputs.login }}
         run: |
-          # uvx gh-profiler@latest "$LOGIN" --concise > profiler.txt
-          uv run --project . gh-profiler "$LOGIN" --concise > profiler.txt
+          uvx gh-profiler@latest "$LOGIN" --concise > profiler.txt
           if grep -Fq "User $LOGIN is a trusted" profiler.txt; then
             echo "trusted=true" >> "$GITHUB_OUTPUT"
             echo "Trusted account; skipping profile output and comment."
