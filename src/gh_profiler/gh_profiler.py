@@ -20,6 +20,9 @@ def main():
         workflow_utils.generate_workflow()
         sys.exit()
 
+    # See if the target user is already trusted.
+    profile_utils.check_trusted_contributors(pdata.username)
+
     # Make sure gh is available.
     profile_utils.ensure_gh()
 
