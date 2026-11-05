@@ -11,33 +11,7 @@ import re
 
 import pytest
 
-from gh_profiler.utils import infra_utils
-
-
-# --- Helper functions ---
-
-def run_with_timeout(cmd):
-    """Run gh-profiler command, with a timeout."""
-    num_attempts = 0
-    while num_attempts < 5:
-        try:
-            result = infra_utils.run_cmd(cmd, timeout=5)
-            output = result.stdout
-        except subprocess.TimeoutExpired:
-            print("Time out.")
-            num_attempts += 1
-        else:
-            # Did not time out, but check that we got a response.
-            if output:
-                return output
-            else:
-                print("Got an empty response.")
-                num_attempts += 1
-                continue
-    
-    # Skip this entire module if there are too many timeouts.
-    msg = "Too many timeouts."
-    pytest.skip(msg, allow_module_level=True)
+import e2e_utils
 
 
 # --- Test functions ---
@@ -52,7 +26,7 @@ def test_full_run(target):
     - target is a PR number (3)
     """
     cmd = f"uv run gh-profiler {target} --ignore-trusted"
-    output = run_with_timeout(cmd)
+    output = e2e_utils.run_with_timeout(cmd)
 
     if output == "":
         msg = "Output was empty, which may indicate a gh timeout rather than a problem with the code."
@@ -86,7 +60,7 @@ def test_full_run(target):
 def test_concise_run():
     """Test a --concise run of gh-profiler."""
     cmd = "uv run gh-profiler ehmatthes --concise --ignore-trusted"
-    output = run_with_timeout(cmd)
+    output = e2e_utils.run_with_timeout(cmd)
 
     if output == "":
         msg = "Output was empty, which may indicate a gh timeout rather than a problem with the code."
@@ -108,7 +82,7 @@ def test_concise_run():
 def test_redact():
     """Test a --redact run of gh-profiler."""
     cmd = "uv run gh-profiler ehmatthes --redact --ignore-trusted"
-    output = run_with_timeout(cmd)
+    output = e2e_utils.run_with_timeout(cmd)
 
     if output == "":
         msg = "Output was empty, which may indicate a gh timeout rather than a problem with the code."
@@ -136,7 +110,7 @@ def test_bulk_open_prs():
     # Django is likely to have many open PRs.
     url = "https://github.com/django/django"
     cmd = f"uv run gh-profiler {url} -n 3"
-    output = run_with_timeout(cmd)
+    output = e2e_utils.run_with_timeout(cmd)
 
     assert output.count("https://github.com/django/django/pull/") == 6
     assert output.count("GitHub user: ") == 3
@@ -152,7 +126,7 @@ def test_bulk_open_prs_table_only():
     # Django is likely to have many open PRs.
     url = "https://github.com/django/django"
     cmd = f"uv run gh-profiler {url} -n 3 --table-only"
-    output = run_with_timeout(cmd)
+    output = e2e_utils.run_with_timeout(cmd)
 
     assert output.count("https://github.com/django/django/pull/") == 3
     assert "GitHub user: " not in output
@@ -173,7 +147,7 @@ def test_bulk_closed_prs():
     # Django is likely to have many closed PRs.
     url = "https://github.com/django/django"
     cmd = f"uv run gh-profiler {url} --back -n 3"
-    output = run_with_timeout(cmd)
+    output = e2e_utils.run_with_timeout(cmd)
 
     assert output.count("https://github.com/django/django/pull/") == 6
     assert output.count("GitHub user: ") + output.count("`ghost`") == 3
@@ -190,7 +164,7 @@ def test_bulk_closed_prs_table_only():
     # Django is likely to have many closed PRs.
     url = "https://github.com/django/django"
     cmd = f"uv run gh-profiler {url} --back -n 3 --table-only"
-    output = run_with_timeout(cmd)
+    output = e2e_utils.run_with_timeout(cmd)
 
     assert output.count("https://github.com/django/django/pull/") == 3
     assert "GitHub user: " not in output
@@ -215,6 +189,6 @@ def test_ghost_profile(mode):
     See: https://github.com/ghost
     """
     cmd = f"uv run gh-profiler ghost {mode}"
-    output = run_with_timeout(cmd)
+    output = e2e_utils.run_with_timeout(cmd)
 
     assert output.strip() == f"🔴 The `ghost` account is GitHub's reference to a deleted user."
