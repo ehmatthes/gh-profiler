@@ -21,9 +21,7 @@ def ensure_config():
     assert "dependabot[bot]" in config["trusted_bots"]
 
 
-    
-
-def test_ignore_trusted_contributor(ensure_config):
+def test_trusted_contributor(ensure_config):
     """Test that a user in the trusted_contributors list is not profiled."""
     cmd = "uv run gh-profiler ehmatthes"
     output = e2e_utils.run_with_timeout(cmd)
@@ -33,3 +31,14 @@ def test_ignore_trusted_contributor(ensure_config):
         pytest.fail(msg)
 
     assert output == "User ehmatthes is a trusted contributor.\n"
+
+def test_trusted_bot(ensure_config):
+    """Test that a bot in the trusted_bot list is not profiled."""
+    cmd = "uv run gh-profiler 'dependabot[bot]'"
+    output = e2e_utils.run_with_timeout(cmd)
+
+    if output == "":
+        msg = "Output was empty, which may indicate a gh timeout rather than a problem with the code."
+        pytest.fail(msg)
+
+    assert output == "User dependabot[bot] is a trusted contributor.\n"
