@@ -216,6 +216,8 @@ User ehmatthes is a trusted contributor.
 
 This can be overridden with the `--ignore-trusted` flag. The `--verbose` flag will also show the path to the config file where the trusted contributors are listed.
 
+You can see a sample `gh-profiler.toml` file [here](https://github.com/ehmatthes/gh-profiler/blob/main/src/gh_profiler/templates/gh-profiler.toml).
+
 False positives
 ---
 
@@ -250,6 +252,8 @@ Workflow type:
 > You don't need Python if you want to run gh-profiler each time a PR or issue is opened in a repository. You can copy the [profiler_contributors.yml](https://github.com/ehmatthes/gh-profiler/blob/main/src/gh_profiler/templates/profile_contributors.yml) file or the [profiler_contributors_link_only.yml](https://github.com/ehmatthes/gh-profiler/blob/main/src/gh_profiler/templates/profile_contributors_link_only.yml) file and paste it into your own `.github/workflows/` directory.
 > 
 > From that point forward, you'll see a comment on each new PR and issue with a concise summary of the user that opened the PR or issue or a link to the Actions log containing the profile output.
+
+When run in CI, gh-profiler respects your [trusted contributors](#trusted-contributors-and-bots) list.
 
 Talks & discussion
 ---
