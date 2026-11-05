@@ -29,10 +29,14 @@ def check_trusted_contributors(username):
     with path.open("rb") as f:
         config = tomllib.load(f)
 
-    if username not in config["trusted_contributors"]:
+    is_trusted = (
+        username in config["trusted_contributors"]
+        or username in config["trusted_bots"]
+    )
+    if not is_trusted:
         return
 
-    # This is a trusted user.
+    # This is a trusted account.
     msg = f"User {username} is a trusted contributor."
     if pdata.verbose:
         msg += f"\nSee {path.as_posix()}"
