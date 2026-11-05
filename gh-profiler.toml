@@ -1,0 +1,8 @@
+# Don't profile these trusted contributors:
+trusted_contributors = [
+    # Known contributors.
+    "ehmatthes",
+
+    # Known bots.
+    "dependabot[bot]",
+]

@@ -30,8 +30,11 @@ def check_trusted_contributors(username):
         return
 
     # This is a trusted user.
-    msg = f"User {username} is the trusted contributors list."
+    msg = f"User {username} is a trusted contributor."
     msg += f"\nSee {path.as_posix()}"
+    print(msg)
+
+    # There's nothing more for gh-profiler to do.
     sys.exit()
 
 
