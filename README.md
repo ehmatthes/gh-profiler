@@ -214,7 +214,7 @@ $ uv run gh-profiler ehmatthes
 User ehmatthes is a trusted contributor.
 ```
 
-This can be overridden with the `--ignore-trusted` flag
+This can be overridden with the `--ignore-trusted` flag. The `--verbose` flag will also show the path to the config file where the trusted contributors are listed.
 
 False positives
 ---
