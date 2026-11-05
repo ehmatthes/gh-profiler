@@ -17,6 +17,7 @@ These initial releases have usable behavior, but may have some rough edges for s
 - If account is present in those lists, displays "User <username> is a trusted <contributor|bot>."
 - With `--verbose`, path to the config file is shown.
 - Trusted accounts can be profiled by passing the `--ignore-trusted` arg.
+- No longer supports Python 3.10, which is at end of life. This allows us to use `tomllib` for config work.
 
 #### Internal changes
 
