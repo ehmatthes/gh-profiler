@@ -199,7 +199,7 @@ If you want to exempt known contributors from profiling, you can add those accou
 trusted_contributors = [
     "ehmatthes",
     "hugovk",
-    ...
+    # ...
 ]
 
 trusted_bots = [
