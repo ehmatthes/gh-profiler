@@ -29,17 +29,22 @@ def check_trusted_contributors(username):
     with path.open("rb") as f:
         config = tomllib.load(f)
 
-    is_trusted = (
-        username in config["trusted_contributors"]
-        or username in config["trusted_bots"]
-    )
-    if not is_trusted:
+    trusted_contributor = username in config["trusted_contributors"]
+    trusted_bot = username in config["trusted_bots"]
+
+    if not (trusted_contributor or trusted_bot):
+        # This account is not already trusted.
         return
 
-    # This is a trusted account.
-    msg = f"User {username} is a trusted contributor."
+    # This account is a trusted contributor or bot.
+    if trusted_contributor:
+        msg = f"User {username} is a trusted contributor."
+    elif trusted_bot:
+        msg = f"User {username} is a trusted bot."
+
     if pdata.verbose:
         msg += f"\nSee {path.as_posix()}"
+
     print(msg)
 
     # There's nothing more for gh-profiler to do.
