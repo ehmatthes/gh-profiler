@@ -29,8 +29,8 @@ def check_trusted_contributors(username):
     with path.open("rb") as f:
         config = tomllib.load(f)
 
-    trusted_contributor = username in config["trusted_contributors"]
-    trusted_bot = username in config["trusted_bots"]
+    trusted_contributor = username in config.get("trusted_contributors", [])
+    trusted_bot = username in config.get("trusted_bots", [])
 
     if not (trusted_contributor or trusted_bot):
         # This account is not already trusted.
