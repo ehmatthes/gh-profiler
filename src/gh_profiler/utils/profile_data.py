@@ -78,6 +78,7 @@ class ProfileData:
     verbose: bool = False
     # Redact is used primarily for live demos, and screenshots.
     redact: bool = False
+    ignore_trusted: bool = False
 
     # Benchmark the code that fetches external data.
     benchmark_fetch: bool = False

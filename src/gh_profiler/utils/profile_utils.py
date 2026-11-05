@@ -18,6 +18,9 @@ from .profile_data import profile_data as pdata
 
 def check_trusted_contributors(username):
     """See if the target user is already a trusted contributor."""
+    if pdata.ignore_trusted:
+        return
+
     # Look for a gh-profiler.toml file.
     path = Path.cwd() / "gh-profiler.toml"
     if not path.exists():

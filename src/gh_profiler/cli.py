@@ -27,8 +27,9 @@ from .utils.cli_config import cli_config
 )
 @click.option("-v", "--verbose", is_flag=True, help="Verbose output, including explanations for decisions about flags.")
 @click.option("--redact", is_flag=True, help="Redact identifying information.")
+@click.option("--ignore-trusted", is_flag=True, help="Profile trusted contributors.")
 @click.option("--benchmark-fetch", is_flag=True, help="Benchmark the code that fetches external data.")
-def main(target, concise, num_targets, back, table_only, generate_workflow, verbose, redact, benchmark_fetch):
+def main(target, concise, num_targets, back, table_only, generate_workflow, verbose, redact, ignore_trusted, benchmark_fetch):
     """Examine a GitHub user's profile, to help quickly decide how much to invest in their contributions.
 
     You can target a GitHub username, a profile URL, or a PR/issue number from the repository you're working in.
@@ -62,6 +63,7 @@ def main(target, concise, num_targets, back, table_only, generate_workflow, verb
     pdata.concise = concise
     pdata.verbose = verbose
     pdata.redact = redact
+    pdata.ignore_trusted = ignore_trusted
     pdata.benchmark_fetch = benchmark_fetch
     pdata.generate_workflow = generate_workflow
 
