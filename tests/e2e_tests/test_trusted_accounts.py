@@ -41,4 +41,4 @@ def test_trusted_bot(ensure_config):
         msg = "Output was empty, which may indicate a gh timeout rather than a problem with the code."
         pytest.fail(msg)
 
-    assert output == "User dependabot[bot] is a trusted contributor.\n"
+    assert output == "User dependabot[bot] is a trusted bot.\n"
