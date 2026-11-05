@@ -2,7 +2,8 @@
 
 Makes an actual gh-profiler call. Currently calls against my own user account
 (ehmatthes). It would be good to find another target, but I'm not sure what
-to use.
+to use. Also uses `--ignore-trusted`, because my account is in the trusted
+contributors list.
 """
 
 import subprocess
@@ -50,7 +51,7 @@ def test_full_run(target):
     - target is an issue number (1)
     - target is a PR number (3)
     """
-    cmd = f"uv run gh-profiler {target}"
+    cmd = f"uv run gh-profiler {target} --ignore-trusted"
     output = run_with_timeout(cmd)
 
     if output == "":
@@ -84,7 +85,7 @@ def test_full_run(target):
 
 def test_concise_run():
     """Test a --concise run of gh-profiler."""
-    cmd = "uv run gh-profiler ehmatthes --concise"
+    cmd = "uv run gh-profiler ehmatthes --concise --ignore-trusted"
     output = run_with_timeout(cmd)
 
     if output == "":
@@ -106,7 +107,7 @@ def test_concise_run():
 
 def test_redact():
     """Test a --redact run of gh-profiler."""
-    cmd = "uv run gh-profiler ehmatthes --redact"
+    cmd = "uv run gh-profiler ehmatthes --redact --ignore-trusted"
     output = run_with_timeout(cmd)
 
     if output == "":
