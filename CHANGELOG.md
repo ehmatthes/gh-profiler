@@ -8,6 +8,23 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 These initial releases have usable behavior, but may have some rough edges for some users and use cases.
 
+### (Unreleased)
+
+#### External changes
+
+- Parses a `gh-profiler.toml` file at the root of the project directory.
+- Config file supports `trusted_contributors` and `trusted_bots` lists.
+- If account is present in those lists, displays "User <username> is a trusted <contributor|bot>."
+- With `--verbose`, path to the config file is shown.
+- Trusted accounts can be profiled by passing the `--ignore-trusted` arg.
+- No longer supports Python 3.10, which is at end of life. This allows us to use `tomllib` for config work.
+
+#### Internal changes
+
+- Updated all dependencies.
+- E2e tests for trusted account behavior.
+- `run_with_timeout()` is in a utils module for e2e tests.
+
 ### 0.9.0
 
 #### External changes

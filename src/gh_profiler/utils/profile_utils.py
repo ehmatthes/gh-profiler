@@ -9,9 +9,46 @@ from datetime import timezone as tz
 from textwrap import dedent
 from time import perf_counter
 from collections import Counter
+from pathlib import Path
+import tomllib
 
 from . import infra_utils
 from .profile_data import profile_data as pdata
+
+
+def check_trusted_contributors(username):
+    """See if the target user is already a trusted contributor."""
+    if pdata.ignore_trusted:
+        return
+
+    # Look for a gh-profiler.toml file.
+    path = Path.cwd() / "gh-profiler.toml"
+    if not path.exists():
+        return
+
+    with path.open("rb") as f:
+        config = tomllib.load(f)
+
+    trusted_contributor = username in config["trusted_contributors"]
+    trusted_bot = username in config["trusted_bots"]
+
+    if not (trusted_contributor or trusted_bot):
+        # This account is not already trusted.
+        return
+
+    # This account is a trusted contributor or bot.
+    if trusted_contributor:
+        msg = f"User {username} is a trusted contributor."
+    elif trusted_bot:
+        msg = f"User {username} is a trusted bot."
+
+    if pdata.verbose:
+        msg += f"\nSee {path.as_posix()}"
+
+    print(msg)
+
+    # There's nothing more for gh-profiler to do.
+    sys.exit()
 
 
 def ensure_gh():

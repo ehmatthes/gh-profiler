@@ -1,0 +1,13 @@
+# Don't profile these trusted contributors.
+# This can be overridden with `--ignore-trusted`.
+trusted_contributors = [
+    "ehmatthes",
+    "hugovk",
+    "offbyone",
+    "brass75",
+    "ryancheley",
+]
+
+trusted_bots = [
+    "dependabot[bot]",
+]
