@@ -188,6 +188,34 @@ Fetching user profiles ..........
 > [!NOTE]
 > When using `--back` to look at merged and closed PRs, the output may differ from what you see on GitHub's PR tab in the corresponding repo. The gh API returns a different filtered set than what we see when we click "closed" on the PR tab in a browser. The data you see for each PR should be accurate; if it's not, please open an issue.
 
+Trusted contributors (and bots)
+---
+
+If you want to exempt known contributors from profiling, you can add those account names to `gh-profiler.toml`, in the root of your project:
+
+```toml
+# Don't profile these trusted contributors.
+# This can be overridden with `--ignore-trusted`.
+trusted_contributors = [
+    "ehmatthes",
+    "hugovk",
+    ...
+]
+
+trusted_bots = [
+    "dependabot[bot]",
+]
+```
+
+In the terminal, you'll see this:
+
+```txt
+$ uv run gh-profiler ehmatthes
+User ehmatthes is a trusted contributor.
+```
+
+This can be overridden with the `--ignore-trusted` flag
+
 False positives
 ---
 
